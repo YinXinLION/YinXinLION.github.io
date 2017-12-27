@@ -5,18 +5,24 @@
   
 
   
-  <title>湖心亭看雪</title>
+  <title>多线程基础 | 湖心亭看雪</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="学习之路">
-<meta property="og:type" content="website">
-<meta property="og:title" content="湖心亭看雪">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="多线程基本知识Java多线程的创建方式有:1.继承Thread 2.实现Runnalbe 3.线程池创建Java中只支持单继承，Thread的每个线程都是相互独立的。而Runnalbe可以通过实现MyThread然后继承实现，线程间的共享数据。 线程是一个子任务，CPU以不确定的方式来调用线程中的run方法。start()是启动线程,单独调用run()是执行这个run方法而已。 currentTh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="多线程基础">
+<meta property="og:url" content="http://yoursite.com/2017/12/27/多线程基础/index.html">
 <meta property="og:site_name" content="湖心亭看雪">
-<meta property="og:description" content="学习之路">
+<meta property="og:description" content="多线程基本知识Java多线程的创建方式有:1.继承Thread 2.实现Runnalbe 3.线程池创建Java中只支持单继承，Thread的每个线程都是相互独立的。而Runnalbe可以通过实现MyThread然后继承实现，线程间的共享数据。 线程是一个子任务，CPU以不确定的方式来调用线程中的run方法。start()是启动线程,单独调用run()是执行这个run方法而已。 currentTh">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/17-12-27/20918385.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/17-12-27/7512396.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/17-12-27/95616048.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/17-12-27/98040340.jpg">
+<meta property="og:updated_time" content="2017-12-27T14:26:00.848Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="湖心亭看雪">
-<meta name="twitter:description" content="学习之路">
+<meta name="twitter:title" content="多线程基础">
+<meta name="twitter:description" content="多线程基本知识Java多线程的创建方式有:1.继承Thread 2.实现Runnalbe 3.线程池创建Java中只支持单继承，Thread的每个线程都是相互独立的。而Runnalbe可以通过实现MyThread然后继承实现，线程间的共享数据。 线程是一个子任务，CPU以不确定的方式来调用线程中的run方法。start()是启动线程,单独调用run()是执行这个run方法而已。 currentTh">
+<meta name="twitter:image" content="http://oqp1ywek9.bkt.clouddn.com/17-12-27/20918385.jpg">
   
     <link rel="alternate" href="/atom.xml" title="湖心亭看雪" type="application/atom+xml">
   
@@ -63,9 +69,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-多线程基础" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-多线程基础" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/12/27/多线程基础/" class="article-date">
   <time datetime="2017-12-27T02:53:03.000Z" itemprop="datePublished">2017-12-27</time>
@@ -82,8 +86,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/27/多线程基础/">多线程基础</a>
+    <h1 class="article-title" itemprop="name">
+      多线程基础
     </h1>
   
 
@@ -138,108 +142,19 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-Python入门学习(一)" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/12/27/Python入门学习(一)/" class="article-date">
-  <time datetime="2017-12-27T01:10:32.000Z" itemprop="datePublished">2017-12-27</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Python基础/">Python基础</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/27/Python入门学习(一)/">Python入门学习(一)</a>
-    </h1>
+    <a href="/2017/12/27/Python入门学习(一)/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Python入门学习(一)</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Python基础数据类型"><a href="#Python基础数据类型" class="headerlink" title="Python基础数据类型"></a>Python基础数据类型</h2><h3 id="数字"><a href="#数字" class="headerlink" title="数字"></a>数字</h3><p>整数:int<br>浮点数:float(双精度) 在其他语言中double才是双精度</p>
-<p><code>type</code>函数是用来查看数据类型的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">print(type(1.1)) # &lt;class &apos;float&apos;&gt;</span><br><span class="line">print(type(1)) # &lt;class &apos;int&apos;&gt;</span><br><span class="line">print(type(2/2)) # &lt;class &apos;float&apos;&gt;</span><br><span class="line">print(type(2//2)) # &lt;class &apos;int&apos;&gt; 特别之处</span><br></pre></td></tr></table></figure></p>
-<h4 id="二进制的表示"><a href="#二进制的表示" class="headerlink" title="二进制的表示"></a>二进制的表示</h4><p>以<code>0b</code>开头的表示为二进制<br>以<code>0o</code>开头的表示为八进制<br>以<code>0x</code>开头的表示为十六进制</p>
-<p><code>bin(num)</code>函数是将数字转换为二进制数<br><code>int(num)</code>函数是将数字转换为十进制数<br><code>hex(num)</code>函数是将数字转换为十六进制数<br><code>oct(num)</code>函数是将数字转换为八进制数</p>
-<h4 id="布尔类型"><a href="#布尔类型" class="headerlink" title="布尔类型"></a>布尔类型</h4><p><code>True</code>表示正确.<code>False</code>表示错误.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">type(True) #&lt;class &apos;bool&apos;&gt;</span><br></pre></td></tr></table></figure></p>
-<p><code>True</code>即为正数，<code>False</code>即为0</p>
-<h4 id="复数"><a href="#复数" class="headerlink" title="复数"></a>复数</h4><p>数字+j 表示为复数<br><code>36j</code></p>
-<h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p>单引号和双引号都能表示字符串。<br>三个单引号和三个双引号效果是一样的，都能换行输入，字符串结果中带有<code>\n</code>转义符</p>
-<h4 id="转义字符"><a href="#转义字符" class="headerlink" title="转义字符"></a>转义字符</h4><p><code>\n</code> 换行<br><code>\t</code> 横向制表符</p>
-<h4 id="原始字符串"><a href="#原始字符串" class="headerlink" title="原始字符串"></a>原始字符串</h4><p>当我们要打印一个windows下的路径时是这样做的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">print(&quot;c:\\windows\\1.txt&quot;) # c:\windows\1.txt</span><br><span class="line">//字符串前面带上r</span><br><span class="line">print(r&quot;c:\windows\1.txt&quot;) # c:\windows\1.txt</span><br></pre></td></tr></table></figure></p>
-<p>前面带上r后，后面的字符串不是普通字符串而是原始字符串</p>
-<h4 id="字符串的操作"><a href="#字符串的操作" class="headerlink" title="字符串的操作"></a>字符串的操作</h4><p>字符串是由多个字符组成的, 根据index下标，可以获取到当前的字符.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">print(&quot;hello&quot; + &quot;world&quot;) #字符串的拼接</span><br><span class="line"># helloworld</span><br><span class="line"></span><br><span class="line">print(&quot;hello&quot;*2) #打印多个hello</span><br><span class="line"># hellohello</span><br><span class="line"></span><br><span class="line"># 字符串是由多个字符组成的, 根据index下标，可以获取到当前的字符</span><br><span class="line">print(&quot;hello&quot;[0])</span><br><span class="line"># h</span><br><span class="line"></span><br><span class="line">print(&quot;hello&quot;[1])</span><br><span class="line"># e</span><br><span class="line"></span><br><span class="line"># -n表示从字符串末尾往前数n次的那个字符</span><br><span class="line">print(&quot;hello&quot;[-1])</span><br><span class="line"># o</span><br><span class="line"># 如何打印字符串内部的多个数字</span><br><span class="line">print(&quot;hello&quot;[0:5])</span><br><span class="line"># hello</span><br><span class="line"></span><br><span class="line">print(&quot;hello&quot;[0:-1])</span><br><span class="line"># hell</span><br><span class="line"></span><br><span class="line"># 获取 str[x:y] 从x到y的字符</span><br><span class="line"># 如果:后面不填默认到最后</span><br><span class="line">print(&quot;hello&quot;[1:])</span><br><span class="line"># ello</span><br></pre></td></tr></table></figure></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/27/Python入门学习(一)/" data-id="cjbp5jdiw0000n0vag0zlmdw9" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
   
 </article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/12/26/hello-world/" class="article-date">
-  <time datetime="2017-12-26T13:57:03.369Z" itemprop="datePublished">2017-12-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/26/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/26/hello-world/" data-id="cjbp5jdjg0004n0vagguyf7qp" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
 
 </section>
         
