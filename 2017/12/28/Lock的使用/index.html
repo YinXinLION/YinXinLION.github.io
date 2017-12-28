@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Lock的使用 | 湖心亭看雪</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="使用ReentrantLock1234pirvate Lock lock = new ReentrantLock();lock.lock(); //上锁lock.unlock(); //释放锁 synchronized使用wait/notify实现等待/通知模式.ReentrantLock同样可以实现，他需要借助Condition。notify/notifyAll进行通知时，被通知的线程是由JVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lock的使用">
+<meta property="og:url" content="http://yoursite.com/2017/12/28/Lock的使用/index.html">
+<meta property="og:site_name" content="湖心亭看雪">
+<meta property="og:description" content="使用ReentrantLock1234pirvate Lock lock = new ReentrantLock();lock.lock(); //上锁lock.unlock(); //释放锁 synchronized使用wait/notify实现等待/通知模式.ReentrantLock同样可以实现，他需要借助Condition。notify/notifyAll进行通知时，被通知的线程是由JVM">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-12-28T09:00:47.082Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Lock的使用">
+<meta name="twitter:description" content="使用ReentrantLock1234pirvate Lock lock = new ReentrantLock();lock.lock(); //上锁lock.unlock(); //释放锁 synchronized使用wait/notify实现等待/通知模式.ReentrantLock同样可以实现，他需要借助Condition。notify/notifyAll进行通知时，被通知的线程是由JVM">
+  
+    <link rel="alternate" href="/atom.xml" title="湖心亭看雪" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">湖心亭看雪</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Lock的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/28/Lock的使用/" class="article-date">
+  <time datetime="2017-12-28T03:45:11.000Z" itemprop="datePublished">2017-12-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java多线程/">Java多线程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Lock的使用
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="使用ReentrantLock"><a href="#使用ReentrantLock" class="headerlink" title="使用ReentrantLock"></a>使用ReentrantLock</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pirvate Lock lock = new ReentrantLock();</span><br><span class="line"></span><br><span class="line">lock.lock(); //上锁</span><br><span class="line">lock.unlock(); //释放锁</span><br></pre></td></tr></table></figure>
+<p><code>synchronized</code>使用<code>wait/notify</code>实现等待/通知模式.<code>ReentrantLock</code>同样可以实现，他需要借助<code>Condition</code>。<br><code>notify/notifyAll</code>进行通知时，被通知的线程是由JVM随机选择的。<code>Condition</code>具有准确选择性通知。<br><code>synchronized</code>相当于只有一个<code>Condition</code>对象，当线程调用<code>wait</code>时，线程进入同一个等待队列。<br><code>Condition</code>的出现,可以让线程进入多个不同的等待队列。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">private Condition condition = lock.newCondition();</span><br><span class="line">condition.await();// 等待 线程进入WAITING状态</span><br><span class="line">condition.singal();// 唤醒</span><br></pre></td></tr></table></figure>
+<p><strong>生产者/消费者模式</strong></p>
+<p>创建出两个<code>Condition</code>,一个<code>notEmpty</code>,一个<code>notFull</code>， 当生产者执行<code>put</code>方法时，调用<code>notEmpty.signalAll()</code>只会唤醒<code>notEmpty.await()</code>下的消费者线程。 当消费者执行塔克方法时，调用<code>notFull.signalAll()</code>只会唤醒<code>notFull.await()</code>下的消费者线程。</p>
+<p><code>Lock</code>分为公平锁和非公平锁。公平锁是线程获取锁的顺序是按照FIFO先进先出的顺序。默认是非公平的，因为保证了高效，公平锁会导致运行缓慢。</p>
+<p><strong>线程按顺序打印</strong></p>
+<p>京东社招笔试上的~~。可以通过join来实现，也可以用<code>Condition</code>哦。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class Demo &#123;</span><br><span class="line">    volatile private static int next = 1;</span><br><span class="line">    ReentrantLock reentrantlock = new ReentrantLock();</span><br><span class="line">    Condition conditionA = lock.newCondition();</span><br><span class="line">    Condition conditionB = lock.newCondition();</span><br><span class="line">    Condition conditionC = lock.newCondition();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>判断<code>next</code>的数值是多少,如果不是想要的，则<code>await</code>循环等待，然后A运行完将next修改，并使用<code>conditonB.singalAll()</code>唤醒，让B运行，同理，C线程一样。保证A,B,C按顺序运行。</p>
+<p>1.防止重复执行（忽略重复触发）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ReentrantLock lock = new ReentrantLock();  </span><br><span class="line">if (lock.tryLock()) &#123;  //如果已经被lock，则立即返回false不会等待，达到忽略操作的效果   </span><br><span class="line">    try &#123;  </span><br><span class="line">        //操作  </span><br><span class="line">    &#125; finally &#123;  </span><br><span class="line">        lock.unlock();  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2.可中断锁的同步执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ReentrantLock lock = new ReentrantLock(true); //公平锁  </span><br><span class="line">lock.lockInterruptibly();  </span><br><span class="line">try &#123;  </span><br><span class="line">    //操作  </span><br><span class="line">&#125; catch (InterruptedException e) &#123;  </span><br><span class="line">    e.printStackTrace();  </span><br><span class="line">&#125; finally &#123;  </span><br><span class="line">    lock.unlock();  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>3.尝试等待执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ReentrantLock lock = new ReentrantLock(true); //公平锁  </span><br><span class="line">try &#123;  </span><br><span class="line">    if (lock.tryLock(5, TimeUnit.SECONDS)) &#123;      </span><br><span class="line">        //如果已经被lock，尝试等待5s，看是否可以获得锁，如果5s后仍然无法获得锁则返回false继续执行  </span><br><span class="line">        try &#123;  </span><br><span class="line">            //操作  </span><br><span class="line">        &#125; finally &#123;  </span><br><span class="line">            lock.unlock();  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125; catch (InterruptedException e) &#123;  </span><br><span class="line">    e.printStackTrace(); //当前线程被中断时(interrupt)，会抛InterruptedException                   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="ReentrantReadWriteLock"><a href="#ReentrantReadWriteLock" class="headerlink" title="ReentrantReadWriteLock"></a>ReentrantReadWriteLock</h3><p>JDK提供一种读写锁<code>ReentrantReadWriteLock</code>类，在对应场景可以加快运行效率。读锁也称共享锁(可以存在多个读线程)，写锁也称互斥锁(只存在一个线程)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ReentrantReadWriteLock lock = new ReentrantReadWriteLock();</span><br><span class="line"></span><br><span class="line">lock.readLock().lock();// 读锁上锁</span><br><span class="line">lock.readLock().unlock();// 读锁解锁</span><br><span class="line"></span><br><span class="line">lock.writeLock().lock();// 写锁上锁</span><br><span class="line">lock.writeLock().unlock();// 写锁解锁</span><br></pre></td></tr></table></figure>
+<p>“读写”、”写读”、”写写”都是互斥的。<br>“读读”是非互斥的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/12/28/Lock的使用/" data-id="cjbq9fmkz000058vafjoofn3j" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/12/27/多线程基础/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">多线程基础</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java多线程/">Java多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python基础/">Python基础</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/12/28/Lock的使用/">Lock的使用</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/27/多线程基础/">多线程基础</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/27/Python入门学习(一)/">Python入门学习(一)</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/26/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 殷鑫<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
