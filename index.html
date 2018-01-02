@@ -65,6 +65,53 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-阅读笔记" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/02/阅读笔记/" class="article-date">
+  <time datetime="2018-01-02T03:04:50.000Z" itemprop="datePublished">2018-01-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/01/02/阅读笔记/">阅读笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>以下均为阅读文章所总结的</p>
+<h2 id="从Chrome源码看DNS解析过程"><a href="#从Chrome源码看DNS解析过程" class="headerlink" title="从Chrome源码看DNS解析过程"></a>从Chrome源码看DNS解析过程</h2><p>当一台设备连接到路由器后，会发送DHCP Request的广播，然后会为电脑分配IP地址及DNS服务器地址nameserver。</p>
+<p>Chrome会按照nameservers的顺序发起查询，并将结果缓存下来，有效时间是根据域名设置的TTL决定，在有效期内可以根据结果查询。</p>
+<p>缓存-&gt;本地host文件(Chrome以Map形式保存host)-&gt;nameserver查询。</p>
+<p>A - 把域名解析到一个IPV4地址上<br>AAAA - 把域名解析到一个IPV6地址上<br>CNAME - 解析到另外一个域名(当很多其它域名指向一个CNAME时，当需要改变IP地址时，只要改变这个CNAME的地址，那么其它的也跟着生效了，但是得做二次解析。)</p>
+<h2 id="缓存穿透、缓存并发、缓存失效之思路变迁"><a href="#缓存穿透、缓存并发、缓存失效之思路变迁" class="headerlink" title="缓存穿透、缓存并发、缓存失效之思路变迁"></a>缓存穿透、缓存并发、缓存失效之思路变迁</h2><h3 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h3><p>在项目中使用缓存通常都是先检查缓存中是否存在，如果存在直接返回缓存内容，如果不存在就直接查询数据库然后再缓存查询结果返回。如果我们查询的某一个数据在缓存中一直不存在，就会造成每一次请求都查询DB,如果大量请求(缓存不存在),导致 <strong>缓存穿透</strong> ,DB可能挂掉。</p>
+<p>解决方法：<br>可以将这个不存在的key预先设定一个值。避免了透传到数据库，从而把大量的类似请求挡在了缓存之中。</p>
+<h3 id="缓存并发"><a href="#缓存并发" class="headerlink" title="缓存并发"></a>缓存并发</h3><p>一个缓存如果失效，可能出现多个进程同时查询DB，同时设置缓存的情况，如果并发确实很大，这也可能造成DB压力过大，还有缓存频繁更新的问题。</p>
+<p>解决方法：<br>对缓存查询加锁，如果KEY不存在，就加锁，然后查DB入缓存，然后解锁。其他进程如果发现有锁就等待，然后等解锁后返回数据或者进入DB查询。</p>
+<h3 id="缓存失效"><a href="#缓存失效" class="headerlink" title="缓存失效"></a>缓存失效</h3><p>在同一时间，出现多个缓存失效。</p>
+<p>解决方法：<br>缓存失效时间分散开来。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/01/02/阅读笔记/" data-id="cjbx3m1yv00089wva7qdovrdy" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-2018年实施计划" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/01/01/2018年实施计划/" class="article-date">
@@ -99,7 +146,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/01/2018年实施计划/" data-id="cjbwb3xzk00004kva80xg8wnj" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/01/01/2018年实施计划/" data-id="cjbx3m1ye00009wvafas2847l" class="article-share-link">Share</a>
       
       
     </footer>
@@ -192,7 +239,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/29/JAVA反射/" data-id="cjbwb3xzx00044kvaa841sde2" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/12/29/JAVA反射/" data-id="cjbx3m1yp00039wvakax23dhl" class="article-share-link">Share</a>
       
       
     </footer>
@@ -247,7 +294,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/28/Lock的使用/" data-id="cjbwb3xzr00014kva6haw8b7b" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/12/28/Lock的使用/" data-id="cjbx3m1yk00019wva84ymr26m" class="article-share-link">Share</a>
       
       
     </footer>
@@ -303,7 +350,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/27/Python入门学习(二)-组/" data-id="cjbwb3xzy00054kvapj3d2o44" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/12/27/Python入门学习(二)-组/" data-id="cjbx3m1ys00059wvape79ernn" class="article-share-link">Share</a>
       
       
     </footer>
@@ -380,7 +427,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/27/多线程基础/" data-id="cjbwb3y0g000g4kvamomew556" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/12/27/多线程基础/" data-id="cjbx3m1yu00079wva9fzjgs84" class="article-share-link">Share</a>
       
       
     </footer>
@@ -432,7 +479,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/27/Python入门学习(一)/" data-id="cjbwb3xzv00034kvai9wvzbsx" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/12/27/Python入门学习(一)/" data-id="cjbx3m1yq00049wvazebmeivh" class="article-share-link">Share</a>
       
       
     </footer>
@@ -477,7 +524,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/26/hello-world/" data-id="cjbwb3y0e000f4kvajaxoo1a6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/12/26/hello-world/" data-id="cjbx3m1yy000b9wvaxwm7hd0e" class="article-share-link">Share</a>
       
       
     </footer>
@@ -525,6 +572,10 @@
       <ul>
         
           <li>
+            <a href="/2018/01/02/阅读笔记/">阅读笔记</a>
+          </li>
+        
+          <li>
             <a href="/2018/01/01/2018年实施计划/">2018年实施计划</a>
           </li>
         
@@ -538,10 +589,6 @@
         
           <li>
             <a href="/2017/12/27/Python入门学习(二)-组/">Python入门学习(二)-组</a>
-          </li>
-        
-          <li>
-            <a href="/2017/12/27/多线程基础/">多线程基础</a>
           </li>
         
       </ul>
