@@ -98,6 +98,19 @@
 <p>解决方法：<br>对缓存查询加锁，如果KEY不存在，就加锁，然后查DB入缓存，然后解锁。其他进程如果发现有锁就等待，然后等解锁后返回数据或者进入DB查询。</p>
 <h3 id="缓存失效"><a href="#缓存失效" class="headerlink" title="缓存失效"></a>缓存失效</h3><p>在同一时间，出现多个缓存失效。</p>
 <p>解决方法：<br>缓存失效时间分散开来。</p>
+<h2 id="面向GC的JAVA编程-2018-1-3"><a href="#面向GC的JAVA编程-2018-1-3" class="headerlink" title="面向GC的JAVA编程 2018-1-3"></a>面向GC的JAVA编程 2018-1-3</h2><p>(1)不要使用<code>Thread.yield()</code>和<code>System.gc()</code>(除非你真的需要回收Native Memory)</p>
+<p>(2)如果可以的话，请指定容器初始化大小。</p>
+<p>(3)如果可以在方法内声明的局部变量，就不要声明为实例变量。</p>
+<p>(4)除非你的对象是单例的或不变的，否则尽可能少地声明static变量。不然，会一直留在内存里。</p>
+<p>(5)引用</p>
+<ul>
+<li>Strong Reference，最常见的引用</li>
+<li>Weak Reference，当没有指向它的强引用时会被GC回收</li>
+<li>Soft Reference，只当临近OOM时才会被GC回收</li>
+<li>Phantom Reference，主要用于识别对象被GC的时机，通常用于做一些清理工作</li>
+</ul>
+<h2 id="从LONGADDER看更高效的无锁实现"><a href="#从LONGADDER看更高效的无锁实现" class="headerlink" title="从LONGADDER看更高效的无锁实现"></a>从LONGADDER看更高效的无锁实现</h2><p><code>AtomicLong</code>的实现方式是内部有个value 变量，当多线程并发自增，自减时，均通过CAS 指令从机器指令级别操作保证并发的原子性。</p>
+<p><code>LongAddr</code>解决办法是：减少并发，将单一value的更新压力分担到多个value中去，降低单个value的 “热度”，分段更新，最后将Value相加。先使用CAS进行更新，如果不成功再执行上面的操作。将Value放在Cells数组里。</p>
 
       
     </div>
