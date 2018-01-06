@@ -14,10 +14,16 @@
 <meta property="og:site_name" content="湖心亭看雪">
 <meta property="og:description" content="以下均为阅读文章所总结及复制 从Chrome源码看DNS解析过程 2018-1-2当一台设备连接到路由器后，会发送DHCP Request的广播，然后会为电脑分配IP地址及DNS服务器地址nameserver。 Chrome会按照nameservers的顺序发起查询，并将结果缓存下来，有效时间是根据域名设置的TTL决定，在有效期内可以根据结果查询。缓存-&amp;gt;本地host文件(Chrome以Ma">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-04T11:39:20.735Z">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-6/90068090.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-6/76791019.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-6/20543836.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-6/5961679.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-6/61189215.jpg">
+<meta property="og:updated_time" content="2018-01-06T16:00:08.175Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阅读笔记">
 <meta name="twitter:description" content="以下均为阅读文章所总结及复制 从Chrome源码看DNS解析过程 2018-1-2当一台设备连接到路由器后，会发送DHCP Request的广播，然后会为电脑分配IP地址及DNS服务器地址nameserver。 Chrome会按照nameservers的顺序发起查询，并将结果缓存下来，有效时间是根据域名设置的TTL决定，在有效期内可以根据结果查询。缓存-&amp;gt;本地host文件(Chrome以Ma">
+<meta name="twitter:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-6/90068090.jpg">
   
     <link rel="alternate" href="/atom.xml" title="湖心亭看雪" type="application/atom+xml">
   
@@ -121,6 +127,42 @@
 <h3 id="事务的ACID"><a href="#事务的ACID" class="headerlink" title="事务的ACID"></a>事务的ACID</h3><p>原子性（ Atomicity ）、一致性（ Consistency ）、隔离性（ Isolation ）和持续性（ Durability ）</p>
 <p>原子性：事务是数据库的逻辑工作单位，事务中包含的各操作要么都做，要么都不做。<br>一致性：事务执行的结果必须是使数据库从一个一致性状态变到另一个一致性状态。<br>隔离性：一个事务的执行不能其它事务干扰。<br>持续性：个事务一旦提交，它对数据库中的数据的改变就应该是永久性的。</p>
 <p>改变MySQL隔离级别的方法：<br><code>set session transaction Isolation level read uncommitted</code></p>
+<h2 id="Spring核心系列之ApplicationContext-2018-1-6"><a href="#Spring核心系列之ApplicationContext-2018-1-6" class="headerlink" title="Spring核心系列之ApplicationContext 2018-1-6"></a>Spring核心系列之ApplicationContext 2018-1-6</h2><h3 id="Spring中的Resource接口"><a href="#Spring中的Resource接口" class="headerlink" title="Spring中的Resource接口"></a>Spring中的Resource接口</h3><p>Resource接口是Spring提供的，它为应用提供了更强的底层资源访问能力。</p>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-6/90068090.jpg" alt=""></p>
+<ul>
+<li>ClassPathResource: 以类路径为相对路劲下的资源。</li>
+<li>FileSystemResource : 以文件系统路径查找的资源。</li>
+<li>ServletContextResource : 以相对于Web应用跟目录的方式访问。</li>
+<li>ByteArrayResource: 二进制数组表示的资源。</li>
+</ul>
+<p>加载Spring下的配置文件<br><code>Resource res =new ServletContectResource(/WEB-INF/classes/spring/application.xml);</code></p>
+<p>Spring资源地址表达式<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-6/76791019.jpg" alt=""></p>
+<ul>
+<li>?:匹配文件名中的一个字符.</li>
+<li>*:匹配文件命中的任意字符.</li>
+<li>** :匹配多层路径.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class GaoshiApplication &#123;</span><br><span class="line"></span><br><span class="line">	public static void main(String[] args) throws IOException &#123;</span><br><span class="line"></span><br><span class="line">		PathMatchingResourcePatternResolver resolver=new PathMatchingResourcePatternResolver();</span><br><span class="line">		Resource[] res =resolver.getResources(&quot;file:/Users/zdy/Desktop/sql.txt&quot;);</span><br><span class="line">		for (Resource  resource : res)&#123;</span><br><span class="line">			System.out.println(resource.getDescription()+&quot;----&quot;+resource.getFilename());</span><br><span class="line">		&#125;</span><br><span class="line">		SpringApplication.run(GaoshiApplication.class, args);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输出结果:</span><br><span class="line">URL [file:/Users/zdy/Desktop/sql.txt]----sql.txt</span><br></pre></td></tr></table></figure></p>
+<h3 id="BeanFactory和ApplicationContext"><a href="#BeanFactory和ApplicationContext" class="headerlink" title="BeanFactory和ApplicationContext"></a>BeanFactory和ApplicationContext</h3><p>ApplicationContext继承自BeanFactory，提供的功能更加强大，一般情况下都是使用ApplicationContext。</p>
+<p>ApplicationContext也就是我们说的Spring容器。</p>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-6/20543836.jpg" alt=""></p>
+<ul>
+<li>ApplicationEventPublisher: 让容器拥有发布应用程序上下文事件的功能.</li>
+<li>ResourcePatternResolver:实现了类似于资源加载器的功能，能够识别特定前缀加Ant风格的路径并加载到容器中.</li>
+<li>LifeCycle：管理容器中bean的生命周期。</li>
+<li>ConfigurableApplicationContext:主要新增了refresh()和close()方法，让ApplicationContext有用了启动，关系和刷新上下文的功能。</li>
+<li><strong>ClassPathXmlApplicationContext与FileSystemXmlApplicationContext</strong>:Spring提供的两个常用的ApplicationContext实现类，前者默认从类路径加载配置文件，后者从文件系统加载。<br>然后初始化一个ApplicationContext看看:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext ac =new ClassPathXmlApplicationContext(&quot;application.xml&quot;);</span><br><span class="line">ApplicationContext ac =new FileSystemXmlApplicationContext(/User/Desktop/application.xml);</span><br></pre></td></tr></table></figure>
+<p>ClassPathXmlApplicationContext如果没有前缀默认就是classpath:</p>
+<p>FileSystemXmlApplicationContext如果没有前缀默认就是 file:</p>
+<p>WebApplicationContext与ServletContext可以相互获得.在非Web应用的环境下，Bean只有singleton和prototype两种作用域，而WebApplicationContext为Bean添加了三个新的作用域:request,session,global session。</p>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-6/5961679.jpg" alt=""></p>
+<p>XmlWebApplicationContext和AnnotationConfigWebApplicationContext，大家猜都应该猜到了，一个是XML配置的，一个是<code>@Configuration</code>配置的。</p>
+<p>WebApplicationContext和ServletContext相互获取</p>
+<p><strong>WebApplicationContext里有ServletContext成员变量，直接get就完了。在ServletContext里有一个写死的attrbute，也是直接get..而且Spring提供了一个WebApplicationContextUtils来封装了这个写死的attribute.</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">其实就是直接调用了</span><br><span class="line">ServletContext.getAttribute(ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);</span><br><span class="line"></span><br><span class="line">    public static WebApplicationContext getWebApplicationContext(ServletContext sc) &#123;</span><br><span class="line">        return getWebApplicationContext(sc, WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-6/61189215.jpg" alt=""></p>
 
       
     </div>
