@@ -19,7 +19,8 @@
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-6/20543836.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-6/5961679.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-6/61189215.jpg">
-<meta property="og:updated_time" content="2018-01-07T04:00:19.777Z">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-8/58541315.jpg">
+<meta property="og:updated_time" content="2018-01-08T14:59:20.369Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阅读笔记">
 <meta name="twitter:description" content="以下均为阅读文章所总结及复制 从Chrome源码看DNS解析过程 2018-1-2当一台设备连接到路由器后，会发送DHCP Request的广播，然后会为电脑分配IP地址及DNS服务器地址nameserver。 Chrome会按照nameservers的顺序发起查询，并将结果缓存下来，有效时间是根据域名设置的TTL决定，在有效期内可以根据结果查询。缓存-&amp;gt;本地host文件(Chrome以Ma">
@@ -188,6 +189,57 @@
 <p>运行结果:  close自动被调用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">正在发送数据</span><br><span class="line">正在关闭连接</span><br></pre></td></tr></table></figure></p>
 <h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>编译器自动帮我们生成了finally块，并且在里面调用了资源的close方法，所以例子中的close方法会在运行的时候被执行。</p>
 <p>编译器生成finally代码之外还在里头生成了<code>addSuppressed()</code>方法,他支持将一个异常附加到另一个异常身上，从而避免异常屏蔽。保证close如果抛出异常，不会被屏蔽掉。</p>
+<h2 id="Git远程操作详解-2018-1-8"><a href="#Git远程操作详解-2018-1-8" class="headerlink" title="Git远程操作详解 2018-1-8"></a>Git远程操作详解 2018-1-8</h2><p>Git常用命令：</p>
+<ul>
+<li>git clone</li>
+<li>git remote</li>
+<li>git fetch</li>
+<li>git pull</li>
+<li>git push</li>
+</ul>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-8/58541315.jpg" alt=""></p>
+<h3 id="git-clone"><a href="#git-clone" class="headerlink" title="git clone"></a>git clone</h3><p>远程操作的第一步，通常是从远程主机克隆一个版本库，这时就要用到<code>git clone</code>命令。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git clone &lt;版本库的网址&gt;</span><br><span class="line"></span><br><span class="line">$ git clone https://github.com/jquery/jquery.git</span><br></pre></td></tr></table></figure>
+<h3 id="git-remote"><a href="#git-remote" class="headerlink" title="git remote"></a>git remote</h3><p>为了便于管理，Git要求每个远程主机都必须指定一个主机名。git remote命令就用于管理主机名。<br><code>git remote</code> 列出所有远程主机<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git remote</span><br><span class="line">origin</span><br></pre></td></tr></table></figure></p>
+<p>克隆的时候，指定远程主机叫做jQuery。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git clone -o jQuery https://github.com/jquery/jquery.git</span><br><span class="line">$ git remote</span><br><span class="line">jQuery</span><br></pre></td></tr></table></figure></p>
+<h3 id="git-fetch"><a href="#git-fetch" class="headerlink" title="git fetch"></a>git fetch</h3><p>一旦远程主机remote有了更新(Git术语叫commit)，需要将这些更新取回本地，这时需要<code>git fetch</code>命令。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">将某个远程主机的更新，全部取回本地。</span><br><span class="line">$ git fetch &lt;远程主机名&gt;</span><br></pre></td></tr></table></figure></p>
+<p><code>git fetch</code>命令通常用来查看其他人的进程，因为它取回的代码对你本地的开发代码没有影响。<br>默认情况下，<code>git fetch</code>取回所有分支（branch）的更新。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">取回特定分支的更新，可以指定分支名。</span><br><span class="line">$ git fetch &lt;远程主机名&gt; &lt;分支名&gt;</span><br><span class="line"></span><br><span class="line">取回origin主机的master分支</span><br><span class="line">$ git fetch origin master</span><br></pre></td></tr></table></figure></p>
+<p><code>git branch</code>命令的<code>-r</code>选项，可以用来查看远程分支，<code>-a</code>选项查看所有分支。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git branch -r</span><br><span class="line">origin/master</span><br><span class="line"></span><br><span class="line">$ git branch -a</span><br><span class="line">* master</span><br><span class="line">  remotes/origin/master</span><br></pre></td></tr></table></figure></p>
+<p>本地分支<code>master</code>,远程分支<code>origin/master</code>.</p>
+<p><code>git checkout</code>创建一个新的分支。</p>
+<p>在<code>orign/master</code>基础上，创建一个新分支。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -b newBrach origin/master</span><br></pre></td></tr></table></figure></p>
+<p>然后可以使用<code>git merge</code>或<code>git rebase</code>命令，将本地分支合并到远程分支。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git merge origin/master</span><br><span class="line"># 或者   合并到origin/master上</span><br><span class="line">$ git rebase origin/master</span><br></pre></td></tr></table></figure></p>
+<h3 id="git-pull"><a href="#git-pull" class="headerlink" title="git pull"></a>git pull</h3><p><code>git pull</code>，取回远程主机某个分支的更新，再与本地的指定分支合并。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git pull &lt;远程主机名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;</span><br></pre></td></tr></table></figure>
+<p>比如，取回<code>origin</code>主机的<code>next</code>分支，与本地的<code>master</code>分支合并。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git pull origin next:master</span><br></pre></td></tr></table></figure></p>
+<p>如果远程分支是与当前分支合并，则冒号后面的部分可以省略。</p>
+<p>面试爱问的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git pull origin next</span><br></pre></td></tr></table></figure></p>
+<p>解释：拉去远程origin/next分支，然后在本地分支和它合并。<br>和下面代码功能相同<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git fetch origin</span><br><span class="line">$ git merge origin/next</span><br></pre></td></tr></table></figure></p>
+<h3 id="git-push"><a href="#git-push" class="headerlink" title="git push"></a>git push</h3><p><code>git push</code>用于将本地分支的更新，推送到远程主机。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git push &lt;远程主机名&gt; &lt;本地分支名&gt;:&lt;远程分支名&gt;</span><br></pre></td></tr></table></figure></p>
+<h2 id="AWK使用"><a href="#AWK使用" class="headerlink" title="AWK使用"></a>AWK使用</h2><p>AWK:是一个行文本处理工具。它是逐行处理文件中的数据。<br>语法:<code>awk &#39;pattern+{action}&#39;</code><br>解释:<br>(1)大括号<code>{}</code>表示为一个命令分组。<br>(2)pattern是过滤器，pattern成功的才能执行action动作。</p>
+<p>实例:显示<code>hello.txt</code>第三行到第六行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat hello.txt | awk &apos;NR==3, NR==6&#123;print;&#125;&apos;</span><br></pre></td></tr></table></figure></p>
+<h3 id="内置变量"><a href="#内置变量" class="headerlink" title="内置变量"></a>内置变量</h3><p>FS：分隔符，默认是空格<br>NR： 当前行数，从1开始<br>NF： 当前记录字段个数<br>$0： 当前记录<br>$1~$n: 当前记录第n个字段<br>例子：显示hello.txt中的第3行至第5行的第一列与最后一列<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat hello.txt | awk &apos;NR==3, NR==5&#123;print $1,$NF&#125;&apos;</span><br></pre></td></tr></table></figure></p>
+<h3 id="pattern"><a href="#pattern" class="headerlink" title="pattern"></a>pattern</h3><p>pattern参数可以是egrep正则中的一个，正则使用<code>/pattern/</code><br>例子：显示WiFi_Log.txt中，正则匹配pid的行<br><code>cat WiFi_Log.txt | awk &#39;/pid/&#39;</code></p>
+<ol>
+<li>pattern和action可以只有其一，但不能两者都没有；</li>
+<li>默认的action是print</li>
+</ol>
+<p>例子：显示hello.txt中，长度大于100的行号<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat hello.txt | awk &apos;length($0)&gt;80&#123;print NR&#125;&apos;</span><br></pre></td></tr></table></figure></p>
+<h3 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h3><ul>
+<li>gsub(r,s)：在$0中用s代替r</li>
+<li>index(s,t)：返回s中t的第一个位置</li>
+<li>length(s)：s的长度</li>
+<li>match(s,r)：s是否匹配r</li>
+<li>split(s,a,fs)：在fs上将s分成序列a</li>
+<li>substr(s,p)：返回s从p开始的子串</li>
+</ul>
+<h3 id="控制流程"><a href="#控制流程" class="headerlink" title="控制流程"></a>控制流程</h3><p>BEGIN和END本质是一个pattern。<br>BEGIN用于awk程序开始开始前，做一些初始化的工作；<br>END用于awk程序结束前，做一些收尾的工作。</p>
+<p>例子：统计字符个数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">awk &apos;</span><br><span class="line">BEGIN</span><br><span class="line">&#123;</span><br><span class="line">count=0;</span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">count+=length($0);</span><br><span class="line">&#125;</span><br><span class="line">END</span><br><span class="line">&#123;</span><br><span class="line">print count;</span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure></p>
+<p>流程控制语句 (和java、c、c++一样)<br>（1）if(condition){}else{}<br>（2）while{}<br>（3）do{}while(condition);<br>（4）for(init;condition;step){}<br>（5）break/continue：如果有END，会执行END中的收尾工作</p>
+<h3 id="awk与shell交互"><a href="#awk与shell交互" class="headerlink" title="awk与shell交互"></a>awk与shell交互</h3><p>(1)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">STR=&quot;hello&quot;</span><br><span class="line">echo | awk &apos;&#123;</span><br><span class="line">print &quot;&apos;$&#123;STR&#125;&apos;&quot;;</span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">结果： 打印 hello</span><br></pre></td></tr></table></figure>
+<p>(2)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">echo hello | awk &apos;&#123;</span><br><span class="line">print $0 | &quot;cat&quot;</span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">结果：打印 hello  如果没有echo 则 执行cat命令</span><br></pre></td></tr></table></figure>
 
       
     </div>
