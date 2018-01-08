@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>京东实习记录 | 湖心亭看雪</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="主要记录自己工作上的发现和遇到问题及解决办法Vue与前端1.前端通过ajax请求，得到响应的json数据，那么获取json的每个属性非常方便，很爽。12345//后端Controller@GetMapping(&amp;quot;/json&amp;quot;)public Person getPersonName()&amp;#123;  return new Person(&amp;quot;a&amp;quot;,&amp;quot;b&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="京东实习记录">
+<meta property="og:url" content="http://yoursite.com/2018/01/08/在京东实习的笔记/index.html">
+<meta property="og:site_name" content="湖心亭看雪">
+<meta property="og:description" content="主要记录自己工作上的发现和遇到问题及解决办法Vue与前端1.前端通过ajax请求，得到响应的json数据，那么获取json的每个属性非常方便，很爽。12345//后端Controller@GetMapping(&amp;quot;/json&amp;quot;)public Person getPersonName()&amp;#123;  return new Person(&amp;quot;a&amp;quot;,&amp;quot;b&amp;">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-01-08T15:04:51.691Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="京东实习记录">
+<meta name="twitter:description" content="主要记录自己工作上的发现和遇到问题及解决办法Vue与前端1.前端通过ajax请求，得到响应的json数据，那么获取json的每个属性非常方便，很爽。12345//后端Controller@GetMapping(&amp;quot;/json&amp;quot;)public Person getPersonName()&amp;#123;  return new Person(&amp;quot;a&amp;quot;,&amp;quot;b&amp;">
+  
+    <link rel="alternate" href="/atom.xml" title="湖心亭看雪" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">湖心亭看雪</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-在京东实习的笔记" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/08/在京东实习的笔记/" class="article-date">
+  <time datetime="2018-01-08T15:00:29.000Z" itemprop="datePublished">2018-01-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/总结/">总结</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      京东实习记录
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="主要记录自己工作上的发现和遇到问题及解决办法"><a href="#主要记录自己工作上的发现和遇到问题及解决办法" class="headerlink" title="主要记录自己工作上的发现和遇到问题及解决办法"></a>主要记录自己工作上的发现和遇到问题及解决办法</h3><h2 id="Vue与前端"><a href="#Vue与前端" class="headerlink" title="Vue与前端"></a>Vue与前端</h2><p>1.<br>前端通过ajax请求，得到响应的json数据，那么获取json的每个属性非常方便，很爽。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//后端Controller</span><br><span class="line">@GetMapping(&quot;/json&quot;)</span><br><span class="line">public Person getPersonName()&#123;</span><br><span class="line">  return new Person(&quot;a&quot;,&quot;b&quot;);  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//domain对象</span><br><span class="line">@Data      </span><br><span class="line">public Class Person()&#123;</span><br><span class="line">    private String firstName;</span><br><span class="line">    private String lastName;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注解<code>@Data</code>是Lombok插件上的，作用是:提供类所有属性的 getting 和 setting 方法，此外还提供了equals、canEqual、hashCode、toString 方法.</p>
+<p><strong>注意：在配合Lombok时，对象属性首字母不能是大写的，我踩过的坑，它会无法注入属性值。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">(function (root, $http) &#123;</span><br><span class="line">        var api = &#123;&#125;;</span><br><span class="line">        api.showWrongDownReason = function (taskInstanceId, func1) &#123;</span><br><span class="line">            Vue.$HttpGet(&apos;/json?taskInstanceId=&apos; + taskInstanceId, func1)</span><br><span class="line">        &#125;;//ajax get请求</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">   //查看违规下架原因</span><br><span class="line">        getWrongDownReason : function (wareId) &#123;</span><br><span class="line">            var self = this;</span><br><span class="line">            this.Person = &quot;&quot;;</span><br><span class="line">            WareApi.getWrongDownReason(wareId, function (data) &#123;</span><br><span class="line">                self.Person = data;//将json数据直接赋值给Vue的Person属性即可。</span><br><span class="line">                self.wrongDownReasonModalShow = true; //弹窗是否显示</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;,</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//html渲染</span><br><span class="line">FirstName : &#123;&#123;Person.firstName&#125;&#125;</span><br><span class="line">LastName : &#123;&#123;Person.lastName&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>很简单，对不对~~</p>
+<p>2.关于ajax请求和返回请求的问题。<br>我遇到的问题是，弹窗使用的是ajax来进行提交，那么想要给用户展示商品操作是否成功不是太好做。<br>我的做法挺low哈哈哈，将数据改为form表单，然后交给Controller，返回给我们一个新的页面(此页面就是用来展示商品操作是否成功)</p>
+<p>然而，2018.1.8号回公司时，发现这样会坑了自己，公司的页面使用的是velocity嘛，是这样的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//xx.vm</span><br><span class="line">&lt;form&gt;</span><br><span class="line">    #yy.vm是我改的 里头是又是一个form</span><br><span class="line">    #prase(&quot;yy.vm&quot;)    </span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure></p>
+<p>这就很尴尬，用ajax改下吧。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//设置某个东西的</span><br><span class="line">   function savePromise()&#123;</span><br><span class="line">       //获取时效id</span><br><span class="line">       var promiseId = jQuery(&quot;#promiseId&quot;).val();</span><br><span class="line">       var url = &quot;&quot;;</span><br><span class="line">       jQuery.get(url,function(data)&#123;</span><br><span class="line">           $(&quot;#errorMsg&quot;).empty();</span><br><span class="line">           $(&quot;#errorMsg&quot;).prepend(&quot;&lt;font style=&apos;font-size: 12px;&apos;&gt;&quot;+data+&quot;&lt;/font&gt;&quot;);</span><br><span class="line">           setTimeout(function()&#123;$(&quot;#errorMsg&quot;).empty();&#125;,5000);</span><br><span class="line">       &#125;);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>现将信息清空</li>
+<li>在信息中添加页面</li>
+<li>设置超时时间，5000毫秒后清空信息</li>
+</ol>
+<p>看需求是什么了，如果允许新增来添加dom节点，那么直接用ajax，不用form，form要求用新页面就用它。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/01/08/在京东实习的笔记/" data-id="cjc6cag1i000bb0valjd2r3ll" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/01/06/Python入门学习(三)-变量与运算符/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Python入门学习(三)-变量与运算符</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java多线程/">Java多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python基础/">Python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习成长/">学习成长</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/心情/">心情</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/01/08/在京东实习的笔记/">京东实习记录</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/06/Python入门学习(三)-变量与运算符/">Python入门学习(三)-变量与运算符</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/02/阅读笔记/">阅读笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/01/2018年实施计划/">2018年实施计划</a>
+          </li>
+        
+          <li>
+            <a href="/2017/12/29/JAVA反射/">JAVA反射</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 殷鑫<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
