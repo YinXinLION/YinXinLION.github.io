@@ -355,6 +355,34 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">结果： 打印 hello</span><br></pre></td></tr></table></figure>
 <p>(2)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">echo hello | awk &apos;&#123;</span><br><span class="line">print $0 | &quot;cat&quot;</span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">结果：打印 hello  如果没有echo 则 执行cat命令</span><br></pre></td></tr></table></figure>
+<h2 id="JAVA内存模型-Infoq-2018-1-9"><a href="#JAVA内存模型-Infoq-2018-1-9" class="headerlink" title="JAVA内存模型(Infoq) 2018-1-9"></a>JAVA内存模型(Infoq) 2018-1-9</h2><ol>
+<li>顺序一致性(syn)模型保证单线程内的操作会按程序的顺序执行，而JMM不保证单线程内的操作会按程序的顺序执行。。</li>
+<li>顺序一致性模型保证所有线程只能看到一致的操作执行顺序，而JMM不保证所有线程能看到一致的操作执行顺序。</li>
+<li>JMM不保证对64位的long型和double型变量的读/写操作具有原子性，而顺序一致性模型保证对所有的内存读/写操作都具有原子性。</li>
+</ol>
+<p>当写一个volatile变量时，JMM会把该线程对应的本地内存中的共享变量刷新到主内存。</p>
+<p>当读一个volatile变量时，JMM会把该线程对应的本地内存置为无效。线程接下来将从主内存中读取共享变量。</p>
+<p>Concurrent包的实现示意图：<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-9/66355814.jpg" alt=""></p>
+<h2 id="JAVA虚拟机内存组成"><a href="#JAVA虚拟机内存组成" class="headerlink" title="JAVA虚拟机内存组成"></a>JAVA虚拟机内存组成</h2><ol>
+<li><p><strong>方法区</strong>:用于存储虚拟机加载的类信息、常量、静态变量、是各个线程共享的内存区域。<br>可以通过<code>-XX:PermSize</code> 和 <code>-XX:MaxPermSize</code> 参数限制方法区的大小。<br><strong>运行时常量池</strong> 方法区的一部分，用于存放编译器生成的各种符号引用。</p>
+</li>
+<li><p><strong>虚拟机栈</strong>：每个方法被执行的时候 都会创建一个“栈帧”用于存储局部变量表(包括参数)、操作栈、方法出口等信息。</p>
+</li>
+</ol>
+<p>其中64位长度的long和double类型的数据会占用2个局部变量的空间，其余数据类型只占1个。</p>
+<p>当进入一个方法时，这个方法需要在栈帧中分配多大的局部变量是完全确定的。在编译期确定好的。</p>
+<ol>
+<li><p><strong>本地方法栈</strong>:与虚拟机栈基本类似,区别在于虚拟机栈为虚拟机执行的java方法服务，而本地方法栈则是为Native方法服务。</p>
+</li>
+<li><p><strong>堆</strong>:该内存区域存放了对象实例及数组(所有new的对象)。JVM配置参数:<code>-Xms</code>(最小值)和<code>-Xmx</code>(最大值)设置堆大小。<br>分为年轻代，和老年代。</p>
+</li>
+<li><p><strong>程序计数器</strong>:PC指针，记录执行位置。</p>
+</li>
+<li><p><strong>直接内存</strong>:NIO,调用Native方法直接分配堆外内存.</p>
+</li>
+</ol>
+<p><strong>内存溢出</strong>:java虚拟机内存超出了系统所能接受的，系统不能满足需求，于是产生溢出。</p>
+<p><strong>内存泄漏</strong>：是指你向系统申请分配内存进行使用(new)，可是使用完了以后却不归还(delete)，结果你申请到的那块内存你自己也不能再访问,该块已分配出来的内存也无法再使用，随着服务器内存的不断消耗，而无法使用的内存越来越多，系统也不能再次将它分配给需要的程序，产生泄露。</p>
 
       
     </div>
