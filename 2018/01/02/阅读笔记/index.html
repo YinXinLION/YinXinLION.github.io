@@ -7,12 +7,12 @@
   
   <title>阅读笔记 | 湖心亭看雪</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="以下均为阅读文章所总结及复制 从Chrome源码看DNS解析过程 2018-1-2当一台设备连接到路由器后，会发送DHCP Request的广播，然后会为电脑分配IP地址及DNS服务器地址nameserver。 Chrome会按照nameservers的顺序发起查询，并将结果缓存下来，有效时间是根据域名设置的TTL决定，在有效期内可以根据结果查询。缓存-&amp;gt;本地host文件(Chrome以Ma">
+  <meta name="description" content="以下均为阅读文章所搬运及少部分总结的。 =-= 大自然的搬运工。。 从Chrome源码看DNS解析过程 2018-1-2当一台设备连接到路由器后，会发送DHCP Request的广播，然后会为电脑分配IP地址及DNS服务器地址nameserver。 Chrome会按照nameservers的顺序发起查询，并将结果缓存下来，有效时间是根据域名设置的TTL决定，在有效期内可以根据结果查询。缓存-&amp;gt">
 <meta property="og:type" content="article">
 <meta property="og:title" content="阅读笔记">
 <meta property="og:url" content="http://yoursite.com/2018/01/02/阅读笔记/index.html">
 <meta property="og:site_name" content="湖心亭看雪">
-<meta property="og:description" content="以下均为阅读文章所总结及复制 从Chrome源码看DNS解析过程 2018-1-2当一台设备连接到路由器后，会发送DHCP Request的广播，然后会为电脑分配IP地址及DNS服务器地址nameserver。 Chrome会按照nameservers的顺序发起查询，并将结果缓存下来，有效时间是根据域名设置的TTL决定，在有效期内可以根据结果查询。缓存-&amp;gt;本地host文件(Chrome以Ma">
+<meta property="og:description" content="以下均为阅读文章所搬运及少部分总结的。 =-= 大自然的搬运工。。 从Chrome源码看DNS解析过程 2018-1-2当一台设备连接到路由器后，会发送DHCP Request的广播，然后会为电脑分配IP地址及DNS服务器地址nameserver。 Chrome会按照nameservers的顺序发起查询，并将结果缓存下来，有效时间是根据域名设置的TTL决定，在有效期内可以根据结果查询。缓存-&amp;gt">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-6/90068090.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-6/76791019.jpg">
@@ -21,10 +21,10 @@
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-6/61189215.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-8/58541315.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-9/66355814.jpg">
-<meta property="og:updated_time" content="2018-01-09T15:40:44.119Z">
+<meta property="og:updated_time" content="2018-01-10T15:40:54.144Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阅读笔记">
-<meta name="twitter:description" content="以下均为阅读文章所总结及复制 从Chrome源码看DNS解析过程 2018-1-2当一台设备连接到路由器后，会发送DHCP Request的广播，然后会为电脑分配IP地址及DNS服务器地址nameserver。 Chrome会按照nameservers的顺序发起查询，并将结果缓存下来，有效时间是根据域名设置的TTL决定，在有效期内可以根据结果查询。缓存-&amp;gt;本地host文件(Chrome以Ma">
+<meta name="twitter:description" content="以下均为阅读文章所搬运及少部分总结的。 =-= 大自然的搬运工。。 从Chrome源码看DNS解析过程 2018-1-2当一台设备连接到路由器后，会发送DHCP Request的广播，然后会为电脑分配IP地址及DNS服务器地址nameserver。 Chrome会按照nameservers的顺序发起查询，并将结果缓存下来，有效时间是根据域名设置的TTL决定，在有效期内可以根据结果查询。缓存-&amp;gt">
 <meta name="twitter:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-6/90068090.jpg">
   
     <link rel="alternate" href="/atom.xml" title="湖心亭看雪" type="application/atom+xml">
@@ -98,7 +98,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>以下均为阅读文章所总结及复制</p>
+        <p>以下均为阅读文章所搬运及少部分总结的。</p>
+<p>=-= 大自然的搬运工。。</p>
 <h2 id="从Chrome源码看DNS解析过程-2018-1-2"><a href="#从Chrome源码看DNS解析过程-2018-1-2" class="headerlink" title="从Chrome源码看DNS解析过程 2018-1-2"></a>从Chrome源码看DNS解析过程 2018-1-2</h2><p>当一台设备连接到路由器后，会发送DHCP Request的广播，然后会为电脑分配IP地址及DNS服务器地址nameserver。</p>
 <p>Chrome会按照nameservers的顺序发起查询，并将结果缓存下来，有效时间是根据域名设置的TTL决定，在有效期内可以根据结果查询。<br>缓存-&gt;本地host文件(Chrome以Map形式保存host)-&gt;nameserver查询。</p>
 <p>A - 把域名解析到一个IPV4地址上<br>AAAA - 把域名解析到一个IPV6地址上<br>CNAME - 解析到另外一个域名(当很多其它域名指向一个CNAME时，当需要改变IP地址时，只要改变这个CNAME的地址，那么其它的也跟着生效了，但是得做二次解析。)</p>
@@ -273,6 +274,30 @@
 </ol>
 <p><strong>内存溢出</strong>:java虚拟机内存超出了系统所能接受的，系统不能满足需求，于是产生溢出。</p>
 <p><strong>内存泄漏</strong>：是指你向系统申请分配内存进行使用(new)，可是使用完了以后却不归还(delete)，结果你申请到的那块内存你自己也不能再访问,该块已分配出来的内存也无法再使用，随着服务器内存的不断消耗，而无法使用的内存越来越多，系统也不能再次将它分配给需要的程序，产生泄露。</p>
+<h2 id="Java对象的序列化与反序列化-2018-1-10"><a href="#Java对象的序列化与反序列化-2018-1-10" class="headerlink" title="Java对象的序列化与反序列化 2018-1-10"></a>Java对象的序列化与反序列化 2018-1-10</h2><h3 id="Serializable-接口"><a href="#Serializable-接口" class="headerlink" title="Serializable 接口"></a>Serializable 接口</h3><p>当试图对一个对象进行序列化的时候，如果遇到不支持 <code>Serializable</code> 接口的对象,将抛出 NotSerializableException。</p>
+<p>如果要序列化的类有父类，要想同时将在父类中定义过的变量持久化下来，那么父类也应该集成<code>java.io.Serializable</code>接口。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">oos = new ObjectOutputStream(new FileOutputStream(&quot;tempFile&quot;));</span><br><span class="line">oos.wirteOject(user); //序列化</span><br><span class="line"></span><br><span class="line">ois = new ObjectInputStream(new FileInputStream(new File(&quot;tempFile&quot;)));</span><br><span class="line">ois.readObject();</span><br></pre></td></tr></table></figure>
+<h3 id="Externalizable接口"><a href="#Externalizable接口" class="headerlink" title="Externalizable接口"></a>Externalizable接口</h3><p><code>Externalizable</code>和<code>Serializable</code>区别：<code>Externalizable</code>继承<code>Serializable</code>。</p>
+<p><code>Externalizable</code>接口中定义了两个抽象方法：writeExternal()与readExternal()。</p>
+<p>当使用<code>Externalizable</code>接口来进行序列化与反序列化的时候需要开发人员重写<code>writeExternal()</code>与<code>readExternal()</code>方法。</p>
+<p>在使用<code>Externalizable</code>进行序列化的时候，在读取对象时，会调用被序列化类的无参构造器去创建一个新的对象，然后再将被保存对象的字段的值分别填充到新对象中。所以，实现<code>Externalizable</code>接口的类必须要提供一个<code>public</code>的无参的构造器。</p>
+<p>重写<code>writeExternal()</code>与<code>readExternal()</code>方法，才能完整的保存下来对象状态，否则不会保存对象状态。</p>
+<h3 id="ObjectOutput和ObjectInput-接口"><a href="#ObjectOutput和ObjectInput-接口" class="headerlink" title="ObjectOutput和ObjectInput 接口"></a>ObjectOutput和ObjectInput 接口</h3><p>ObjectInput接口 扩展自 DataInput 接口以包含对象的读操作。</p>
+<p>ObjectOutput 扩展 DataOutput 接口以包含对象的写入操作。</p>
+<h3 id="Transient-关键字"><a href="#Transient-关键字" class="headerlink" title="Transient 关键字"></a>Transient 关键字</h3><p>Transient 关键字的作用是控制变量的序列化，在变量声明前加上该关键字，可以阻止该变量被序列化到文件中，在被反序列化后，transient 变量的值被设为初始值，如 int 型的是 0，对象型的是 null。</p>
+<h3 id="序列化ID"><a href="#序列化ID" class="headerlink" title="序列化ID"></a>序列化ID</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private static final long serialVersionUID;</span><br></pre></td></tr></table></figure>
+<p>很眼熟吧~</p>
+<p>虚拟机是否允许反序列化，不仅取决于类路径和功能代码是否一致，一个非常重要的一点是两个类的序列化 ID 是否一致。</p>
+<h2 id="设计模式概述"><a href="#设计模式概述" class="headerlink" title="设计模式概述"></a>设计模式概述</h2><blockquote>
+<p>设计模式(Design Pattern)是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结，使用设计模式是为了可重用代码、让代码更容易被他人理解并且保证代码可靠性。</p>
+</blockquote>
+<p>设计模式一般包含模式名称、问题、目的、解决方案、效果等组成要素，其中关键要素是模式名称、问题、解决方案和效果.<br><strong>模式名称</strong>:以便更好地理解模式并方便开发人员之间的交流.</p>
+<p><strong>问题(Problem)</strong>:描述了应该在何时使用模式，它包含了设计中存在的问题以及问题存在的原因；</p>
+<p><strong>解决方案(Solution)</strong>:描述了一个设计模式的组成成分，以及这些组成成分之间的相互关系，各自的职责和协作方式，通常解决方案通过UML类图和核心代码来进行描述；</p>
+<p><strong>效果(Consequences)</strong>:描述了模式的优缺点以及在使用模式时应权衡的问题。</p>
+<p>根据它们的用途，设计模式可分为创建型(Creational)，结构型(Structural)和行为型(Behavioral)三种。</p>
+<p><strong>创建型模式主要用于描述如何创建对象，结构型模式主要用于描述如何实现类或对象的组合，行为型模式主要用于描述类或对象怎样交互以及怎样分配职责</strong></p>
+<p>在学习每一个设计模式时至少应该掌握如下几点：这个设计模式的意图是什么，它要解决一个什么问题，什么时候可以使用它；它是如何解决的，掌握它的结构图，记住它的关键代码；能够想到至少两个它的应用实例，一个生活中的，一个软件中的；这个模式的优缺点是什么，在使用时要注意什么。</p>
 
       
     </div>
