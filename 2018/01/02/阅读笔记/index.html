@@ -21,7 +21,11 @@
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-6/61189215.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-8/58541315.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-9/66355814.jpg">
-<meta property="og:updated_time" content="2018-01-10T15:40:54.144Z">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-11/95662756.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-11/46119128.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-11/69903717.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-11/6878478.jpg">
+<meta property="og:updated_time" content="2018-01-11T15:59:23.900Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阅读笔记">
 <meta name="twitter:description" content="以下均为阅读文章所搬运及少部分总结的。 =-= 大自然的搬运工。。 从Chrome源码看DNS解析过程 2018-1-2当一台设备连接到路由器后，会发送DHCP Request的广播，然后会为电脑分配IP地址及DNS服务器地址nameserver。 Chrome会按照nameservers的顺序发起查询，并将结果缓存下来，有效时间是根据域名设置的TTL决定，在有效期内可以根据结果查询。缓存-&amp;gt">
@@ -298,6 +302,45 @@
 <p>根据它们的用途，设计模式可分为创建型(Creational)，结构型(Structural)和行为型(Behavioral)三种。</p>
 <p><strong>创建型模式主要用于描述如何创建对象，结构型模式主要用于描述如何实现类或对象的组合，行为型模式主要用于描述类或对象怎样交互以及怎样分配职责</strong></p>
 <p>在学习每一个设计模式时至少应该掌握如下几点：这个设计模式的意图是什么，它要解决一个什么问题，什么时候可以使用它；它是如何解决的，掌握它的结构图，记住它的关键代码；能够想到至少两个它的应用实例，一个生活中的，一个软件中的；这个模式的优缺点是什么，在使用时要注意什么。</p>
+<h2 id="面向对象设计原则-2018-1-11"><a href="#面向对象设计原则-2018-1-11" class="headerlink" title="面向对象设计原则 2018-1-11"></a>面向对象设计原则 2018-1-11</h2><ol>
+<li>单一职责原则:一个类只负责一个功能领域中的相应职责.</li>
+<li>开闭原则:软件实体应对扩展开放，而对修改关闭.</li>
+<li>里氏代换原则:所有引用基类对象的地方能够透明地使用其子类的对象</li>
+<li>依赖倒转原则:抽象不应该依赖于细节，细节应该依赖于抽象</li>
+<li>接口隔离原则:使用多个专门的接口，而不使用单一的总接口</li>
+<li>合成复用原则:尽量使用对象组合，而不是继承来达到复用的目的.</li>
+<li>迪米特法则:一个软件实体应当尽可能少地与其他实体发生相互作用.</li>
+</ol>
+<h3 id="面向对象设计原则之单一职责原则"><a href="#面向对象设计原则之单一职责原则" class="headerlink" title="面向对象设计原则之单一职责原则"></a>面向对象设计原则之单一职责原则</h3><blockquote>
+<p><strong>单一职责原则(Single Responsibility Principle, SRP)：一个类只负责一个功能领域中的相应职责，或者可以定义为：就一个类而言，应该只有一个引起它变化的原因。</strong></p>
+</blockquote>
+<p>单一职责原则告诉我们:在软件系统中，一个类（大到模块，小到方法）承担的职责越多，它被复用的可能性就越小，而且一个类承担的职责过多，就相当于将这些职责耦合在一起，当其中一个职责变化时，可能会影响其他职责的运作，因此要将这些职责进行分离，将不同的职责封装在不同的类中，即将不同的变化原因封装在不同的类中，如果多个职责总是同时发生改变则可将它们封装在同一类中。</p>
+<p><strong>单一职责原则是实现高内聚、低耦合的指导方针，它是最简单但又最难运用的原则</strong></p>
+<p>开发人员针对某CRM（Customer Relationship  Management，客户关系管理）系统中客户信息图形统计模块提出了如图1所示初始设计方案：<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-11/95662756.jpg" alt=""></p>
+<p>如果在其他类中也需要连接数据库或者使用findCustomers()方法查询客户信息，则难以实现代码的重用。无论是修改数据库连接方式还是修改图表显示方式都需要修改该类，它不止一个引起它变化的原因，违背了单一职责原则.</p>
+<p>使其满足单一职责原则，类CustomerDataChart可拆分为如下三个类：</p>
+<p>(1) DBUtil：负责连接数据库，包含数据库连接方法getConnection()；</p>
+<p>(2) CustomerDAO：负责操作数据库中的Customer表，包含对Customer表的增删改查等方法，如findCustomers()；</p>
+<p>(3) CustomerDataChart：负责图表的生成和显示，包含方法createChart()和displayChart()。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-11/46119128.jpg" alt=""></p>
+<h3 id="面向对象设计原则之开闭原则"><a href="#面向对象设计原则之开闭原则" class="headerlink" title="面向对象设计原则之开闭原则"></a>面向对象设计原则之开闭原则</h3><p>开闭原则(Open-Closed Principle, OCP)：一个软件实体应当对扩展开放，对修改关闭。即软件实体应尽量在不修改原有代码的情况下进行扩展。</p>
+<p><strong>抽象化是开闭原则的关键</strong><br>软件公司开发的CRM系统可以显示各种类型的图表，如饼状图和柱状图等，为了支持多种图表显示方式，原始设计方案:<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-11/69903717.jpg" alt=""><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//ChartDisplay代码片段</span><br><span class="line">if (type.equals(&quot;pie&quot;)) &#123;  </span><br><span class="line">    PieChart chart = new PieChart();  </span><br><span class="line">    chart.display();  </span><br><span class="line">&#125;  </span><br><span class="line">else if (type.equals(&quot;bar&quot;)) &#123;  </span><br><span class="line">    BarChart chart = new BarChart();  </span><br><span class="line">    chart.display();  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果需要增加一个新的图表类，如折线图LineChart，则需要修改ChartDisplay类的display()方法的源代码，增加新的判断逻辑，违反了开闭原则。</p>
+<p>由于在ChartDisplay类的display()方法中针对每一个图表类编程，因此增加新的图表类不得不修改源代码。可以通过抽象化的方式对系统进行重构，使之增加新的图表类时无须修改源代码，满足开闭原则。具体做法如下：</p>
+<p>(1) 增加一个抽象图表类AbstractChart，将各种具体图表类作为其子类；</p>
+<p>(2)  ChartDisplay类针对抽象图表类进行编程，由客户端来决定使用哪种具体图表。</p>
+<p>重构后结构:<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-11/6878478.jpg" alt=""></p>
+<h2 id="深入分析Java的序列化与反序列化"><a href="#深入分析Java的序列化与反序列化" class="headerlink" title="深入分析Java的序列化与反序列化"></a>深入分析Java的序列化与反序列化</h2><h3 id="ArrayList的序列化"><a href="#ArrayList的序列化" class="headerlink" title="ArrayList的序列化"></a>ArrayList的序列化</h3><p>看下<code>java.util.ArrayList</code>源码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class ArrayList&lt;E&gt; extends AbstractList&lt;E&gt;</span><br><span class="line">        implements List&lt;E&gt;, RandomAccess, Cloneable, java.io.Serializable</span><br><span class="line">&#123;</span><br><span class="line">    private static final long serialVersionUID = 8683452581122892189L;</span><br><span class="line">    transient Object[] elementData; // non-private to simplify nested class access</span><br><span class="line">    private int size;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可知：它实现了<code>Serializable</code>接口，可以实现序列化及反序列化。</p>
+<p>然而元素都存在<code>elementData</code>数组中，但被<code>transient</code>修饰啦。把元素保存下来通过<code>writeObject</code>方法和<code>readObject</code>方法。</p>
+<blockquote>
+<p>在序列化过程中，如果被序列化的类中定义了writeObject 和 readObject 方法，虚拟机会试图调用对象类里的 writeObject 和 readObject 方法，进行用户自定义的序列化和反序列化。</p>
+<p>如果没有这样的方法，则默认调用是 ObjectOutputStream 的 defaultWriteObject 方法以及 ObjectInputStream 的 defaultReadObject 方法。</p>
+<p>用户自定义的 writeObject 和 readObject 方法可以允许用户控制序列化的过程，比如可以在序列化的过程中动态改变序列化的数值。</p>
+</blockquote>
+<p>为什么要使用<code>transient</code>?<br>ArrayList实际上是动态数组，每次在放满以后自动增长设定的长度值，如果数组自动增长长度设为100，而实际只放了一个元素，那就会序列化99个null元素。为了保证在序列化的时候不会将这么多null同时进行序列化，ArrayList把元素数组设置为transient。</p>
+<p>ObjectOutputStream的writeObject的调用栈：<br><code>writeObject ---&gt; writeObject0 ---&gt;writeOrdinaryObject---&gt;writeSerialData---&gt;invokeWriteObject</code></p>
+<p>在使用ObjectOutputStream的writeObject方法和ObjectInputStream的readObject方法时，会通过反射的方式调用。</p>
+<p>如果一个类想被序列化，需要实现<code>Serializable</code>接口。否则将抛出<code>NotSerializableException</code>异常，这是因为，在序列化操作过程中会对类型进行检查，要求被序列化的类必须属于Enum、Array和Serializable类型其中的任何一种。</p>
 
       
     </div>
