@@ -29,7 +29,7 @@
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-15/98048601.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-16/82183064.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-13/26869601.jpg">
-<meta property="og:updated_time" content="2018-01-15T16:04:04.422Z">
+<meta property="og:updated_time" content="2018-01-16T15:13:01.247Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阅读笔记">
 <meta name="twitter:description" content="以下均为阅读文章所搬运及少部分总结的。 =-= 大自然的搬运工。。 从Chrome源码看DNS解析过程 2018-1-2当一台设备连接到路由器后，会发送DHCP Request的广播，然后会为电脑分配IP地址及DNS服务器地址nameserver。 Chrome会按照nameservers的顺序发起查询，并将结果缓存下来，有效时间是根据域名设置的TTL决定，在有效期内可以根据结果查询。缓存-&amp;gt">
@@ -346,6 +346,8 @@
 <p><strong>由于CustomerDAO针对具体数据转换类编程，因此在增加新的数据转换类或者更换数据转换类时都不得不修改CustomerDAO的源代码。我们可以通过引入抽象数据转换类解决该问题</strong></p>
 <p>只要将新增数据转换类作为DataConvertor的子类并修改配置文件即可，原有代码无须做任何修改，满足开闭原则。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-16/82183064.jpg" alt=""></p>
 <p><strong>开闭原则是目标，里氏代换原则是基础，依赖倒转原则是手段</strong></p>
+<h3 id="面向对象设计原则之接口隔离原则-2018-1-16"><a href="#面向对象设计原则之接口隔离原则-2018-1-16" class="headerlink" title="面向对象设计原则之接口隔离原则 2018-1-16"></a>面向对象设计原则之接口隔离原则 2018-1-16</h3><p>接口不能太大，需要细分接口，使每一个接口承担一种相对独立的角色。</p>
+<h3 id="面向对象设计原则之迪米特法则"><a href="#面向对象设计原则之迪米特法则" class="headerlink" title="面向对象设计原则之迪米特法则"></a>面向对象设计原则之迪米特法则</h3><p>尽量减少对象之间的交互，不应当发生任何直接的相互作用，可以引入一个合理的第三者来降低现有对象之间的耦合度。</p>
 <h2 id="深入分析Java的序列化与反序列化"><a href="#深入分析Java的序列化与反序列化" class="headerlink" title="深入分析Java的序列化与反序列化"></a>深入分析Java的序列化与反序列化</h2><h3 id="ArrayList的序列化"><a href="#ArrayList的序列化" class="headerlink" title="ArrayList的序列化"></a>ArrayList的序列化</h3><p>看下<code>java.util.ArrayList</code>源码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class ArrayList&lt;E&gt; extends AbstractList&lt;E&gt;</span><br><span class="line">        implements List&lt;E&gt;, RandomAccess, Cloneable, java.io.Serializable</span><br><span class="line">&#123;</span><br><span class="line">    private static final long serialVersionUID = 8683452581122892189L;</span><br><span class="line">    transient Object[] elementData; // non-private to simplify nested class access</span><br><span class="line">    private int size;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>可知：它实现了<code>Serializable</code>接口，可以实现序列化及反序列化。</p>
 <p>然而元素都存在<code>elementData</code>数组中，但被<code>transient</code>修饰啦。把元素保存下来通过<code>writeObject</code>方法和<code>readObject</code>方法。</p>
