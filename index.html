@@ -614,6 +614,37 @@
 <h4 id="实现Number的方法"><a href="#实现Number的方法" class="headerlink" title="实现Number的方法"></a>实现Number的方法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">int intValue();</span><br><span class="line">long longValue();</span><br><span class="line">float floatValue();</span><br><span class="line">double doubleValue();</span><br><span class="line">byte byteValue();</span><br><span class="line">short shortValue();</span><br></pre></td></tr></table></figure>
 <p>实现如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public long longValue() &#123;</span><br><span class="line">    return (long)value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public float floatValue() &#123;</span><br><span class="line">    return (float)value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public double doubleValue() &#123;</span><br><span class="line">    return (double)value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h3 id="动态规划-2018-1-17"><a href="#动态规划-2018-1-17" class="headerlink" title="动态规划 2018-1-17"></a>动态规划 2018-1-17</h3><p>需要 最优子结构，边界值，状态转移方程。</p>
+<h3 id="Synchronized底层实现原理-2018-1-18"><a href="#Synchronized底层实现原理-2018-1-18" class="headerlink" title="Synchronized底层实现原理 2018-1-18"></a>Synchronized底层实现原理 2018-1-18</h3><p>概念1：Java对象头：包含两部分MarkWord和Klass Pointer(类型指针)<br>Markword中包含：哈希码，GC分带年龄，锁状态标志，线程持有的锁，偏向线程ID，偏向时间戳等等。</p>
+<p>概念2：Monitor：Monitor也是一个对象，它是线程私有的，每一个线程都有一个可用的monitor record列表，还有一个全局的可用列表。每一个被锁住的对象会和一个monitor相关联。</p>
+<p>概念3：自旋锁：由于线程阻塞和唤醒需要CPU从用户态到内核态，耗时，不如循环等待，查看是否锁释放，因为一般锁持有的时间都会很短。</p>
+<p>概念4：锁消除：JVM会检查是否存在共享数据的竞争，不存在的话，直接消除加锁操作。</p>
+<p>概念5：锁粗化：如果一段代码，加锁，解锁，加锁，解锁..，不如直接加锁 执行 解锁，这样耗时少。</p>
+<h3 id="Tomcat集群session保证同步"><a href="#Tomcat集群session保证同步" class="headerlink" title="Tomcat集群session保证同步"></a>Tomcat集群session保证同步</h3><p>Tomcat实现会话同步通过Manager-&gt;Cluster-&gt;Tribes(通信框架)。</p>
+<p>DeltaManager会话管理器是tomcat默认的集群会话管理器，用于集群各节点的会话状态同步维护。使用全节点复制模式，会话创建，全体节点都要收到这个状态变化信息。</p>
+<p>还有一种工作机制，每个会话存在一份原件和一个备份，通过session stick保证先访问原件，如果原件节点坏掉，如果请求分到刚好节点有，则需要创建备份，如果节点没有，则向所有集群节点发问谁有，并在此节点生成一个原件。</p>
+<p>tomcat会话集使用的是ConcurrentHashMap</p>
+<p>int的范围是 -2的31次方 ~ 2的31-1  -2147483648 ~ 2147483647</p>
+<h3 id="ConcurrentHashMap源码学习"><a href="#ConcurrentHashMap源码学习" class="headerlink" title="ConcurrentHashMap源码学习"></a>ConcurrentHashMap源码学习</h3><p>2018-1-19的活，先记一下。</p>
+<h3 id="乐观锁和悲观锁-2018-1-19"><a href="#乐观锁和悲观锁-2018-1-19" class="headerlink" title="乐观锁和悲观锁 2018-1-19"></a>乐观锁和悲观锁 2018-1-19</h3><p>首先这是两种方法，并非锁机制（行锁，表锁，排它锁，共享锁，页级锁），也不是只有DBMS才有。</p>
+<p>悲观锁：</p>
+<ol>
+<li>悲观锁：一个事务执行，应用了锁，只有当这个事务把锁释放了，才能够执行与该锁冲突的操作。</li>
+<li>数据库中悲观锁流程：在对任意记录进行修改时，先尝试给该记录加锁。如果加锁失败，表明记录正在修改，当前查询需要修改或者抛出异常。</li>
+<li>MySQL(Innodb)使用悲观锁：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//0.开始事务</span><br><span class="line">begin;/begin work;/start transaction; (三者选一就可以)</span><br><span class="line">//1.查询出商品信息</span><br><span class="line">select status from t_goods where id=1 for update;</span><br><span class="line">//2.根据商品信息生成订单</span><br><span class="line">insert into t_orders (id,goods_id) values (null,1);</span><br><span class="line">//3.修改商品status为2</span><br><span class="line">update t_goods set status=2;</span><br><span class="line">//4.提交事务</span><br><span class="line">commit;/commit work;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>使用<code>for update</code>开启排它锁方式以实现悲观锁。MySQL的Innodb默认是<strong>行级锁</strong>，行级锁是基于索引，如果SQL语句中用不到索引是不会使用行级锁的，会用表级锁把整个表锁住。</p>
+<p>乐观锁:</p>
+<ol>
+<li>乐观锁：它假设多用户并发的事务在处理时不会彼此互相影响，每个事务会先检查在该事务读取数据后，有没有其他事务又修改了该数据，如果其他事务有更新的话，正在提交的事务会进行回滚。</li>
+<li>实现方式：乐观锁并不会使用数据库提供的锁机制。一般的实现乐观锁的方式就是记录数据版本。</li>
+<li>Version：当读取数据时，将版本号一起读出来，更新时，对版本标识进行更新。<strong>实现方式两种，第一是版本号，第二是使用时间戳</strong>。</li>
+<li><p>每次对数据进行更新版本号+1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1.查询出商品信息</span><br><span class="line">select (status,status,version) from t_goods where id=#&#123;id&#125;</span><br><span class="line">2.根据商品信息生成订单</span><br><span class="line">3.修改商品status为2</span><br><span class="line">update t_goods</span><br><span class="line">set status=2,version=version+1</span><br><span class="line">where id=#&#123;id&#125; and version=#&#123;version&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>优点与缺点：乐观并发控制相信事务之间数据竞争概率小，但可能遇到坏的结果，例如两事务都读取数据库一行，经过修改写回数据库造成影响，由间隙锁和行锁解决问题。</p>
+</li>
+</ol>
 
       
     </div>
