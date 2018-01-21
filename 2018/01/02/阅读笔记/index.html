@@ -29,7 +29,14 @@
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-15/98048601.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-16/82183064.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-13/26869601.jpg">
-<meta property="og:updated_time" content="2018-01-19T15:53:07.018Z">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-21/59041500.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-21/47593821.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-21/90934099.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-21/66508301.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-21/84631196.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-21/2320534.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-21/45501567.jpg">
+<meta property="og:updated_time" content="2018-01-21T13:50:15.940Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阅读笔记">
 <meta name="twitter:description" content="以下均为阅读文章所搬运及少部分总结的。 =-= 大自然的搬运工。。 从Chrome源码看DNS解析过程 2018-1-2当一台设备连接到路由器后，会发送DHCP Request的广播，然后会为电脑分配IP地址及DNS服务器地址nameserver。 Chrome会按照nameservers的顺序发起查询，并将结果缓存下来，有效时间是根据域名设置的TTL决定，在有效期内可以根据结果查询。缓存-&amp;gt">
@@ -522,7 +529,48 @@
 <p>还有一种工作机制，每个会话存在一份原件和一个备份，通过session stick保证先访问原件，如果原件节点坏掉，如果请求分到刚好节点有，则需要创建备份，如果节点没有，则向所有集群节点发问谁有，并在此节点生成一个原件。</p>
 <p>tomcat会话集使用的是ConcurrentHashMap</p>
 <p>int的范围是 -2的31次方 ~ 2的31-1  -2147483648 ~ 2147483647</p>
-<h3 id="ConcurrentHashMap源码学习"><a href="#ConcurrentHashMap源码学习" class="headerlink" title="ConcurrentHashMap源码学习"></a>ConcurrentHashMap源码学习</h3><p>2018-1-19的活，先记一下。</p>
+<h3 id="ConcurrentHashMap源码学习"><a href="#ConcurrentHashMap源码学习" class="headerlink" title="ConcurrentHashMap源码学习"></a>ConcurrentHashMap源码学习</h3><p>2018-1-19的活，先记一下。然而 21号才开始看，，</p>
+<p><strong>ConcuurentHashMap初始化具体实现</strong><br><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-21/59041500.jpg" alt=""><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public ConcurrentHashMap(int initialCapacity) &#123;</span><br><span class="line">	  //都调用这个构造方法</span><br><span class="line">	  this(DEFAULT_INITAL_CAPACITY, DEAFULT_LOAD_FACTOR_, DEFAULT_CONCURRENCY);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>HashEntry</code>和<code>segment</code>数组都是2的N次方。</p>
+<p><strong>Segment定位</strong><br><code>ConcurrentHashMap</code>使用分段锁segment来保护数据，在插入和读取数据元素，需要通过hash算法定位segment。</p>
+<p>为什么要再散列？ 再散列的目的是为了减少冲突，让元素可以均匀分配在不同的segment上，提高存储效率。</p>
+<h4 id="ConcurrentHashMap相关操作分析"><a href="#ConcurrentHashMap相关操作分析" class="headerlink" title="ConcurrentHashMap相关操作分析"></a>ConcurrentHashMap相关操作分析</h4><p><strong>get操作</strong><br><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-21/47593821.jpg" alt=""></p>
+<ol>
+<li>根据key,计算出来HashCode</li>
+<li>根据HashCode定位Segment,如果Segment不为null,并且Segment.table也不为null,那么执行步骤3,否则返回null,该key所对应的value不存在。</li>
+<li>根据HashCode定位table中对应的HashEntry,遍历HashEntry,如果key存在,返回key对应的value</li>
+<li>如果没找到key，返回null。</li>
+</ol>
+<p>get整个过程不加锁,是因为:volatile修饰，保证读取到的是最新的(线程间的可见性)。</p>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-21/90934099.jpg" alt=""></p>
+<p><strong>put操作</strong><br>ConcurrentHashMap提供两个方法<code>put</code>和<code>putIfAbsent</code>来完成put操作，它们之间的区别在于<code>put</code>方法做插入时key存在会更新key所对应的value，而<code>putIfAbsent</code>不会更新。</p>
+<p>put实现<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-21/66508301.jpg" alt=""></p>
+<ol>
+<li>参数校验,value不能为null,为null抛出空指针异常。</li>
+<li>计算key的HashCode</li>
+<li>定位Segment，如果Segment不存在，创建新的Segment。</li>
+<li>调用Segment的put方法在对应Segment做插入操作。</li>
+</ol>
+<p>putIfAbsent实现<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-21/84631196.jpg" alt=""><br>putIfAbsent的执行过程与put方法是一致的，除了最后调用的segment的put方法参数onlyIfAbsent传参不一样。</p>
+<p><strong>segment的put方法实现</strong><br>segment的put方法是整个put操作的核心，它实现了在segment的HashEntry数组中做插入（segment的HashEntry数组采用开链法来处理冲突）。</p>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-21/2320534.jpg" alt=""></p>
+<ol>
+<li>获取锁，保证put是线程安全的。</li>
+<li>定位到HashEtry数组的具体的HashEntry。</li>
+<li>遍历HashEntry链表，如果插入key已存在，需要更新key锁对应的value(!onlyIfAbsent)，更新oldValue-&gt;newValue，调到步骤5</li>
+<li>若key不存在，则直接步骤5，遍历完HashEntry列表，key不存在，插入HashEntry节点，oldValue=null，跳转第5步</li>
+<li>释放锁，返回oldValue。</li>
+</ol>
+<p>步骤4，由于不存在HashEntry不存在，需要new一个，经历两个步骤:</p>
+<ol>
+<li><p>HashEntry扩容：<br>是否需要扩容，在插入元素前会先判断Segment的HashEntry数组是否超过threshold，如果超过阀值，则需要对HashEntry数组扩容；<br>如何扩容，在扩容的时候，首先创建一个容量是原来容量两倍的数组，将原数组的元素再散列后插入到新的数组里。为了高效，ConcurrentHashMap只对某个Segment进行扩容，不会对整个容器扩容。</p>
+</li>
+<li><p>定位添加元素对应的位置，然后将其放到HashEntry数组中。</p>
+</li>
+</ol>
+<p><strong>Size实现</strong><br>如果需要统计整个ConcurrentHashMap的容量，需要统计所有Segment容量然后求和，Segment提供变量count用于存储当前Segment的容量。但是ConcurrentHashMap为了保证线程安全，并不是直接把所有的Segment的count相加来得到整个容器的大小。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-21/45501567.jpg" alt=""><br>ConcurrentHashMap先尝试2次不锁住Segment的方式来统计每个Segment的大小，如果在统计的过程中Segment的count发生了变化，这时候再加锁统计Segment的count。</p>
+<p>ConcurrentHashMap如何判断统计过程中Segment的cout发生了变化？</p>
+<p>Segment使用变量modCount来表示Segment大小是否发生变化，在put/remove/clean操作里都会将modCount加1，那么在统计size的前后只需要比较modCount是否发生了变化，如果发生变化，Segment的大小肯定发生了变化。</p>
 <h3 id="乐观锁和悲观锁-2018-1-19"><a href="#乐观锁和悲观锁-2018-1-19" class="headerlink" title="乐观锁和悲观锁 2018-1-19"></a>乐观锁和悲观锁 2018-1-19</h3><p>首先这是两种方法，并非锁机制（行锁，表锁，排它锁，共享锁，页级锁），也不是只有DBMS才有。</p>
 <p>悲观锁：</p>
 <ol>
