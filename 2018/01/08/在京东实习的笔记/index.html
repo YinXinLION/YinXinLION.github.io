@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="湖心亭看雪">
 <meta property="og:description" content="主要记录自己工作上的发现和遇到问题及解决办法Vue与前端1.前端通过ajax请求，得到响应的json数据，那么获取json的每个属性非常方便，很爽。12345//后端Controller@GetMapping(&amp;quot;/json&amp;quot;)public Person getPersonName()&amp;#123;  return new Person(&amp;quot;a&amp;quot;,&amp;quot;b&amp;">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-25T15:02:43.181Z">
+<meta property="og:updated_time" content="2018-01-27T15:47:21.242Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="京东实习记录">
 <meta name="twitter:description" content="主要记录自己工作上的发现和遇到问题及解决办法Vue与前端1.前端通过ajax请求，得到响应的json数据，那么获取json的每个属性非常方便，很爽。12345//后端Controller@GetMapping(&amp;quot;/json&amp;quot;)public Person getPersonName()&amp;#123;  return new Person(&amp;quot;a&amp;quot;,&amp;quot;b&amp;">
@@ -109,6 +109,7 @@
 <h3 id="2018-1-25-上线总结"><a href="#2018-1-25-上线总结" class="headerlink" title="2018-1-25 上线总结"></a>2018-1-25 上线总结</h3><p>今天晚上十点多才回到住的地方，原因是上线。自己太粗心了，String类型当int类型进行加1操作，导致type类型(1-6)错误。<br>上线过程中，一定要检查配置文件是否出错，测试是一个配置文件，预发和线上又是不同的文件，一定要整理清楚，记住是否应该在线上配置，如果不配置的话，读取配置文件出错，那么这个系统将没法正常运行。</p>
 <p>京东消息中间件使用JMQ，生产者需要自己的app名，username，password，创建出一个Producer进行制造消息。消费者也需要app，username，password，创建Consumer进行消费。他们通过topic进行消息类型的确定，topic是全局独一无二的。</p>
 <p>对于，合并主干代码，一定要审查清楚，确保代码正确，尤其是配置文件正确，因为预发配置和线上不一样。不然会重复上线，流程很麻烦。<br>在此，谢谢明敏哥长期以来对我的帮助，让我学到了很多很多。我会尝试耐心认真的去做事情的。</p>
+<h3 id="2018-1-26-商家后台管理系统出现XSS漏洞"><a href="#2018-1-26-商家后台管理系统出现XSS漏洞" class="headerlink" title="2018-1-26 商家后台管理系统出现XSS漏洞"></a>2018-1-26 商家后台管理系统出现XSS漏洞</h3><p>那天，安全部门告知我们出现了XSS漏洞，原因是商家添加商品页面，那些输入框对字符串没有进行过滤，导致少量商家密码泄露。<br>Controller获取前端商家传来的参数封装到了一个Template中，我解决的方法是:通过java反射，将对象所有的属性获取到，然后根据每个属性的类型判断是否为<code>String</code>类型，如果是，则调用Apache的StringUtiles的html转义方法进行转义后，再放入属性中。</p>
 
       
     </div>

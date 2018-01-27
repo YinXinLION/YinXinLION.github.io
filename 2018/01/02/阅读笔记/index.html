@@ -38,7 +38,7 @@
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-21/45501567.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-22/18463439.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-22/39431678.jpg">
-<meta property="og:updated_time" content="2018-01-23T15:32:20.878Z">
+<meta property="og:updated_time" content="2018-01-27T15:57:07.538Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阅读笔记">
 <meta name="twitter:description" content="以下均为阅读文章所搬运及少部分总结的。 =-= 大自然的搬运工。。 从Chrome源码看DNS解析过程 2018-1-2当一台设备连接到路由器后，会发送DHCP Request的广播，然后会为电脑分配IP地址及DNS服务器地址nameserver。 Chrome会按照nameservers的顺序发起查询，并将结果缓存下来，有效时间是根据域名设置的TTL决定，在有效期内可以根据结果查询。缓存-&amp;gt">
@@ -635,6 +635,12 @@
 <li>工厂类负责创建的对象比较少，由于创建的对象较少，不会造成工厂方法中的业务逻辑太过复杂。</li>
 <li>客户端只知道传入工厂类的参数，对于如何创建对象并不关心。</li>
 </ol>
+<h3 id="final关键字-2018-1-26"><a href="#final关键字-2018-1-26" class="headerlink" title="final关键字 2018-1-26"></a>final关键字 2018-1-26</h3><p>1.修饰变量<br>说明一个数据是不可改变的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">class Value &#123;</span><br><span class="line">    int v;</span><br><span class="line">    public Value(int v) &#123;</span><br><span class="line">        this.v = v;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">public class FinalTest &#123;</span><br><span class="line">    final int f1 = 1;</span><br><span class="line">    final int f2;</span><br><span class="line">    public FinalTest() &#123;</span><br><span class="line">        f2 = 2;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        final int value1 = 1; //value1不可改变</span><br><span class="line">        // value1 = 4;</span><br><span class="line">        final double value2; //value2先声明 后赋值</span><br><span class="line">        value2 = 2.0;</span><br><span class="line">        final Value value3 = new Value(1);//引用对象不能变，对象属性可以变</span><br><span class="line">        value3.v = 4;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>final修饰变量，可以不在声明时赋值（允许 先声明后赋值）。引用对象不能把，但引用属性可以变。</p>
+<p>2.修饰方法参数<br>final修饰表示我们只会给它赋值一次且不会改变变量的值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public void finalFunc(final int i, final Value value) &#123;</span><br><span class="line">        // i = 5; 不能改变i的值</span><br><span class="line">        // v = new Value(); 不能改变v的值</span><br><span class="line">        value.v = 5; // 可以改变引用对象的值</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>3.修饰方法<br>final关键字修饰方法，它表示该方法不能被覆盖。</p>
+<p>4.修饰类<br>final修饰的类是无法被继承的。</p>
+<h3 id="工厂方法模式-2018-1-27"><a href="#工厂方法模式-2018-1-27" class="headerlink" title="工厂方法模式 2018-1-27"></a>工厂方法模式 2018-1-27</h3><p>在工厂方法模式中，不再提供一个统一的工厂类来创建所有的产品对象，而是针对不同的产品提供不同的工厂，系统提供一个与产品等级结构对应的工厂等级结构。</p>
 
       
     </div>
