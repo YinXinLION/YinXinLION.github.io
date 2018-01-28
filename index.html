@@ -65,6 +65,53 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Python入门学习(四)-模块" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/28/Python入门学习(四)-模块/" class="article-date">
+  <time datetime="2018-01-28T02:31:44.000Z" itemprop="datePublished">2018-01-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/01/28/Python入门学习(四)-模块/">Python入门学习(四)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="while循环"><a href="#while循环" class="headerlink" title="while循环"></a>while循环</h3><p>先来看下Python的while和for循环<br>while循环可以在结束时执行一个逻辑，看代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">counter = 1</span><br><span class="line">while counter &lt;= 10 :</span><br><span class="line">    counter += 1</span><br><span class="line">    print(counter)</span><br><span class="line">else:</span><br><span class="line">    print(&apos;EOF&apos;)</span><br><span class="line"></span><br><span class="line">#当while执行false时，可执行else代码块。</span><br></pre></td></tr></table></figure></p>
+<h3 id="for循环"><a href="#for循环" class="headerlink" title="for循环"></a>for循环</h3><p>主要用来遍历/循环 序列、集合、字典<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for target_list in expression_list:</span><br><span class="line">    pass</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(变量, end=&apos;&apos;)</span><br><span class="line"># end表示结尾 默认 end=&apos;\n&apos;</span><br></pre></td></tr></table></figure>
+<p><code>range(0,10)</code>可以生成0-9的序列 0,1,2,3…<br><code>range(0,10,2)</code>第三个参数是步长的意思，0,2,4,6,8</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = [1,2,3,4,5,6,7]</span><br><span class="line">b = a[0:len(a):2]</span><br><span class="line">print(b) # [1,3,5,7]</span><br></pre></td></tr></table></figure>
+<h3 id="包"><a href="#包" class="headerlink" title="包"></a>包</h3><p>包相当于是一个文件夹，里头有很多个<code>.py</code>文件。<br>包下必须有一个特定的文件<code>__init__.py</code>,如果不包含表示只是一个普通文件夹。<br><code>__init__.py</code>的某块名字就是包名，并不是<code>包名.__init__</code></p>
+<p>模块1中有<code>__all__</code>，当模块2引入模块1后，只能使用<code>__all__</code>中含有的变量。</p>
+<h4 id="init-用法"><a href="#init-用法" class="headerlink" title="__init__用法"></a><code>__init__</code>用法</h4><p>当导入某个包时，<code>__init__.py</code>会自动的执行，所以可以用于初始化。</p>
+<h3 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h3><p><code>.py</code>文件就是一个模块。<br><code>import 模块名</code>即可导入，使用模块下的东西。<br>包和模块不会重复被导入。不然效率太低。</p>
+<p>不要循环导入,会报错。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#p1.py</span><br><span class="line">form p2 import p2</span><br><span class="line">p1 = 2</span><br><span class="line"></span><br><span class="line">#p2.py</span><br><span class="line">from p1 import p1</span><br><span class="line">p2 = 2</span><br></pre></td></tr></table></figure></p>
+<h3 id="类"><a href="#类" class="headerlink" title="类"></a>类</h3><p><code>.py</code>文件里头可以有很多个类。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">class classname(object):</span><br><span class="line">    pass</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/01/28/Python入门学习(四)-模块/" data-id="cjcyaag7j00046wvaeogtw3m5" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-在京东实习的笔记" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/01/08/在京东实习的笔记/" class="article-date">
@@ -115,7 +162,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/08/在京东实习的笔记/" data-id="cjcumpedq000bqova0sav7quo" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/01/08/在京东实习的笔记/" data-id="cjcyaag7m00076wvah08dq7sj" class="article-share-link">Share</a>
       
       
     </footer>
@@ -176,7 +223,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/06/Python入门学习(三)-变量与运算符/" data-id="cjcumpedi0004qovage09m7t3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/01/06/Python入门学习(三)-变量与运算符/" data-id="cjcyaag7n00086wvaoyhr7g8u" class="article-share-link">Share</a>
       
       
     </footer>
@@ -737,12 +784,31 @@
 <p>2.修饰方法参数<br>final修饰表示我们只会给它赋值一次且不会改变变量的值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public void finalFunc(final int i, final Value value) &#123;</span><br><span class="line">        // i = 5; 不能改变i的值</span><br><span class="line">        // v = new Value(); 不能改变v的值</span><br><span class="line">        value.v = 5; // 可以改变引用对象的值</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
 <p>3.修饰方法<br>final关键字修饰方法，它表示该方法不能被覆盖。</p>
 <p>4.修饰类<br>final修饰的类是无法被继承的。</p>
+<h3 id="设计模式怎么分类？"><a href="#设计模式怎么分类？" class="headerlink" title="设计模式怎么分类？"></a>设计模式怎么分类？</h3><ol>
+<li>创建型模式：描述如何创建对象。</li>
+<li>结构型模式：描述如何实现类或对象组合。</li>
+<li>行为型模式：描述类或对象怎样交互以及怎样分配职责。</li>
+</ol>
 <h3 id="工厂方法模式-2018-1-27"><a href="#工厂方法模式-2018-1-27" class="headerlink" title="工厂方法模式 2018-1-27"></a>工厂方法模式 2018-1-27</h3><p>在工厂方法模式中，不再提供一个统一的工厂类来创建所有的产品对象，而是针对不同的产品提供不同的工厂，系统提供一个与产品等级结构对应的工厂等级结构。</p>
+<blockquote>
+<p> 工厂方法模式(Factory Method Pattern)：定义一个用于创建对象的接口，让子类决定将哪一个类实例化。工厂方法模式让一个类的实例化延迟到其子类。工厂方法模式又简称为工厂模式. 工厂方法模式是创建型模式。</p>
+</blockquote>
+<p> 工厂方法模式提供一个抽象工厂接口来声明抽象工厂方法，而由其子类来具体实现工厂方法，创建具体的产品对象。工厂方法模式结构如图所示：<br> <img src="http://oqp1ywek9.bkt.clouddn.com/18-1-28/60289796.jpg" alt="工厂方法模式结构"></p>
+<ul>
+<li><strong>Product（抽象产品）：</strong> 它是定义产品的接口，是工厂方法模式所创建对象的超类型，也就是产品对象的公共父类。</li>
+<li><strong>ConcreteProduct（具体产品）：</strong> 它实现了抽象产品接口，某种类型的具体产品由专门的具体工厂创建，具体工厂和具体产品之间一一对应。</li>
+<li><strong>Factory（抽象工厂）：</strong> 在抽象工厂类中，声明了工厂方法(Factory Method)，用于返回一个产品。抽象工厂是工厂方法模式的核心，所有创建对象的工厂类都必须实现该接口。</li>
+<li><strong>ConcreteFactory（具体工厂）：</strong> 它是抽象工厂类的子类，实现了抽象工厂中定义的工厂方法，并可由客户端调用，返回一个具体产品类的实例。</li>
+</ul>
+<p>与简单工厂模式相比，工厂方法模式最重要的区别是引入了抽象工厂角色，抽象工厂可以是接口，也可以是抽象类或者具体类，其典型代码如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">interface Factory &#123;  </span><br><span class="line">    public Product factoryMethod();  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在抽象工厂中声明了工厂方法但并未实现工厂方法，具体产品对象的创建由其子类负责，客户端针对抽象工厂编程，可在运行时再指定具体工厂类，具体工厂类实现了工厂方法，不同的具体工厂可以创建不同的具体产品，其典型代码如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class ConcreteFactory implements Factory &#123;  </span><br><span class="line">    public Product factoryMethod() &#123;  </span><br><span class="line">        return new ConcreteProduct();  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在实际使用时，具体工厂类在实现工厂方法时除了创建具体产品对象之外，还可以负责产品对象的初始化工作以及一些资源和环境配置工作，例如连接数据库、创建文件等。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//客户端只关心工厂类</span><br><span class="line">Factory factory;  </span><br><span class="line">factory = new ConcreteFactory(); //可通过配置文件实现  </span><br><span class="line">Product product;  </span><br><span class="line">product = factory.factoryMethod();</span><br></pre></td></tr></table></figure></p>
+<p><strong>工厂方法模式中的工厂方法能否为静态方法？为什么？</strong><br>能，因为工厂方法实际上是抽象方法，要求由子类来 <strong>动态</strong> 地实现，而动态性与static所声明的静态性相冲突。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/02/阅读笔记/" data-id="cjcumpee9000nqovajzqdwcjr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/01/02/阅读笔记/" data-id="cjcyaag8r000n6wvak5ohjsba" class="article-share-link">Share</a>
       
       
     </footer>
@@ -786,7 +852,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/01/2018年实施计划/" data-id="cjcumped80000qovaez6narey" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/01/01/2018年实施计划/" data-id="cjcyaag7800006wva958jeukz" class="article-share-link">Share</a>
       
       
     </footer>
@@ -879,7 +945,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/29/JAVA反射/" data-id="cjcumpedo0008qovaruqz772e" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/12/29/JAVA反射/" data-id="cjcyaag7d00016wvafm2nabg9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -934,7 +1000,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/28/Lock的使用/" data-id="cjcumpedd0001qovake54xvnu" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/12/28/Lock的使用/" data-id="cjcyaag7k00056wva12yq6z3t" class="article-share-link">Share</a>
       
       
     </footer>
@@ -990,7 +1056,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/27/Python入门学习(二)-组/" data-id="cjcumpedg0003qova45onldzq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/12/27/Python入门学习(二)-组/" data-id="cjcyaag7h00036wvagwtculzj" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1067,7 +1133,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/27/多线程基础/" data-id="cjcumpee7000mqova8ahts4cd" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/12/27/多线程基础/" data-id="cjcyaag8o000m6wvannf6firb" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1119,52 +1185,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/27/Python入门学习(一)/" data-id="cjcumpedm0007qova7neo7oav" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/12/26/hello-world/" class="article-date">
-  <time datetime="2017-12-26T13:57:03.369Z" itemprop="datePublished">2017-12-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/26/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/26/hello-world/" data-id="cjcumpedj0005qovalx7b9fqr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/12/27/Python入门学习(一)/" data-id="cjcyaag7p000b6wva7wjjtw40" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1175,6 +1196,11 @@
 
   
 
+
+  <nav id="page-nav">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">下一页 &raquo;</a>
+  </nav>
 
 </section>
         
@@ -1212,6 +1238,10 @@
       <ul>
         
           <li>
+            <a href="/2018/01/28/Python入门学习(四)-模块/">Python入门学习(四)</a>
+          </li>
+        
+          <li>
             <a href="/2018/01/08/在京东实习的笔记/">京东实习记录</a>
           </li>
         
@@ -1225,10 +1255,6 @@
         
           <li>
             <a href="/2018/01/01/2018年实施计划/">2018年实施计划</a>
-          </li>
-        
-          <li>
-            <a href="/2017/12/29/JAVA反射/">JAVA反射</a>
           </li>
         
       </ul>
