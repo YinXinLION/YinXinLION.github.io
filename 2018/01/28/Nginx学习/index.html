@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Nginx学习1 | 湖心亭看雪</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Nginx概述Nginx是一个开源且高性能、可靠的HTTP中间件、代理服务。 常见的HTTP服务：httpd、GWS(谷歌的)、IIS(微软) IO多路复用： IO多路复用的实现方式：select、poll、epoll  select:通过循环变量fd数组，查看是否有消息。(文件描述符数量存在限制1024个，循环扫描效率底下)。 epoll:采用回调函数将fd放入就绪，最大连接数无限制。  Ngi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nginx学习1">
+<meta property="og:url" content="http://yoursite.com/2018/01/28/Nginx学习/index.html">
+<meta property="og:site_name" content="湖心亭看雪">
+<meta property="og:description" content="Nginx概述Nginx是一个开源且高性能、可靠的HTTP中间件、代理服务。 常见的HTTP服务：httpd、GWS(谷歌的)、IIS(微软) IO多路复用： IO多路复用的实现方式：select、poll、epoll  select:通过循环变量fd数组，查看是否有消息。(文件描述符数量存在限制1024个，循环扫描效率底下)。 epoll:采用回调函数将fd放入就绪，最大连接数无限制。  Ngi">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/20/594937002ebba.png">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-28/51373462.jpg">
+<meta property="og:updated_time" content="2018-01-28T08:23:41.110Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Nginx学习1">
+<meta name="twitter:description" content="Nginx概述Nginx是一个开源且高性能、可靠的HTTP中间件、代理服务。 常见的HTTP服务：httpd、GWS(谷歌的)、IIS(微软) IO多路复用： IO多路复用的实现方式：select、poll、epoll  select:通过循环变量fd数组，查看是否有消息。(文件描述符数量存在限制1024个，循环扫描效率底下)。 epoll:采用回调函数将fd放入就绪，最大连接数无限制。  Ngi">
+<meta name="twitter:image" content="https://ooo.0o0.ooo/2017/06/20/594937002ebba.png">
+  
+    <link rel="alternate" href="/atom.xml" title="湖心亭看雪" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">湖心亭看雪</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Nginx学习" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/28/Nginx学习/" class="article-date">
+  <time datetime="2018-01-28T06:14:21.000Z" itemprop="datePublished">2018-01-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Nginx学习笔记/">Nginx学习笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Nginx学习1
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Nginx概述"><a href="#Nginx概述" class="headerlink" title="Nginx概述"></a>Nginx概述</h3><p>Nginx是一个开源且高性能、可靠的HTTP中间件、代理服务。</p>
+<p>常见的HTTP服务：httpd、GWS(谷歌的)、IIS(微软)</p>
+<p>IO多路复用：<br><img src="https://ooo.0o0.ooo/2017/06/20/594937002ebba.png" alt=""></p>
+<p>IO多路复用的实现方式：select、poll、epoll</p>
+<ul>
+<li>select:通过循环变量fd数组，查看是否有消息。(文件描述符数量存在限制1024个，循环扫描效率底下)。</li>
+<li>epoll:采用回调函数将fd放入就绪，最大连接数无限制。</li>
+</ul>
+<p>Nginx对CPU进行分配，亲和绑定（一个进程worker对应一个cpu），保证不会出现cpu频繁切换带来的效率低下问题。</p>
+<p><strong>什么是CPU亲和</strong>： 是一种把CPU核心和Nginx工作进程绑定方式，把每一个worker进程固定在一个CPU上执行，减少切换CPU的Cache miss，获得更好的性能。</p>
+<p>Nginx对静态资源采用sendfile机制：<br>一般file -&gt; 内核态 -&gt; 用户态 -&gt; 内核态 -&gt; socket 进行文件传输。<br>由于静态文件不需要逻辑处理，所以出现sendfile： 走到内核态后，直接通过socket发送。(零拷贝)</p>
+<p>安装 <code>yum install nginx</code> 记得更新yum源</p>
+<p><strong>静态资源服务场景 - CDN</strong><br>资源存储中心，向各个Nginx(不同地区)发送静态资源并存储下来，当用户发送请求时，通过DNS找到距离最近的Nginx，并返回静态资源给用户。</p>
+<p><strong>浏览器缓存</strong><br>HTTP协议定义的缓存机制(如：Expires;Cache-Control等)<br>校验过期机制：<br>本地验证<br>校验是否过期：Expires 1.0版本、Cache-Control(max-age)1.1版本<br>服务器验证<br>协议中Etag头信息校验：Etag  (特殊字符串比较)<br>Last-Modified头信息校验：Last-Modified (HTTP request 具体时间)</p>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-28/51373462.jpg" alt=""></p>
+<p><strong>跨域访问</strong>、<br>浏览器禁止跨域访问：因为不安全，容易出现CSRF攻击。</p>
+<p><strong>防盗链</strong><br>目的：防止资源被盗用。<br>思路:首先区分，哪些请求是非正常的用户请求。<br>最简单的，根据refer查看。</p>
+<p><strong>代理服务</strong><br>正向代理：代理的对象是客户端。<br>场景：科学上网。<br>反向代理：代理的对象是服务端<br>场景：代理后面可能是多个服务器，代理进行分发。</p>
+<p><strong>负载均衡</strong></p>
+<ol>
+<li>4层负载均衡(传输层)<br>可实现TCP/IP的包转发。</li>
+<li>7层负载均衡(应用层)<br>可完成各种应用协议的请求。http头信息改写等。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/01/28/Nginx学习/" data-id="cjd2aleh4000bfova3899em72" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/01/31/Nginx学习1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Nginx学习1
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/01/28/Python入门学习(四)-模块/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Python入门学习(四)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java多线程/">Java多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx学习笔记/">Nginx学习笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python基础/">Python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习成长/">学习成长</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/心情/">心情</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/01/31/Nginx学习1/">Nginx学习1</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/28/Nginx学习/">Nginx学习1</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/28/Python入门学习(四)-模块/">Python入门学习(四)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/08/在京东实习的笔记/">京东实习记录</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/06/Python入门学习(三)-变量与运算符/">Python入门学习(三)-变量与运算符</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 殷鑫<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
