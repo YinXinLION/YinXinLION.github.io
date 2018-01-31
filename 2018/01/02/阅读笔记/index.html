@@ -39,7 +39,7 @@
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-22/18463439.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-22/39431678.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-28/60289796.jpg">
-<meta property="og:updated_time" content="2018-01-30T15:35:56.826Z">
+<meta property="og:updated_time" content="2018-01-31T15:53:46.820Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阅读笔记">
 <meta name="twitter:description" content="以下均为阅读文章所搬运及少部分总结的。 =-= 大自然的搬运工。。 从Chrome源码看DNS解析过程 2018-1-2当一台设备连接到路由器后，会发送DHCP Request的广播，然后会为电脑分配IP地址及DNS服务器地址nameserver。 Chrome会按照nameservers的顺序发起查询，并将结果缓存下来，有效时间是根据域名设置的TTL决定，在有效期内可以根据结果查询。缓存-&amp;gt">
@@ -703,6 +703,15 @@
 <li>客户端抓包抓到的是没加密的包(=。=我没验证 ，有时间验证)</li>
 </ul>
 <h3 id="ClassLoader加载和Class-forName加载"><a href="#ClassLoader加载和Class-forName加载" class="headerlink" title="ClassLoader加载和Class.forName加载"></a><code>ClassLoader</code>加载和<code>Class.forName</code>加载</h3><p>通过 <code>classloader</code> 加载类实际上就是加载的时候并不对该类进行解析，因此也不会初始<br>化，而 <code>class</code> 类的 <code>forName</code> 方法则相反，使用 <code>forName</code> 方法加载的时候会将 <code>class</code> 进行解析与<br>初始化。</p>
+<h3 id="别人的面试总结"><a href="#别人的面试总结" class="headerlink" title="别人的面试总结"></a>别人的面试总结</h3><p><a href="https://liuchi.coding.me/2017/12/16/%E5%A6%82%E4%BD%95%E5%87%86%E5%A4%87%E6%A0%A1%E6%8B%9B%E6%8A%80%E6%9C%AF%E9%9D%A2%E8%AF%95-%E4%B8%80%E5%8F%AA%E5%B0%8F%E8%8F%9C%E9%B8%9F%E7%9A%84%E9%9D%A2%E8%AF%95%E4%B9%8B%E8%B7%AF/" target="_blank" rel="noopener">https://liuchi.coding.me/2017/12/16/%E5%A6%82%E4%BD%95%E5%87%86%E5%A4%87%E6%A0%A1%E6%8B%9B%E6%8A%80%E6%9C%AF%E9%9D%A2%E8%AF%95-%E4%B8%80%E5%8F%AA%E5%B0%8F%E8%8F%9C%E9%B8%9F%E7%9A%84%E9%9D%A2%E8%AF%95%E4%B9%8B%E8%B7%AF/</a></p>
+<h3 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h3><p>cookie是存在浏览器端的，服务器给浏览器一个cookie，以后每次浏览器访问服务器都要带上这个cookie。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Cookie cookie = new Cookie(&quot;name&quot;,&quot;lion&quot;); //创建cookie</span><br><span class="line">response.addCookie(cookie); //调用response方法把cookie传输给客户端</span><br></pre></td></tr></table></figure></p>
+<p>默认cookie是会话级别的,存储在浏览器内存中，用户退出浏览器之后被删除。若希望浏览器将cookie存储在磁盘上，则要使用maxage,给定时间(单位是秒),表示cookie的存活时间。</p>
+<p><strong>cookie的作用范围</strong>:作用当前目录和当前目录的子目录，不能作用当前目录的上一级。</p>
+<p>使用cookie保持会话，session在服务器端保持http状态，cookie是在session。</p>
+<h3 id="Session"><a href="#Session" class="headerlink" title="Session"></a>Session</h3><p>当浏览器第一次访问服务器时，没有cookie，服务端也就得不到jsession_id(Cookie中),然后服务器创建一个session对象，返回一个jsession_id给浏览器，通过cookie返回，下次浏览器访问服务器时带上cookie(有jsession_id)，服务端就能找到对应的session对象。Jession_id可以通过cookie传输，也可通过url传送。</p>
+<p>一个session对应一个sessionID。浏览器和服务器的一次会话，若浏览器不关，至始至终都是一个 session，因为用 cookie 传送。</p>
+<p>URL 重写：response 的 <code>encodeURL(String URL)</code> 方法和 <code>encoderedirectURL(String URL)</code>两个都一样。</p>
+<p>关闭浏览器只是使存储在浏览器内存中的 <code>session</code> <code>cookie</code> 失效，不会使服务器端的<code>session</code>对象失效。</p>
 
       
     </div>
