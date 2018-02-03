@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="湖心亭看雪">
 <meta property="og:description" content="日常学习 2018-2-1ClassCastException:当试图将对象强制转换为不是实例的子类时，抛出该异常。 内部类分为4种：  成员内部类：外部类的成员。 局部内部类 静态内部类：类似于静态成员。 匿名内部类：实现一个接口或者继承一个抽象类。外部类不能任意访问访问内部类的成员，外部类必须创建其内部类的对象(静态内部类除外)。内部类可以访问所有外部类的成员，因为内部类就像是一个类的成员。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-02T15:57:11.648Z">
+<meta property="og:updated_time" content="2018-02-03T15:18:04.097Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阅读笔记-2月">
 <meta name="twitter:description" content="日常学习 2018-2-1ClassCastException:当试图将对象强制转换为不是实例的子类时，抛出该异常。 内部类分为4种：  成员内部类：外部类的成员。 局部内部类 静态内部类：类似于静态成员。 匿名内部类：实现一个接口或者继承一个抽象类。外部类不能任意访问访问内部类的成员，外部类必须创建其内部类的对象(静态内部类除外)。内部类可以访问所有外部类的成员，因为内部类就像是一个类的成员。">
@@ -108,6 +108,30 @@
 <h3 id="日常阅读-2018-2-2"><a href="#日常阅读-2018-2-2" class="headerlink" title="日常阅读 2018-2-2"></a>日常阅读 2018-2-2</h3><p>BFS：广度优先遍历，使用队列，先进先出，正拓扑排序。<br>DFS：深度优先遍历，使用栈，先进后出，逆拓扑排序。</p>
 <p>若try、finally都要return，则忽略try的return语句。<br><strong>排序</strong><br>快速排序在无序时效率最高、有序时效率低。堆排序、基数排序、归并排序、选择排序和初始状态无关，即最好情况和最坏情况一样。</p>
 <p>今晚，学习了一个算法，明天上代码，解析。明天上班，培训日，讲区块链、敏捷思想等，听听看看吧~~~~ 加油ヾ(◍°∇°◍)ﾉﾞ</p>
+<h3 id="日常算法-2018-2-3"><a href="#日常算法-2018-2-3" class="headerlink" title="日常算法 2018-2-3"></a>日常算法 2018-2-3</h3><h4 id="给定子矩阵，返回子矩阵最大累加和。"><a href="#给定子矩阵，返回子矩阵最大累加和。" class="headerlink" title="给定子矩阵，返回子矩阵最大累加和。"></a>给定子矩阵，返回子矩阵最大累加和。</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Created by 殷鑫 on 2018/2/3.</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">public class test1 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        int[][] s = new int[3][3];</span><br><span class="line">        s = new int[][]&#123;</span><br><span class="line">                &#123;1, 2, 3&#125;,</span><br><span class="line">                &#123;2, 3, 4&#125;,</span><br><span class="line">                &#123;3, 4, 5&#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        int max = Integer.MIN_VALUE;</span><br><span class="line">        /*</span><br><span class="line">            前两层循环是 当 1、12、123、2、23、3层 作为矩阵时的情况</span><br><span class="line">            可以把多行的矩阵压缩为1行，求出最大子数组和 相当于求出最大矩阵和。</span><br><span class="line">         */</span><br><span class="line">        for (int i = 0; i &lt; 3; i++) &#123;</span><br><span class="line">            int[] help = new int[3];</span><br><span class="line">            for (int j = i; j &lt; 3; j++) &#123;</span><br><span class="line">                //下面的for循环中，是最大子数组解法</span><br><span class="line">                int cur = 0;</span><br><span class="line">                for (int k = 0; k &lt; 3; k++) &#123;</span><br><span class="line">                    help[k] += s[j][k];</span><br><span class="line">                    cur += help[k];</span><br><span class="line">                    max = Math.max(cur,max);</span><br><span class="line">                    cur = cur &gt; 0 ? cur : 0;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(max);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="HTTP浏览器缓存机制"><a href="#HTTP浏览器缓存机制" class="headerlink" title="HTTP浏览器缓存机制"></a>HTTP浏览器缓存机制</h3><p><code>Last-Modified</code>是由服务器往客户端发送的HTTP头，而<code>If-Modified-Since</code>是由客户端往服务器发送的头，<strong>再次请求本地存在的缓存页面时,</strong> 客户端会通过<code>If-Modified-Since</code>头把浏览器端缓存页面的最后一次被服务器修改的时间一起发送到服务器去，服务器会把这个时间与服务器上时间文件的最后修改时间进行比较，通过时间戳判断客户端的页面是否是最新的，如果不是最新的，就返回200状态码和新文件内容，客户端接收到之后会丢弃旧文件，把新文件缓存起来，并显示到浏览器中：如果是最新的，则返回304告诉客户端其本地缓存页面是最新的，就直接把本地缓存文件显示到浏览器中，这样，网络上传输的数据量就会大大减少，减轻了服务器负担。</p>
+<ol>
+<li>什么是<code>Last-Modified</code>?<br>浏览器第一次请求URL时，服务器会返回状态码200，内容是你请求的资源，同时有一个<code>Last-Modified</code>的属性标记此文件在服务端最后被修改的时间，格式为：<code>Last-Modified: Fri, 12 May 2006 18:53:33 GMT</code></li>
+</ol>
+<p>客户端第二次请求此URL时，浏览器会像服务器传送<code>If-Modified-Since</code>报头，询问该时间之后文件是否被修改。格式为:<code>If-Modified-Since: Fri, 12 May 2006 18:53:33 GMT</code></p>
+<p>如果服务器端资源没变化，则自动返回304状态码，</p>
+<ol>
+<li><code>ETag</code>和<code>If-None-Match</code><br><code>ETag</code>和<code>If-None-Match</code>是一种常用的判断资源是否改变的方法，类似于<code>Last-Modified</code>和<code>If-Modified-Since</code>。但有所不同的是 ，<code>Last-Modified</code>和<code>If-Modified-Since</code>只判断资源的最后修改时间，而<code>ETag</code>和<code>If-None-Match</code>可以是资源的任何属性，比如资源的MD5等。</li>
+</ol>
+<p>ETag和If-None-Match的工作原理是在Http Response中添加ETag信息。当客户端再次请求该资源时，将在Http Request中加入If-None-Match信息(ETag的值)。如果服务器验证资源的 ETags 没有改变,表示该资源你没有改变，将返回一个304状态；否则，服务器返回200状态，并返回该资源和新的Etags。</p>
+<ol>
+<li>什么是ETag？<br>服务会为每个资源分配对应的ETag值，根据资源的内容得到其值。<strong>当资源内容发生改变时，其值也会改变。</strong> 服务端返回的格式：<br><code>ETag: &quot;50b1c1d4f775c61:df3&quot;</code><br>客户端查询格式更新为：<br><code>If-None-Match: W/&quot;50b1c1d4f775c61:df3&quot;</code><br>如果ETag没改变，则返回304，和Last-Modified一样。</li>
+</ol>
+<p><strong>Last-Modified 和 ETags如何帮助提高性能?</strong><br>把Last-Modified和ETag请求的http报头一起使用，这样可以利用浏览器的缓存。</p>
+<p><strong>既然有了Last-Modified，为什么还要用ETag字段?</strong></p>
+<ol>
+<li>某些文件修改频繁，比如在秒一下的时间内进行修改(比如1s内修改N次)，If-Modified-Since只能检查到粒度是秒级，修改无法体现。</li>
+<li>一些文件也许会周期性更改，但是它的内容并不会改变(仅仅改变了修改时间 )，只是不需要客户端认为文件被修改而重新GET。</li>
+<li><p>某些服务器不能精确得到文件最后修改时间。<br>因此 HTTP/1.1利用Entity Tag头提供了更加严格的验证。服务器一般优先验证ETag的值。</p>
+</li>
+<li><p>Expires / Cache-Control(<font color="red" 优先使用="" <="" font="">)<br>这两都是响应头。<br>用于控制缓存的失效日期，通知浏览器是直接从浏览器读数据还是重新发送请求到服务器取数据。<br>Cache-Control只适用于HTTP/1.1，<code>Cache-Control: max-age=315360000</code>。<br>优先使用Cache-Control然后再是Expires。</font></p>
+</li>
+</ol>
 
       
     </div>
