@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="湖心亭看雪">
 <meta property="og:description" content="日常学习 2018-2-1ClassCastException:当试图将对象强制转换为不是实例的子类时，抛出该异常。 内部类分为4种：  成员内部类：外部类的成员。 局部内部类 静态内部类：类似于静态成员。 匿名内部类：实现一个接口或者继承一个抽象类。外部类不能任意访问访问内部类的成员，外部类必须创建其内部类的对象(静态内部类除外)。内部类可以访问所有外部类的成员，因为内部类就像是一个类的成员。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-03T15:18:04.097Z">
+<meta property="og:updated_time" content="2018-02-04T14:17:15.315Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阅读笔记-2月">
 <meta name="twitter:description" content="日常学习 2018-2-1ClassCastException:当试图将对象强制转换为不是实例的子类时，抛出该异常。 内部类分为4种：  成员内部类：外部类的成员。 局部内部类 静态内部类：类似于静态成员。 匿名内部类：实现一个接口或者继承一个抽象类。外部类不能任意访问访问内部类的成员，外部类必须创建其内部类的对象(静态内部类除外)。内部类可以访问所有外部类的成员，因为内部类就像是一个类的成员。">
@@ -131,6 +131,44 @@
 </li>
 <li><p>Expires / Cache-Control(<font color="red" 优先使用="" <="" font="">)<br>这两都是响应头。<br>用于控制缓存的失效日期，通知浏览器是直接从浏览器读数据还是重新发送请求到服务器取数据。<br>Cache-Control只适用于HTTP/1.1，<code>Cache-Control: max-age=315360000</code>。<br>优先使用Cache-Control然后再是Expires。</font></p>
 </li>
+</ol>
+<h3 id="日常学习-2018-2-4"><a href="#日常学习-2018-2-4" class="headerlink" title="日常学习 2018-2-4"></a>日常学习 2018-2-4</h3><p>通过<code>Explain</code>可以查看SQL语句的执行效果，可以帮助选择更好的索引和优化查询语句。<br><code>explain select * from  news;</code><br>不要使用<code>select * from table</code>，要用具体的字段列表代替*,不要返回用不到的任何字段。<br>不要在索引列做运算，或者使用函数。查询尽量使用limit减少返回行数，减少数据传输时间和带宽浪费。</p>
+<h4 id="对表进行拆分"><a href="#对表进行拆分" class="headerlink" title="对表进行拆分"></a>对表进行拆分</h4><p><strong>1.垂直拆分</strong><br>把主键和一些列放在一个表中，然后把主键和另外的列放在另一个表中。如果一个表中某些列常用，而另一些不常用，则可以采用垂直拆分。</p>
+<p><strong>2.水平拆分</strong><br>根据一列或多列数据的值把数据行放到两个独立的表中。</p>
+<h4 id="查询缓存"><a href="#查询缓存" class="headerlink" title="查询缓存"></a>查询缓存</h4><p>存储select查询的文本及其相应的结果。如果随后收到一个相同的查询，服务器会从查询缓存中直接得到查询结果。查询缓存适合的对象是更新不频繁的表，当表中数据更改后，查询缓存中的相关条目就会被清空。</p>
+<h4 id="主从复制的几种方式"><a href="#主从复制的几种方式" class="headerlink" title="主从复制的几种方式"></a>主从复制的几种方式</h4><ol>
+<li>同步复制<br>服务器在将更新的数据写入二进制文件后，等待验证所有服务器更新是否复制完成，之后才能处理事务请求。</li>
+<li>异步复制<br>主服务器将更新的数据写入二进制日志后，无需等待验证更新数据是否已经复制到从服务器中，就可以自由处理其他事务请求。</li>
+<li>半同步复制<br>主服务器将更新数据写入二进制日志后，只需等待验证一台服务器是否更新数据，就可处理其他事务请求。</li>
+</ol>
+<h4 id="分库、分表、分区"><a href="#分库、分表、分区" class="headerlink" title="分库、分表、分区"></a>分库、分表、分区</h4><h5 id="分表"><a href="#分表" class="headerlink" title="分表"></a>分表</h5><p><strong>1.垂直拆分</strong><br>把主键和一些列放在一个表中，然后把主键和另外的列放在另一个表中。如果一个表中某些列常用，而另一些不常用，则可以采用垂直拆分。</p>
+<p><strong>2.水平拆分</strong><br>根据一列或多列数据的值把数据行放到两个独立的表中</p>
+<h5 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h5><p>分区就是把一张表的数据分成多个区块，这些区块可以在一个磁盘上，也可以在不同的磁盘上，分区后，表面上还是一张表，但数据散列在多个位置，这样一来，多块硬盘同时处理不同的请求，从而提高磁盘 I/O 读写性能，实现比较简单。 包括水平分区和垂直分区。</p>
+<h5 id="分库"><a href="#分库" class="headerlink" title="分库"></a>分库</h5><p>分库是根据业务不同把相关的表切分到不同的数据库中，比如 web、bbs、blog 等库。</p>
+<h5 id="防止SQL注入"><a href="#防止SQL注入" class="headerlink" title="防止SQL注入"></a>防止SQL注入</h5><ol>
+<li>参数绑定<code>prepareStatement</code></li>
+<li>检查变量的数据类型和格式</li>
+<li>所有的SQL语句封装在存储过程中</li>
+</ol>
+<p><code>select A.* from A inner join B using(name,address,aage);</code><br><code>using( column_list)</code>:其作用是为了方便书写联结的多对应关系，大部分情况可以用ON语句代替<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a LEFT JOIN b USING (c1,c2,c3)，其作用相当于下面语句</span><br><span class="line">a LEFT JOIN b ON a.c1=b.c1 AND a.c2=b.c2 AND a.c3=b.c3</span><br></pre></td></tr></table></figure></p>
+<h4 id="存储过程"><a href="#存储过程" class="headerlink" title="存储过程"></a>存储过程</h4><p>存储过程：就是一些 编译好了的 sql 语句，这些 SQL 语句代码像一个方法一样实现一些功能（对单表或多表的增删改查），然后再给这个代码块取一个名字，在用到这个功能的时候调用他就行了。</p>
+<p>插入一行数据：<code>insert into stu(stuName,stuAge,stuSex) values(&#39;张三&#39;,&#39;20&#39;,&#39;男&#39;);</code><br>增加列：<code>alter table tableName add (column) columnName varchar(30);//一定要有数据类型！</code><br>删除列：<code>alter table tableName drop (column) columnName;</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM employee</span><br><span class="line">    WHERE  EXISTS</span><br><span class="line">    (SELECT d_name FROM department WHERE d_id=1003);</span><br></pre></td></tr></table></figure>
+<p>解析：因为 department 表中存在 d_id 值为 1003 的记录，内层查询语句返回一个 true，外层查询语句接收 true 后，开始查询 employee 表中的记录。因为没有设置查询 employee 表的查询条件，所以查询出了 employee 表的所有记录。</p>
+<p>条件表达式与 EXISTS 关键字之间用<code>AND</code> 或者 <code>OR</code> 进行连接。<br>如果 department 表中存在 d_id 取值为 1003 的记录，则查询 employee 表中 age 大于24 岁的记录。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM employee</span><br><span class="line">    WHERE age&gt;24 AND EXISTS</span><br><span class="line">    (SELECT d_name FROM department WHERE d_id=1003);</span><br></pre></td></tr></table></figure></p>
+<p>如果 department 表中不存在 d_id 字段取值为 1003 的记录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM employee</span><br><span class="line">    WHERE NOT EXISTS</span><br><span class="line">    (SELECT d_name FROM department WHERE d_id=1003);</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>做题：有一个学生表，有三个字段 ：name  、course  、score  ，写 每一个学生都有三门课程，比如数学、语文、英语，写sql语句，查找出三门课程的成绩都大于 80 。</li>
+</ul>
+<p>逆向思维：三门成绩都大于 80 的人，也可以是使先查出有成绩小于 80 的人，再除去这些人就是三门成绩都大于 80 的人了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select DISTINCT A.name</span><br><span class="line">FROM Student A</span><br><span class="line">WHERE A.name not in (select DISTINCT S.name FROM Student S WHERE S.score &lt; 80);</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT S.name</span><br><span class="line">FROM Student s</span><br><span class="line">GROUP BY S.name</span><br><span class="line">HAVING MIN(S.score) &gt;= 80;</span><br></pre></td></tr></table></figure>
+<p>查询字段值为空的语法：<code>where &lt;字段名&gt; is null</code><br>查询字段值不为空的语法：<code>where &lt;字段名&gt; is not null</code></p>
+<p>MYISAM中，主索引和辅助索引在结构上没有任何区别，只是主索引要求key是唯一的，而辅助索引的key可以重复。</p>
+<h3 id="死锁的四个必要条件"><a href="#死锁的四个必要条件" class="headerlink" title="死锁的四个必要条件"></a>死锁的四个必要条件</h3><ol>
+<li>互斥条件：一个资源每次只能被一个进程使用。</li>
+<li>请求与保持条件： 一个进程因请求资源而阻塞时，对已获得的资源保持不放。</li>
+<li>不可剥夺条件： 进程已获得的资源，在末使用完之前，不能强行剥夺。</li>
+<li>循环等待条件： 若干进程之间形成一种头尾相接的循环等待资源关系。<br>避免死锁：使用银行家算法。检测死锁：死锁定理。</li>
 </ol>
 
       
