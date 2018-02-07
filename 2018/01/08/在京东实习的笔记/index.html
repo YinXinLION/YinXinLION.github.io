@@ -7,17 +7,22 @@
   
   <title>京东实习记录 | 湖心亭看雪</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="主要记录自己工作上的发现和遇到问题及解决办法Vue与前端1.前端通过ajax请求，得到响应的json数据，那么获取json的每个属性非常方便，很爽。12345//后端Controller@GetMapping(&amp;quot;/json&amp;quot;)public Person getPersonName()&amp;#123;  return new Person(&amp;quot;a&amp;quot;,&amp;quot;b&amp;">
+  <meta name="description" content="记录部分自己的工作内容2018-1-15 == 2018-1-191.完成商品shop端LOC相对有效期上线。商品的服务有效期分为固定有效期和相对有效期。修改前端页面，完成VUE的逻辑控制。2.完成man端商品系统对接下架MQ接口。主要是使用MQ的Producer进行消息存入，对方从MQ中读取消息。如果商品上架审核未通过，调用MQ。3.完成正义联盟优化，  增加类目判断(绑定监听事件，如果触发三级">
 <meta property="og:type" content="article">
 <meta property="og:title" content="京东实习记录">
 <meta property="og:url" content="http://yoursite.com/2018/01/08/在京东实习的笔记/index.html">
 <meta property="og:site_name" content="湖心亭看雪">
-<meta property="og:description" content="主要记录自己工作上的发现和遇到问题及解决办法Vue与前端1.前端通过ajax请求，得到响应的json数据，那么获取json的每个属性非常方便，很爽。12345//后端Controller@GetMapping(&amp;quot;/json&amp;quot;)public Person getPersonName()&amp;#123;  return new Person(&amp;quot;a&amp;quot;,&amp;quot;b&amp;">
+<meta property="og:description" content="记录部分自己的工作内容2018-1-15 == 2018-1-191.完成商品shop端LOC相对有效期上线。商品的服务有效期分为固定有效期和相对有效期。修改前端页面，完成VUE的逻辑控制。2.完成man端商品系统对接下架MQ接口。主要是使用MQ的Producer进行消息存入，对方从MQ中读取消息。如果商品上架审核未通过，调用MQ。3.完成正义联盟优化，  增加类目判断(绑定监听事件，如果触发三级">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-27T15:47:21.242Z">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-18/5847440.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-2-5/76917573.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-2-5/77435066.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-2-5/79120644.jpg">
+<meta property="og:updated_time" content="2018-02-07T15:50:28.031Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="京东实习记录">
-<meta name="twitter:description" content="主要记录自己工作上的发现和遇到问题及解决办法Vue与前端1.前端通过ajax请求，得到响应的json数据，那么获取json的每个属性非常方便，很爽。12345//后端Controller@GetMapping(&amp;quot;/json&amp;quot;)public Person getPersonName()&amp;#123;  return new Person(&amp;quot;a&amp;quot;,&amp;quot;b&amp;">
+<meta name="twitter:description" content="记录部分自己的工作内容2018-1-15 == 2018-1-191.完成商品shop端LOC相对有效期上线。商品的服务有效期分为固定有效期和相对有效期。修改前端页面，完成VUE的逻辑控制。2.完成man端商品系统对接下架MQ接口。主要是使用MQ的Producer进行消息存入，对方从MQ中读取消息。如果商品上架审核未通过，调用MQ。3.完成正义联盟优化，  增加类目判断(绑定监听事件，如果触发三级">
+<meta name="twitter:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-18/5847440.jpg">
   
     <link rel="alternate" href="/atom.xml" title="湖心亭看雪" type="application/atom+xml">
   
@@ -90,7 +95,19 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="主要记录自己工作上的发现和遇到问题及解决办法"><a href="#主要记录自己工作上的发现和遇到问题及解决办法" class="headerlink" title="主要记录自己工作上的发现和遇到问题及解决办法"></a>主要记录自己工作上的发现和遇到问题及解决办法</h3><h2 id="Vue与前端"><a href="#Vue与前端" class="headerlink" title="Vue与前端"></a>Vue与前端</h2><p>1.<br>前端通过ajax请求，得到响应的json数据，那么获取json的每个属性非常方便，很爽。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//后端Controller</span><br><span class="line">@GetMapping(&quot;/json&quot;)</span><br><span class="line">public Person getPersonName()&#123;</span><br><span class="line">  return new Person(&quot;a&quot;,&quot;b&quot;);  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <h3 id="记录部分自己的工作内容"><a href="#记录部分自己的工作内容" class="headerlink" title="记录部分自己的工作内容"></a>记录部分自己的工作内容</h3><p><strong>2018-1-15 == 2018-1-19</strong><br>1.完成商品shop端LOC相对有效期上线。商品的服务有效期分为固定有效期和相对有效期。修改前端页面，完成VUE的逻辑控制。<br>2.完成man端商品系统对接下架MQ接口。主要是使用MQ的Producer进行消息存入，对方从MQ中读取消息。如果商品上架审核未通过，调用MQ。<br>3.完成正义联盟优化，</p>
+<ol>
+<li>增加类目判断(绑定监听事件，如果触发三级类目，则用ajax进行get请求发送，然后根据结果是否显示)</li>
+<li>待售商品列表中，商品状态是系统下架待审核的，修改后商品信息，点击开始销售，页面提示信息为：您的商品已经保存到 “在售商品管理”中，实际商品还在待售商品列表中。<br>通过EditWare.vm页面到发布成功页面，判断商品的状态，如果是，则在显示对应的（vm里修改逻辑）<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-18/5847440.jpg" alt=""><br>4.进行京东拍卖新老发布页切换Bug修复。新发布页中不必填的SkuPrice通过网页传入值为0，需要在后端进行判断，是否是拍卖商家，然后进行jdPrice的默认设置9999999。</li>
+</ol>
+<p><strong>2018-1-22 == 2018-1-26</strong><br>1.完成拍卖新老发布页切换 已上线<br>2.完成基于Spring-Batch的批处理man端系统 审核下架接奖惩上线。<br>3.WareMan端审核下架接奖惩上线<br>4.正义联盟已上线</p>
+<p><strong>2018-1-29- == 2018-2-2</strong><br>1.修复shop端的关联版式(关联版式关联商品增加关联结果显示)<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-2-5/76917573.jpg" alt=""><br>2.商品Man端/批处理系统 卖点设置</p>
+<ol>
+<li>商品批量管理 – 新增卖点设置。</li>
+<li>商品信息管理 – SKU设置增加卖点设置。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-2-5/77435066.jpg" alt=""><br>用到，动态绑定，ajax提交，popdesign组件（方便开发者实现网页效果)<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-2-5/79120644.jpg" alt=""><br>使用VUE来开发页面，requst中存放文件,并将结果交给Controller，然后根据执行类型获取指定的<code>ExcuteClass</code>，通过jsf，远程调用，将CSV文件发送给批处理系统，批处理接收到 将每一行解析为一个Item对象。然后对每一个Item进行卖点设置即可。</li>
+</ol>
+<a id="more"></a>
+<h3 id="主要记录自己工作上的发现和遇到问题及解决办法"><a href="#主要记录自己工作上的发现和遇到问题及解决办法" class="headerlink" title="主要记录自己工作上的发现和遇到问题及解决办法"></a>主要记录自己工作上的发现和遇到问题及解决办法</h3><h2 id="Vue与前端"><a href="#Vue与前端" class="headerlink" title="Vue与前端"></a>Vue与前端</h2><p>1.<br>前端通过ajax请求，得到响应的json数据，那么获取json的每个属性非常方便，很爽。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//后端Controller</span><br><span class="line">@GetMapping(&quot;/json&quot;)</span><br><span class="line">public Person getPersonName()&#123;</span><br><span class="line">  return new Person(&quot;a&quot;,&quot;b&quot;);  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//domain对象</span><br><span class="line">@Data      </span><br><span class="line">public Class Person()&#123;</span><br><span class="line">    private String firstName;</span><br><span class="line">    private String lastName;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>注解<code>@Data</code>是Lombok插件上的，作用是:提供类所有属性的 getting 和 setting 方法，此外还提供了equals、canEqual、hashCode、toString 方法.</p>
 <p><strong>注意：在配合Lombok时，对象属性首字母不能是大写的，我踩过的坑，它会无法注入属性值。</strong></p>

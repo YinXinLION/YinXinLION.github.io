@@ -7,21 +7,21 @@
   
   <title>JAVA反射 | 湖心亭看雪</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="反射反射可以拿到一个类所有的方法和属性，包括父类和接口。反射功能：1.在运行时判断任意一个对象所属的类；2.在运行时构造任意一个类的对象；3.在运行时判断任意一个类所具有的成员变量和方法（通过反射甚至可以调用private方法）；4.在运行时调用任意一个对象的方法 获得Class对象(1)使用Class类的forName静态方法:public static Class&amp;lt;?&amp;gt; forNa">
+  <meta name="description" content="反射反射可以拿到一个类所有的方法和属性，包括父类和接口。反射功能：1.在运行时判断任意一个对象所属的类；2.在运行时构造任意一个类的对象；3.在运行时判断任意一个类所具有的成员变量和方法（通过反射甚至可以调用private方法）；4.在运行时调用任意一个对象的方法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JAVA反射">
 <meta property="og:url" content="http://yoursite.com/2017/12/29/JAVA反射/index.html">
 <meta property="og:site_name" content="湖心亭看雪">
-<meta property="og:description" content="反射反射可以拿到一个类所有的方法和属性，包括父类和接口。反射功能：1.在运行时判断任意一个对象所属的类；2.在运行时构造任意一个类的对象；3.在运行时判断任意一个类所具有的成员变量和方法（通过反射甚至可以调用private方法）；4.在运行时调用任意一个对象的方法 获得Class对象(1)使用Class类的forName静态方法:public static Class&amp;lt;?&amp;gt; forNa">
+<meta property="og:description" content="反射反射可以拿到一个类所有的方法和属性，包括父类和接口。反射功能：1.在运行时判断任意一个对象所属的类；2.在运行时构造任意一个类的对象；3.在运行时判断任意一个类所具有的成员变量和方法（通过反射甚至可以调用private方法）；4.在运行时调用任意一个对象的方法">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/17-6-25/74165568.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/17-6-25/88322831.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/17-6-25/82956264.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/17-6-25/75525290.jpg">
-<meta property="og:updated_time" content="2018-01-01T14:23:45.140Z">
+<meta property="og:updated_time" content="2018-02-07T15:50:25.724Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JAVA反射">
-<meta name="twitter:description" content="反射反射可以拿到一个类所有的方法和属性，包括父类和接口。反射功能：1.在运行时判断任意一个对象所属的类；2.在运行时构造任意一个类的对象；3.在运行时判断任意一个类所具有的成员变量和方法（通过反射甚至可以调用private方法）；4.在运行时调用任意一个对象的方法 获得Class对象(1)使用Class类的forName静态方法:public static Class&amp;lt;?&amp;gt; forNa">
+<meta name="twitter:description" content="反射反射可以拿到一个类所有的方法和属性，包括父类和接口。反射功能：1.在运行时判断任意一个对象所属的类；2.在运行时构造任意一个类的对象；3.在运行时判断任意一个类所具有的成员变量和方法（通过反射甚至可以调用private方法）；4.在运行时调用任意一个对象的方法">
 <meta name="twitter:image" content="http://oqp1ywek9.bkt.clouddn.com/17-6-25/74165568.jpg">
   
     <link rel="alternate" href="/atom.xml" title="湖心亭看雪" type="application/atom+xml">
@@ -95,7 +95,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>反射可以拿到一个类所有的方法和属性，包括父类和接口。<br>反射功能：<br>1.在运行时判断任意一个对象所属的类；<br>2.在运行时构造任意一个类的对象；<br>3.在运行时判断任意一个类所具有的成员变量和方法（通过反射甚至可以调用private方法）；<br>4.在运行时调用任意一个对象的方法</p>
+        <h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>反射可以拿到一个类所有的方法和属性，包括父类和接口。<br>反射功能：<br>1.在运行时判断任意一个对象所属的类；<br>2.在运行时构造任意一个类的对象；<br>3.在运行时判断任意一个类所具有的成员变量和方法（通过反射甚至可以调用private方法）；<br>4.在运行时调用任意一个对象的方法<br><a id="more"></a></p>
 <h3 id="获得Class对象"><a href="#获得Class对象" class="headerlink" title="获得Class对象"></a>获得Class对象</h3><p>(1)使用Class类的forName静态方法:<br><code>public static Class&lt;?&gt; forName(String className)</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//在JDBC开发中常用此方法加载数据库驱动:</span><br><span class="line">Class.forName(driver);</span><br></pre></td></tr></table></figure></p>
 <p>(2)直接获取某一个对象的class，比如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Class&lt;?&gt; klass = int.class;</span><br><span class="line">Class&lt;?&gt; classInt = Integer.TYPE;</span><br></pre></td></tr></table></figure></p>
 <p>(3)调用某个对象的getClass()方法,比如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">StringBuilder str = new StringBuilder(&quot;123&quot;);</span><br><span class="line">Class&lt;?&gt; klass = str.getClass();</span><br></pre></td></tr></table></figure></p>

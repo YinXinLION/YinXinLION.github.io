@@ -19,7 +19,7 @@
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-2-7/10107960.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-2-7/8980855.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-2-7/11666092.jpg">
-<meta property="og:updated_time" content="2018-02-07T15:38:15.467Z">
+<meta property="og:updated_time" content="2018-02-07T15:50:18.825Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阅读笔记-2月">
 <meta name="twitter:description" content="日常学习 2018-2-1ClassCastException:当试图将对象强制转换为不是实例的子类时，抛出该异常。 内部类分为4种：  成员内部类：外部类的成员。 局部内部类 静态内部类：类似于静态成员。 匿名内部类：实现一个接口或者继承一个抽象类。外部类不能任意访问访问内部类的成员，外部类必须创建其内部类的对象(静态内部类除外)。内部类可以访问所有外部类的成员，因为内部类就像是一个类的成员。">
@@ -98,10 +98,8 @@
 <li>成员内部类：外部类的成员。</li>
 <li>局部内部类</li>
 <li>静态内部类：类似于静态成员。</li>
-<li>匿名内部类：实现一个接口或者继承一个抽象类。<br>外部类不能任意访问访问内部类的成员，外部类必须创建其内部类的对象(静态内部类除外)。内部类可以访问所有外部类的成员，因为内部类就像是一个类的成员。</li>
-</ol>
-<p><strong>Observer/Obserable观察者</strong>：java 用 Observer 接口和 Obserable 类实现观察者模式。</p>
-<ol>
+<li>匿名内部类：实现一个接口或者继承一个抽象类。<br>外部类不能任意访问访问内部类的成员，外部类必须创建其内部类的对象(静态内部类除外)。内部类可以访问所有外部类的成员，因为内部类就像是一个类的成员。<a id="more"></a>
+<strong>Observer/Obserable观察者</strong>：java 用 Observer 接口和 Obserable 类实现观察者模式。</li>
 <li>创建被观察者类 observable类</li>
 <li>创建观察者类 Observer 接口</li>
 <li>对于被观察者，添加他的观察者 <code>void addObserver(Observer o)</code>：该方法把观察者对象添加到观察者对象列表中，当被观察事件发生时，<br>调用<br>1.setchange()用来设置一个内部标志，注明数据发生了变换；2.notifyObservers()：调用观察者对象列表中 all Observer 的 update 方法，通知他们数据发生变换，只有在 setchang被调用以后，notifyObservers 才会调用 update。</li>

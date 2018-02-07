@@ -7,19 +7,19 @@
   
   <title>Nginx学习1 | 湖心亭看雪</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Nginx概述Nginx是一个开源且高性能、可靠的HTTP中间件、代理服务。 常见的HTTP服务：httpd、GWS(谷歌的)、IIS(微软) IO多路复用： IO多路复用的实现方式：select、poll、epoll  select:通过循环变量fd数组，查看是否有消息。(文件描述符数量存在限制1024个，循环扫描效率底下)。 epoll:采用回调函数将fd放入就绪，最大连接数无限制。  Ngi">
+  <meta name="description" content="Nginx概述Nginx是一个开源且高性能、可靠的HTTP中间件、代理服务。 常见的HTTP服务：httpd、GWS(谷歌的)、IIS(微软) IO多路复用： IO多路复用的实现方式：select、poll、epoll  select:通过循环变量fd数组，查看是否有消息。(文件描述符数量存在限制1024个，循环扫描效率底下)。 epoll:采用回调函数将fd放入就绪，最大连接数无限制。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Nginx学习1">
 <meta property="og:url" content="http://yoursite.com/2018/01/28/Nginx学习/index.html">
 <meta property="og:site_name" content="湖心亭看雪">
-<meta property="og:description" content="Nginx概述Nginx是一个开源且高性能、可靠的HTTP中间件、代理服务。 常见的HTTP服务：httpd、GWS(谷歌的)、IIS(微软) IO多路复用： IO多路复用的实现方式：select、poll、epoll  select:通过循环变量fd数组，查看是否有消息。(文件描述符数量存在限制1024个，循环扫描效率底下)。 epoll:采用回调函数将fd放入就绪，最大连接数无限制。  Ngi">
+<meta property="og:description" content="Nginx概述Nginx是一个开源且高性能、可靠的HTTP中间件、代理服务。 常见的HTTP服务：httpd、GWS(谷歌的)、IIS(微软) IO多路复用： IO多路复用的实现方式：select、poll、epoll  select:通过循环变量fd数组，查看是否有消息。(文件描述符数量存在限制1024个，循环扫描效率底下)。 epoll:采用回调函数将fd放入就绪，最大连接数无限制。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://ooo.0o0.ooo/2017/06/20/594937002ebba.png">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-1-28/51373462.jpg">
-<meta property="og:updated_time" content="2018-01-28T08:23:41.110Z">
+<meta property="og:updated_time" content="2018-02-07T15:50:24.715Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nginx学习1">
-<meta name="twitter:description" content="Nginx概述Nginx是一个开源且高性能、可靠的HTTP中间件、代理服务。 常见的HTTP服务：httpd、GWS(谷歌的)、IIS(微软) IO多路复用： IO多路复用的实现方式：select、poll、epoll  select:通过循环变量fd数组，查看是否有消息。(文件描述符数量存在限制1024个，循环扫描效率底下)。 epoll:采用回调函数将fd放入就绪，最大连接数无限制。  Ngi">
+<meta name="twitter:description" content="Nginx概述Nginx是一个开源且高性能、可靠的HTTP中间件、代理服务。 常见的HTTP服务：httpd、GWS(谷歌的)、IIS(微软) IO多路复用： IO多路复用的实现方式：select、poll、epoll  select:通过循环变量fd数组，查看是否有消息。(文件描述符数量存在限制1024个，循环扫描效率底下)。 epoll:采用回调函数将fd放入就绪，最大连接数无限制。">
 <meta name="twitter:image" content="https://ooo.0o0.ooo/2017/06/20/594937002ebba.png">
   
     <link rel="alternate" href="/atom.xml" title="湖心亭看雪" type="application/atom+xml">
@@ -99,9 +99,9 @@
 <p>IO多路复用的实现方式：select、poll、epoll</p>
 <ul>
 <li>select:通过循环变量fd数组，查看是否有消息。(文件描述符数量存在限制1024个，循环扫描效率底下)。</li>
-<li>epoll:采用回调函数将fd放入就绪，最大连接数无限制。</li>
+<li>epoll:采用回调函数将fd放入就绪，最大连接数无限制。<a id="more"></a>
+Nginx对CPU进行分配，亲和绑定（一个进程worker对应一个cpu），保证不会出现cpu频繁切换带来的效率低下问题。</li>
 </ul>
-<p>Nginx对CPU进行分配，亲和绑定（一个进程worker对应一个cpu），保证不会出现cpu频繁切换带来的效率低下问题。</p>
 <p><strong>什么是CPU亲和</strong>： 是一种把CPU核心和Nginx工作进程绑定方式，把每一个worker进程固定在一个CPU上执行，减少切换CPU的Cache miss，获得更好的性能。</p>
 <p>Nginx对静态资源采用sendfile机制：<br>一般file -&gt; 内核态 -&gt; 用户态 -&gt; 内核态 -&gt; socket 进行文件传输。<br>由于静态文件不需要逻辑处理，所以出现sendfile： 走到内核态后，直接通过socket发送。(零拷贝)</p>
 <p>安装 <code>yum install nginx</code> 记得更新yum源</p>

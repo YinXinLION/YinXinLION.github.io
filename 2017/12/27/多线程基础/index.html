@@ -18,7 +18,7 @@
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/17-12-27/7512396.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/17-12-27/95616048.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/17-12-27/98040340.jpg">
-<meta property="og:updated_time" content="2017-12-27T14:26:00.848Z">
+<meta property="og:updated_time" content="2018-02-07T15:50:14.310Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="多线程基础">
 <meta name="twitter:description" content="多线程基本知识Java多线程的创建方式有:1.继承Thread 2.实现Runnalbe 3.线程池创建Java中只支持单继承，Thread的每个线程都是相互独立的。而Runnalbe可以通过实现MyThread然后继承实现，线程间的共享数据。 线程是一个子任务，CPU以不确定的方式来调用线程中的run方法。start()是启动线程,单独调用run()是执行这个run方法而已。 currentTh">
@@ -98,7 +98,7 @@
         <h3 id="多线程基本知识"><a href="#多线程基本知识" class="headerlink" title="多线程基本知识"></a>多线程基本知识</h3><p>Java多线程的创建方式有:1.继承<code>Thread</code> 2.实现<code>Runnalbe</code> 3.线程池创建<br>Java中只支持单继承，<code>Thread</code>的每个线程都是相互独立的。而<code>Runnalbe</code>可以通过实现MyThread然后继承实现，线程间的共享数据。</p>
 <p>线程是一个子任务，CPU以不确定的方式来调用线程中的run方法。<code>start()</code>是启动线程,单独调用<code>run()</code>是执行这个run方法而已。</p>
 <p><code>currentThread()</code>方法可返回代码段正在被那个线程调用的信息。<br><code>isAlive()</code>方法判断当前的线程是否处于活动状态。<br><code>sleep()</code>方法作用是在指定的毫秒数内让当前执行的线程休眠(暂停运行)。并不会释放锁。</p>
-<p>线程优先级:优先级分为1~10，优先级具有继承性，默认为5.</p>
+<p>线程优先级:优先级分为1~10，优先级具有继承性，默认为5.<br><a id="more"></a></p>
 <h3 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h3><p><code>synchronized</code>可以在任意对象及方法上加锁，加锁的这段代码称为”互斥区”或”临界区”。</p>
 <p>当多个线程操作同一个变量时，可以采用<code>synchronized</code>方式上锁，解决非线程安全问题。</p>
 <p>“非线程安全”会在多个线程对同一个对象中的实例变量进行并发访问时发生，产生的后果就是脏读。</p>
