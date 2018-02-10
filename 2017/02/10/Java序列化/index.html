@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Java序列化 | 芝兰生于深谷，不以无人而不芳</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="序列化：将对象的状态信息转换为可存储或传输的形式过程。反序列化：将字节数组反序列化为对象。可以帮助我们，将对象持久化到存储设备，通过网络传输对象等问题。常用的序列化技术有：java默认序列化、XML、JSON、Hessian Java默认序列化Java序列化通过对象输出流java.io.ObjectOutputStream与对象输入流java.io.ObjectInputStream实现，被序列化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java序列化">
+<meta property="og:url" content="http://yoursite.com/2017/02/10/Java序列化/index.html">
+<meta property="og:site_name" content="芝兰生于深谷，不以无人而不芳">
+<meta property="og:description" content="序列化：将对象的状态信息转换为可存储或传输的形式过程。反序列化：将字节数组反序列化为对象。可以帮助我们，将对象持久化到存储设备，通过网络传输对象等问题。常用的序列化技术有：java默认序列化、XML、JSON、Hessian Java默认序列化Java序列化通过对象输出流java.io.ObjectOutputStream与对象输入流java.io.ObjectInputStream实现，被序列化">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-2-8/3754667.jpg">
+<meta property="og:updated_time" content="2018-02-10T11:32:28.229Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java序列化">
+<meta name="twitter:description" content="序列化：将对象的状态信息转换为可存储或传输的形式过程。反序列化：将字节数组反序列化为对象。可以帮助我们，将对象持久化到存储设备，通过网络传输对象等问题。常用的序列化技术有：java默认序列化、XML、JSON、Hessian Java默认序列化Java序列化通过对象输出流java.io.ObjectOutputStream与对象输入流java.io.ObjectInputStream实现，被序列化">
+<meta name="twitter:image" content="http://oqp1ywek9.bkt.clouddn.com/18-2-8/3754667.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="芝兰生于深谷，不以无人而不芳" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">芝兰生于深谷，不以无人而不芳</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Java序列化" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/10/Java序列化/" class="article-date">
+  <time datetime="2017-02-10T11:30:10.000Z" itemprop="datePublished">2017-02-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java基础/">Java基础</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java序列化
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>序列化：将对象的状态信息转换为可存储或传输的形式过程。<br>反序列化：将字节数组反序列化为对象。<br>可以帮助我们，将对象持久化到存储设备，通过网络传输对象等问题。<br>常用的序列化技术有：java默认序列化、XML、JSON、Hessian</p>
+<h3 id="Java默认序列化"><a href="#Java默认序列化" class="headerlink" title="Java默认序列化"></a>Java默认序列化</h3><p>Java序列化通过对象输出流<code>java.io.ObjectOutputStream</code>与对象输入流<code>java.io.ObjectInputStream</code>实现，被序列化的类要实现<code>Serializable</code>接口。<br><code>transient</code>关键字可以在默认序列化时忽略修饰的字段。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-2-8/3754667.jpg" alt=""></p>
+<a id="more"></a>
+<h3 id="XML序列化"><a href="#XML序列化" class="headerlink" title="XML序列化"></a>XML序列化</h3><p>XML序列化，可读性好，但序列化后码流大，效率不高。它具有语言无关性，可用于异构系统之间的数据交换。<br>(1)方式1<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">  &lt;groupId&gt;com.thoughtworks.xstream&lt;/groupId&gt;</span><br><span class="line">  &lt;artifactId&gt;xstream&lt;/artifactId&gt;</span><br><span class="line">  &lt;version&gt;1.4.9&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class xml_test &#123;</span><br><span class="line">    private static final XStream xStream = new XStream(new DomDriver());</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        byte[] bytes = xStream.toXML(new User()).getBytes();</span><br><span class="line">        String xml = new String(bytes);</span><br><span class="line">        User user = (User) xStream.fromXML(xml);</span><br><span class="line">        System.out.println(user.getAge());//输出28</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>(2)方式2-java自带工具<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">package com.yinxin.mytest;</span><br><span class="line"></span><br><span class="line">import com.thoughtworks.xstream.XStream;</span><br><span class="line">import com.thoughtworks.xstream.io.xml.DomDriver;</span><br><span class="line"></span><br><span class="line">import java.beans.XMLDecoder;</span><br><span class="line">import java.beans.XMLEncoder;</span><br><span class="line">import java.io.ByteArrayInputStream;</span><br><span class="line">import java.io.ByteArrayOutputStream;</span><br><span class="line"></span><br><span class="line">public class xml_test &#123;</span><br><span class="line">    private static final XStream xStream = new XStream(new DomDriver());</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        ByteArrayOutputStream out = new ByteArrayOutputStream();</span><br><span class="line">        XMLEncoder xe = new XMLEncoder(out, &quot;utf-8&quot;, true, 0);</span><br><span class="line">        xe.writeObject(new User());</span><br><span class="line">        xe.close();</span><br><span class="line">        bytes = out.toByteArray();</span><br><span class="line">        XMLDecoder xd = new XMLDecoder(new ByteArrayInputStream(bytes));</span><br><span class="line">        User user1 = (User) xd.readObject();</span><br><span class="line">        System.out.println(user1.getAge());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="JSON序列化"><a href="#JSON序列化" class="headerlink" title="JSON序列化"></a>JSON序列化</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">      &lt;groupId&gt;com.alibaba&lt;/groupId&gt;</span><br><span class="line">      &lt;artifactId&gt;fastjson&lt;/artifactId&gt;</span><br><span class="line">      &lt;version&gt;1.2.29&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public class json_test &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        JSON.DEFFAULT_DATE_FORMAT = &quot;yyyy-MM-dd HH:mm:ss&quot;;</span><br><span class="line">        byte[] bytes = JSON.toJSONString(new User(), SerializerFeature.WriteDateUseDateFormat).getBytes();</span><br><span class="line">        User user = JSON.parseObject(new String(bytes), User.class);</span><br><span class="line">        System.out.println(user.getAge());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Hessian序列化"><a href="#Hessian序列化" class="headerlink" title="Hessian序列化"></a>Hessian序列化</h3><p>Hessian是一个支持跨语言传输的二进制序列化协议，支持不同的语言。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">  &lt;groupId&gt;com.caucho&lt;/groupId&gt;</span><br><span class="line">  &lt;artifactId&gt;hessian&lt;/artifactId&gt;</span><br><span class="line">  &lt;version&gt;4.0.38&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class hessian_test &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        byte[] bytes = null;</span><br><span class="line">        try &#123;</span><br><span class="line">            ByteArrayOutputStream os = new ByteArrayOutputStream();</span><br><span class="line">            HessianOutput ho = new HessianOutput(os);</span><br><span class="line">            ho.writeObject(new User());</span><br><span class="line">            bytes = os.toByteArray();</span><br><span class="line">            ByteArrayInputStream is = new ByteArrayInputStream(bytes);</span><br><span class="line">            HessianInput hi = new HessianInput(is);</span><br><span class="line">            User user = (User) hi.readObject();</span><br><span class="line">            System.out.println(user.getAge());</span><br><span class="line">        &#125; catch (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="分布式服务注册中心"><a href="#分布式服务注册中心" class="headerlink" title="分布式服务注册中心"></a>分布式服务注册中心</h2><ul>
+<li>在服务启动的时候，将服务提供者信息主动上报到服务注册中心进行服务注册。</li>
+<li>服务调用者启动时候，将服务提供者信息从注册中心下拉到服务调用者机器本地缓存，调用者从本地缓存的服务提供者地址列表中，基于某种负载均衡策略选择一台服务提供者发起远程调用。</li>
+<li>服务注册中心能感知服务提供者集群中某一台机器下线，将该机器服务提供者信息从服务注册中心删除，并主动通知服务调用者集群中的每一台机器，使得服务调用者不再调用该机器。</li>
+</ul>
+<p>服务注册中心的优点：1.负载均衡及透明化服务路由，服务动态发现，为服务提供服务治理能力。</p>
+<h3 id="Zookeeper服务注册中心"><a href="#Zookeeper服务注册中心" class="headerlink" title="Zookeeper服务注册中心"></a>Zookeeper服务注册中心</h3><p>Zookeeper提供了统一命名服务、配置管理、分布式锁等分布式基础服务，通过这些基础，可实现集群管理、软负载、发布/订阅、分布式队列、命名服务等功能。</p>
+<ul>
+<li><code>ByteArrayOutputStream/ByteArrayInputStream</code>可以将字符串或者字节数组转换成输入/输出流。</li>
+<li><code>FileOutputStream/FileInputStream</code>专门用于文件IO操作，更适用于图片等二进制文件操作。</li>
+<li><code>BufferedOutputStream/BufferedInputStream</code>使用装饰器模式。增加字节流缓存能力。使字节数组能批量读取写入。</li>
+<li><code>DataOutputStream/DataInputStream</code>对Java原生类型直接写入再按写入顺序直接读取。常用语网络数据传输过程读取和写入。</li>
+<li><code>PrintStream</code>用语日志输出组件的实现，无需抛出IO异常。</li>
+<li><code>ObjectOutputStream/ObjectInputStream</code>用语Java对象的序列化与反序列化或网络数据的写入/写出。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/02/10/Java序列化/" data-id="cjdhhyh54000024va1z225bn1" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/12/26/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Hello World
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java多线程/">Java多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx学习笔记/">Nginx学习笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python基础/">Python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习成长/">学习成长</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/心情/">心情</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/02/01/阅读笔记-2月/">阅读笔记-2月</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/28/Nginx学习/">Nginx学习1</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/28/Python入门学习(四)-模块/">Python入门学习(四)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/08/在京东实习的笔记/">京东实习记录</a>
+          </li>
+        
+          <li>
+            <a href="/2018/01/06/Python入门学习(三)-变量与运算符/">Python入门学习(三)-变量与运算符</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 殷鑫<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

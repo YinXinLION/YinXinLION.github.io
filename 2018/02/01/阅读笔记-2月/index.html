@@ -19,7 +19,9 @@
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-2-7/10107960.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-2-7/8980855.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-2-7/11666092.jpg">
-<meta property="og:updated_time" content="2018-02-07T15:50:18.825Z">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-2-8/30294933.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-2-8/91408498.jpg">
+<meta property="og:updated_time" content="2018-02-10T11:32:38.355Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阅读笔记-2月">
 <meta name="twitter:description" content="日常学习 2018-2-1ClassCastException:当试图将对象强制转换为不是实例的子类时，抛出该异常。 内部类分为4种：  成员内部类：外部类的成员。 局部内部类 静态内部类：类似于静态成员。 匿名内部类：实现一个接口或者继承一个抽象类。外部类不能任意访问访问内部类的成员，外部类必须创建其内部类的对象(静态内部类除外)。内部类可以访问所有外部类的成员，因为内部类就像是一个类的成员。">
@@ -76,6 +78,10 @@
   <time datetime="2018-02-01T15:25:05.000Z" itemprop="datePublished">2018-02-01</time>
 </a>
     
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/学习成长/">学习成长</a>
+  </div>
+
   </div>
   <div class="article-inner">
     
@@ -204,6 +210,41 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//AbstractFactory（抽象工厂）</span><br><span class="line">abstract class AbstractFactory &#123;</span><br><span class="line">    public abstract AbstractProductA createProductA(); //工厂方法一</span><br><span class="line">    public abstract AbstractProductB createProductB(); //工厂方法二</span><br><span class="line">    ……</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//ConcreteFactory（具体工厂）</span><br><span class="line">class ConcreteFactory1 extends AbstractFactory &#123;  </span><br><span class="line">    //工厂方法一  </span><br><span class="line">    public AbstractProductA createProductA() &#123;  </span><br><span class="line">        return new ConcreteProductA1();  </span><br><span class="line">    &#125;  </span><br><span class="line"></span><br><span class="line">    //工厂方法二  </span><br><span class="line">    public AbstractProductB createProductB() &#123;  </span><br><span class="line">        return new ConcreteProductB1();  </span><br><span class="line">    &#125;  </span><br><span class="line"></span><br><span class="line">    ……  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="两阶段提交-2018-2-9"><a href="#两阶段提交-2018-2-9" class="headerlink" title="两阶段提交 2018-2-9"></a>两阶段提交 2018-2-9</h3><h4 id="准备阶段"><a href="#准备阶段" class="headerlink" title="准备阶段"></a>准备阶段</h4><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-2-8/30294933.jpg" alt=""></p>
+<h4 id="提交阶段"><a href="#提交阶段" class="headerlink" title="提交阶段"></a>提交阶段</h4><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-2-8/91408498.jpg" alt=""></p>
+<p><strong>缺点</strong>：1.同步阻塞问题2.单点故障3.数据不一致(commit消息传输丢失)</p>
+<h3 id="三阶段提交"><a href="#三阶段提交" class="headerlink" title="三阶段提交"></a>三阶段提交</h3><p>相对于两阶段不同的是：</p>
+<ol>
+<li>引入超时机制。</li>
+<li>在第一阶段和第二阶段插入一个准备阶段。（canCommit、PreCommit、DoCommit）<h4 id="CanCommit阶段"><a href="#CanCommit阶段" class="headerlink" title="CanCommit阶段"></a>CanCommit阶段</h4>协调者向参与者发送commit请求，参与者如果可以提交就返回Yes响应，否则返回No响应。</li>
+<li><strong>事务询问</strong> 协调者向参与者发送CanCommit请求。询问是否可以执行事务提交操作。然后开始等待参与者的响应。</li>
+<li><strong>响应反馈</strong> 参与者接到CanCommit请求之后，正常情况下，如果其自身认为可以顺利执行事务，则返回Yes响应，并进入预备状态。否则反馈No</li>
+</ol>
+<h4 id="PreCommit阶段"><a href="#PreCommit阶段" class="headerlink" title="PreCommit阶段"></a>PreCommit阶段</h4><p>协调者根据参与者的反应情况来决定是否可以记性事务的PreCommit操作。<br><strong>假如协调者从所有的参与者获得的反馈都是Yes响应，那么就会执行事务的预执行。</strong></p>
+<ol>
+<li><strong>发送预提交请求</strong> 协调者向参与者发送PreCommit请求，并进入Prepared阶段。</li>
+<li><strong>事务预提交</strong> 参与者接收到PreCommit请求后，会执行事务操作，并将undo和redo信息记录到事务日志中。</li>
+<li><strong>响应反馈</strong> 如果参与者成功的执行了事务操作，则返回ACK响应，同时开始等待最终指令。</li>
+</ol>
+<p><strong>假如有任何一个参与者向协调者发送了No响应，或者等待超时之后，协调者都没有接到参与者的响应，那么就执行事务的中断。</strong></p>
+<ol>
+<li><strong>发送中断请求</strong> 协调者向所有参与者发送abort请求。</li>
+<li><strong>中断事务</strong> 参与者收到来自协调者的abort请求之后（或超时之后，仍未收到协调者的请求），执行事务的中断。</li>
+</ol>
+<h4 id="doCommit阶段"><a href="#doCommit阶段" class="headerlink" title="doCommit阶段"></a>doCommit阶段</h4><p><strong>执行提交</strong></p>
+<ol>
+<li><strong>发送提交请求</strong> 协调接收到参与者发送的ACK响应，那么他将从预提交状态进入到提交状态。并向所有参与者发送doCommit请求。</li>
+<li><strong>事务提交</strong> 参与者接收到doCommit请求之后，执行正式的事务提交。并在完成事务提交之后释放所有事务资源。</li>
+<li><strong>响应反馈</strong> 事务提交完之后，向协调者发送Ack响应。</li>
+<li><strong>完成事务</strong> 协调者接收到所有参与者的ack响应之后，完成事务。</li>
+</ol>
+<p><strong>中断事务</strong><br>协调者没有接收到参与者发送的ACK响应（可能是接受者发送的不是ACK响应，也可能响应超时），那么就会执行中断事务</p>
+<ol>
+<li><strong>发送中断请求</strong> 协调者向所有参与者发送abort请求</li>
+<li><strong>事务回滚</strong> 参与者接收到abort请求之后，利用其在阶段二记录的undo信息来执行事务的回滚操作，并在完成回滚之后释放所有的事务资源。</li>
+<li><strong>反馈结果</strong> 参与者完成事务回滚之后，向协调者发送ACK消息</li>
+<li><strong>中断事务</strong> 协调者接收到参与者反馈的ACK消息之后，执行事务的中断。</li>
+</ol>
 
       
     </div>
@@ -251,7 +292,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
     </div>
   </div>
 
