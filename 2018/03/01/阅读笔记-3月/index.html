@@ -5,18 +5,19 @@
   
 
   
-  <title>归档: 2017/2 | 芝兰生于深谷，不以无人而不芳</title>
+  <title>阅读笔记-3月 | 芝兰生于深谷，不以无人而不芳</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="学习之路">
-<meta property="og:type" content="website">
-<meta property="og:title" content="芝兰生于深谷，不以无人而不芳">
-<meta property="og:url" content="http://yoursite.com/archives/2017/02/index.html">
+  <meta name="description" content="最小生成树算法Kruskal算法适用范围：要求无向图。思路：运用并查集，先将每个节点作为一个集合，然后以边的权重建立一个最小堆，然后获取最小的边，查看这两个点是否在同一个集合，不在则将这条边保存在result中，并且并查集合并两个点。不断地循环取出最小的边。 Prim算法使用范围：要求无向图。思路：建立一个Hashset查看点是否在set中。从某一个点出发，找到边最小的，看这个点是否在set中不在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阅读笔记-3月">
+<meta property="og:url" content="http://yoursite.com/2018/03/01/阅读笔记-3月/index.html">
 <meta property="og:site_name" content="芝兰生于深谷，不以无人而不芳">
-<meta property="og:description" content="学习之路">
+<meta property="og:description" content="最小生成树算法Kruskal算法适用范围：要求无向图。思路：运用并查集，先将每个节点作为一个集合，然后以边的权重建立一个最小堆，然后获取最小的边，查看这两个点是否在同一个集合，不在则将这条边保存在result中，并且并查集合并两个点。不断地循环取出最小的边。 Prim算法使用范围：要求无向图。思路：建立一个Hashset查看点是否在set中。从某一个点出发，找到边最小的，看这个点是否在set中不在">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-01T15:12:33.159Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="芝兰生于深谷，不以无人而不芳">
-<meta name="twitter:description" content="学习之路">
+<meta name="twitter:title" content="阅读笔记-3月">
+<meta name="twitter:description" content="最小生成树算法Kruskal算法适用范围：要求无向图。思路：运用并查集，先将每个节点作为一个集合，然后以边的权重建立一个最小堆，然后获取最小的边，查看这两个点是否在同一个集合，不在则将这条边保存在result中，并且并查集合并两个点。不断地循环取出最小的边。 Prim算法使用范围：要求无向图。思路：建立一个Hashset查看点是否在set中。从某一个点出发，找到边最小的，看这个点是否在set中不在">
   
     <link rel="alternate" href="/atom.xml" title="芝兰生于深谷，不以无人而不芳" type="application/atom+xml">
   
@@ -63,40 +64,57 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/02/10/Java序列化/" class="archive-article-date">
-  <time datetime="2017-02-10T11:30:10.000Z" itemprop="datePublished">2月 10</time>
+        <section id="main"><article id="post-阅读笔记-3月" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/01/阅读笔记-3月/" class="article-date">
+  <time datetime="2018-03-01T15:01:10.000Z" itemprop="datePublished">2018-03-01</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/学习成长/">学习成长</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/02/10/Java序列化/">Java序列化</a>
+    <h1 class="article-title" itemprop="name">
+      阅读笔记-3月
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="最小生成树算法"><a href="#最小生成树算法" class="headerlink" title="最小生成树算法"></a>最小生成树算法</h3><h4 id="Kruskal算法"><a href="#Kruskal算法" class="headerlink" title="Kruskal算法"></a>Kruskal算法</h4><p>适用范围：要求无向图。<br>思路：运用并查集，先将每个节点作为一个集合，然后以边的权重建立一个最小堆，然后获取最小的边，查看这两个点是否在同一个集合，不在则将这条边保存在result中，并且并查集合并两个点。不断地循环取出最小的边。</p>
+<h5 id="Prim算法"><a href="#Prim算法" class="headerlink" title="Prim算法"></a>Prim算法</h5><p>使用范围：要求无向图。<br>思路：建立一个Hashset查看点是否在set中。从某一个点出发，找到边最小的，看这个点是否在set中不在则加入result，并把这个点相邻的边都加上。总之就是不断地找最小的边，并且不能产生回路。</p>
 
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/03/01/阅读笔记-3月/" data-id="cje8njey0000074vaxxg4959y" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/02/01/阅读笔记-2月/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">阅读笔记-2月</div>
+    </a>
+  
+</nav>
+
+  
+</article>
 
 </section>
         
