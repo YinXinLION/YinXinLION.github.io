@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="芝兰生于深谷，不以无人而不芳">
 <meta property="og:description" content="最小生成树算法Kruskal算法适用范围：要求无向图。思路：运用并查集，先将每个节点作为一个集合，然后以边的权重建立一个最小堆，然后获取最小的边，查看这两个点是否在同一个集合，不在则将这条边保存在result中，并且并查集合并两个点。不断地循环取出最小的边。 Prim算法使用范围：要求无向图。思路：建立一个Hashset查看点是否在set中。从某一个点出发，找到边最小的，看这个点是否在set中不在">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-01T15:12:33.159Z">
+<meta property="og:updated_time" content="2018-03-04T07:11:30.242Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阅读笔记-3月">
 <meta name="twitter:description" content="最小生成树算法Kruskal算法适用范围：要求无向图。思路：运用并查集，先将每个节点作为一个集合，然后以边的权重建立一个最小堆，然后获取最小的边，查看这两个点是否在同一个集合，不在则将这条边保存在result中，并且并查集合并两个点。不断地循环取出最小的边。 Prim算法使用范围：要求无向图。思路：建立一个Hashset查看点是否在set中。从某一个点出发，找到边最小的，看这个点是否在set中不在">
@@ -92,6 +92,20 @@
       
         <h3 id="最小生成树算法"><a href="#最小生成树算法" class="headerlink" title="最小生成树算法"></a>最小生成树算法</h3><h4 id="Kruskal算法"><a href="#Kruskal算法" class="headerlink" title="Kruskal算法"></a>Kruskal算法</h4><p>适用范围：要求无向图。<br>思路：运用并查集，先将每个节点作为一个集合，然后以边的权重建立一个最小堆，然后获取最小的边，查看这两个点是否在同一个集合，不在则将这条边保存在result中，并且并查集合并两个点。不断地循环取出最小的边。</p>
 <h5 id="Prim算法"><a href="#Prim算法" class="headerlink" title="Prim算法"></a>Prim算法</h5><p>使用范围：要求无向图。<br>思路：建立一个Hashset查看点是否在set中。从某一个点出发，找到边最小的，看这个点是否在set中不在则加入result，并把这个点相邻的边都加上。总之就是不断地找最小的边，并且不能产生回路。</p>
+<h3 id="递归和动态规划-2018-3-4"><a href="#递归和动态规划-2018-3-4" class="headerlink" title="递归和动态规划 2018-3-4"></a>递归和动态规划 2018-3-4</h3><p>暴力递归：</p>
+<ol>
+<li>把问题转化为规模缩小了的同类问题的子问题。</li>
+<li>有明确的不需要继续进行的递归的条件。</li>
+<li>有当得到了子问题的结果之后的决策过程。</li>
+<li>不记录每一个子问题的解。</li>
+</ol>
+<p>动态规划：</p>
+<ol>
+<li>从暴力递归中来。</li>
+<li>将每一个子问题的解记录下来，避免重复计算。</li>
+<li>将暴力递归的过程，抽象成了状态表达。</li>
+<li>存在化简状态表达。</li>
+</ol>
 
       
     </div>
