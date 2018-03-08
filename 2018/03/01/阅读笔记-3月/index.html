@@ -14,10 +14,13 @@
 <meta property="og:site_name" content="芝兰生于深谷，不以无人而不芳">
 <meta property="og:description" content="最小生成树算法Kruskal算法适用范围：要求无向图。思路：运用并查集，先将每个节点作为一个集合，然后以边的权重建立一个最小堆，然后获取最小的边，查看这两个点是否在同一个集合，不在则将这条边保存在result中，并且并查集合并两个点。不断地循环取出最小的边。 Prim算法使用范围：要求无向图。思路：建立一个Hashset查看点是否在set中。从某一个点出发，找到边最小的，看这个点是否在set中不在">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-04T07:11:30.242Z">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-3-8/64888252.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-3-8/29113555.jpg">
+<meta property="og:updated_time" content="2018-03-08T02:23:51.196Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阅读笔记-3月">
 <meta name="twitter:description" content="最小生成树算法Kruskal算法适用范围：要求无向图。思路：运用并查集，先将每个节点作为一个集合，然后以边的权重建立一个最小堆，然后获取最小的边，查看这两个点是否在同一个集合，不在则将这条边保存在result中，并且并查集合并两个点。不断地循环取出最小的边。 Prim算法使用范围：要求无向图。思路：建立一个Hashset查看点是否在set中。从某一个点出发，找到边最小的，看这个点是否在set中不在">
+<meta name="twitter:image" content="http://oqp1ywek9.bkt.clouddn.com/18-3-8/64888252.jpg">
   
     <link rel="alternate" href="/atom.xml" title="芝兰生于深谷，不以无人而不芳" type="application/atom+xml">
   
@@ -106,6 +109,16 @@
 <li>将暴力递归的过程，抽象成了状态表达。</li>
 <li>存在化简状态表达。</li>
 </ol>
+<h3 id="MySQL索引原则-2018-3-7"><a href="#MySQL索引原则-2018-3-7" class="headerlink" title="MySQL索引原则 2018-3-7"></a>MySQL索引原则 2018-3-7</h3><p>1.最左前缀匹配原则。mysql会一直向右匹配直到遇到范围查询(&gt;,&lt;,between,like)就停止匹配，如果建立(a,b,c,d)索引,abcd的顺序可以任意调整。<br>2.=和in可以乱序,mysql优化器会优化，a=1 b=2 c=3建立(a,b,c)索引可以任意顺序。<br>3.尽量选择区分度高的列作为索引<br>4.索引列不能参与计算(检索时元素应用函数才能比较，成本太大)<br>5.尽量扩展索引，不要新建索引。</p>
+<h3 id="基于内存管理方案-2018-3-8"><a href="#基于内存管理方案-2018-3-8" class="headerlink" title="基于内存管理方案 2018-3-8"></a>基于内存管理方案 2018-3-8</h3><ol>
+<li>单一连续区：每次只运行一个程序，用户程序独占内存。</li>
+<li>固定分区：系统把内存空间分割成若干个连续区域，每个分区只能装一个进程。</li>
+<li>可变分区：根据进程需求，把可分配的内存空间分割出一个分区，分配给进程。</li>
+<li>页式存储管理方案<br>(1)用户进程地址空间被划分成大小相等的部分，成为页或页面<br>(2)内存空间按照同样大小进行划分，称为页框。<br>(3)以页为单位进行内存分配，按进程需求来分配页。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-8/64888252.jpg" alt=""><br>一个进程一个页表，通过查页表项来实现。</li>
+<li>段式存储管理方案<br>(1)用户进程地址空间按照程序自身逻辑关系划分成若干个程序段，每个程序段都有一个段名。<br>(2)内存空间被动态分成若干长度不同的区域，称为物理段。<br>(3)内存分配规则：以段为单位进行分配，每段在内存占据连续空间，各段之间可以不相同。<br>(4)逻辑地址为段号+段内地址。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-8/29113555.jpg" alt=""></li>
+<li>段页式存储管理方案<br>(1)用户进程地址空间先按段进行划分，每一段再按页面进行划分。</li>
+</ol>
+<h3 id="虚拟内存技术"><a href="#虚拟内存技术" class="headerlink" title="虚拟内存技术"></a>虚拟内存技术</h3><p>基本思想：每个程序拥有自己的地址空间，这个空间被分割成很多个块，每一个块称为页面。<br>每一页都有连续的地址范围。这些页被映射到物理内存，但并不是所有页都必须在内存中才能运行程序。<br>当程序引用到一部分在物理内存中的地址空间时，由硬件立刻执行必要的映射。<br>当程序引用到一部分不再物理内存中的地址空间时，由操作系统（缺页异常）负责将缺失的部分装入物理内存并重新执行失败的指令。</p>
 
       
     </div>
