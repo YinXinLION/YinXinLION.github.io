@@ -65,6 +65,51 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Zookeeper学习-一致性协议" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/27/Zookeeper学习-一致性协议/" class="article-date">
+  <time datetime="2018-03-27T01:27:14.000Z" itemprop="datePublished">2018-03-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/27/Zookeeper学习-一致性协议/">Zookeeper学习-一致性协议</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="一致性协议"><a href="#一致性协议" class="headerlink" title="一致性协议"></a>一致性协议</h3><h4 id="二阶段提交"><a href="#二阶段提交" class="headerlink" title="二阶段提交"></a>二阶段提交</h4><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-27/66567191.jpg" alt="二阶段提交"><br>1.提交事务请求 2.执行事务提交<br>如果任何一个参与者返回No，或者等待超时时间后，协调者无法接收所有的反馈，那么执行事务中断。</p>
+<p>优点：原理简单、实现方便。<br>缺点：<br>1.同步阻塞：各个参与者在等待其他参与者响应的过程中，将无法进行其他任何操作。<br>2.单点问题：一旦协调者出现问题，那么整个二阶段提交流程将无法运转。参与者会一直处于锁定事务资源的状态中。<br>3.数据不一致性：由于网络的原因或者协调者自身宕机，导致只有部门参与者收到Commit请求，于是整个分布式出现数据不一致现象。<br>4.太过保守：任意一点失败都会导致事务的失败。</p>
+<p>二阶段提交协议解决了分布式事务的原子性问题</p>
+<h4 id="三阶段提交"><a href="#三阶段提交" class="headerlink" title="三阶段提交"></a>三阶段提交</h4><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-2/74225968.jpg" alt="三阶段提交"><br>1.选票收集CanCommit 2.提交授权PreCommit 3.确定提交DoCommit</p>
+<p>优点：降低参与者的阻塞范围，能够在出现单点故障后继续达成一致。<br>缺点：参与者接收到PreCommit消息后，如果网络出现分区，协调者所在的节点和参与者无法正常通信，参与者依然会进行事务提交，导致数据不一致。</p>
+<p>三阶段提交避免了二阶段提交中无限等待问题。</p>
+<h4 id="Paxos算法"><a href="#Paxos算法" class="headerlink" title="Paxos算法"></a>Paxos算法</h4><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-3/11731777.jpg" alt="Paxos算法"><br>然后通知Leaner集合的一部分，然后通知剩余Leaner。保证可靠性，防止通知1个Leaner导致单点故障。</p>
+<p>P1：提出编号为M1的提案，完成阶段1.<br>P2:提出编号为M2的提案（M2&gt;M1），完成阶段1.此时不批准小于M2的提案。<br>P1：进入阶段二，发出的Accept请求会被忽略。于是P1重新生成编号M3的提案(M3&gt;M2),完成阶段1。<br>然后无限循环。为了避免这一现象，必须采用一个主Proposer。这样整套Paxos算法流程能够保持活性。</p>
+<p>Paxos算法解决了无限等待问题，解决了”脑裂”问题。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/03/27/Zookeeper学习-一致性协议/" data-id="cjfjuqiwx000dr0vaeo3pfsrw" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Zookeeper学习笔记-1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/03/23/Zookeeper学习笔记-1/" class="article-date">
@@ -100,7 +145,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/23/Zookeeper学习笔记-1/" data-id="cjf6y9rdo000ia8vawa5ikyv9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/03/23/Zookeeper学习笔记-1/" data-id="cjfjuqix1000gr0vamryaltiv" class="article-share-link">Share</a>
       
       
     </footer>
@@ -145,7 +190,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/15/排序算法学习/" data-id="cjf6y9re1000pa8vas6h6s4tp" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/03/15/排序算法学习/" data-id="cjfjuqixd000nr0vakb5p3jf4" class="article-share-link">Share</a>
       
       
     </footer>
@@ -219,7 +264,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/01/阅读笔记-3月/" data-id="cjf6y9re5000ua8vaba5t5527" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/03/01/阅读笔记-3月/" data-id="cjfjuqixh000pr0va119oh411" class="article-share-link">Share</a>
       
       
     </footer>
@@ -270,7 +315,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/阅读笔记-2月/" data-id="cjf6y9re6000va8vaf8esl6ct" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/02/01/阅读笔记-2月/" data-id="cjfjuqiy60012r0vagg3be5un" class="article-share-link">Share</a>
       
       
     </footer>
@@ -321,7 +366,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/28/Nginx学习/" data-id="cjf6y9rd00004a8vayoi6rwe9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/01/28/Nginx学习/" data-id="cjfjuqiwi0003r0vah0s97j3b" class="article-share-link">Share</a>
       
       
     </footer>
@@ -362,7 +407,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/28/Python入门学习(四)-模块/" data-id="cjf6y9rdx000ma8vazo9okmnl" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/01/28/Python入门学习(四)-模块/" data-id="cjfjuqix8000kr0vabpwi52mv" class="article-share-link">Share</a>
       
       
     </footer>
@@ -417,7 +462,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/08/在京东实习的笔记/" data-id="cjf6y9rdz000na8vadnro3owk" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/01/08/在京东实习的笔记/" data-id="cjfjuqixb000lr0vauduro5jd" class="article-share-link">Share</a>
       
       
     </footer>
@@ -465,7 +510,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/06/Python入门学习(三)-变量与运算符/" data-id="cjf6y9rdk000fa8van20cjdv9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/01/06/Python入门学习(三)-变量与运算符/" data-id="cjfjuqiwu000br0vand6hyiwk" class="article-share-link">Share</a>
       
       
     </footer>
@@ -515,51 +560,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/02/阅读笔记-1月/" data-id="cjf6y9rf10014a8vaotywxiuc" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-2018年实施计划" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/01/01/2018年实施计划/" class="article-date">
-  <time datetime="2018-01-01T14:26:45.000Z" itemprop="datePublished">2018-01-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/心情/">心情</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/01/2018年实施计划/">2018年实施计划</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>今天，是2018年的第一天，所以要给自己指定下目标，想要改变自己，坚持努力下去。<br>希望家人平安健康幸福，天天开心。</p>
-<p>每天看2篇别人写的技术文章。<br>保持读书。<br>锻炼身体。（由于1月7号-过年这段时间要去公司实习，在学长家里住着，不是太熟悉那边班车时间，希望每天早起去公司跑步~~）<br>技术博客是要写的。</p>
-<p>书籍： 我的JD购物车看。<br>语言：Python、Scala。<br>感兴趣：大数据、分布式、爬虫。<br>音乐：节奏感好的，古风类的。<br>游戏：坐等国服吃鸡（希望别上瘾啊啊啊），彩虹六号。</p>
-<p>先到这里。加油ヾ(◍°∇°◍)ﾉﾞ</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/01/2018年实施计划/" data-id="cjf6y9rcy0003a8vaskpxp6q8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/01/02/阅读笔记-1月/" data-id="cjfjuqiz20014r0va9fr8vl0l" class="article-share-link">Share</a>
       
       
     </footer>
@@ -612,6 +613,10 @@
       <ul>
         
           <li>
+            <a href="/2018/03/27/Zookeeper学习-一致性协议/">Zookeeper学习-一致性协议</a>
+          </li>
+        
+          <li>
             <a href="/2018/03/23/Zookeeper学习笔记-1/">Zookeeper学习笔记(1)</a>
           </li>
         
@@ -625,10 +630,6 @@
         
           <li>
             <a href="/2018/02/01/阅读笔记-2月/">阅读笔记-2月</a>
-          </li>
-        
-          <li>
-            <a href="/2018/01/28/Nginx学习/">Nginx学习1</a>
           </li>
         
       </ul>

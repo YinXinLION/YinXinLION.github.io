@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Zookeeper学习-一致性协议 | 芝兰生于深谷，不以无人而不芳</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一致性协议二阶段提交1.提交事务请求 2.执行事务提交如果任何一个参与者返回No，或者等待超时时间后，协调者无法接收所有的反馈，那么执行事务中断。 优点：原理简单、实现方便。缺点：1.同步阻塞：各个参与者在等待其他参与者响应的过程中，将无法进行其他任何操作。2.单点问题：一旦协调者出现问题，那么整个二阶段提交流程将无法运转。参与者会一直处于锁定事务资源的状态中。3.数据不一致性：由于网络的原因或者">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zookeeper学习-一致性协议">
+<meta property="og:url" content="http://yoursite.com/2018/03/27/Zookeeper学习-一致性协议/index.html">
+<meta property="og:site_name" content="芝兰生于深谷，不以无人而不芳">
+<meta property="og:description" content="一致性协议二阶段提交1.提交事务请求 2.执行事务提交如果任何一个参与者返回No，或者等待超时时间后，协调者无法接收所有的反馈，那么执行事务中断。 优点：原理简单、实现方便。缺点：1.同步阻塞：各个参与者在等待其他参与者响应的过程中，将无法进行其他任何操作。2.单点问题：一旦协调者出现问题，那么整个二阶段提交流程将无法运转。参与者会一直处于锁定事务资源的状态中。3.数据不一致性：由于网络的原因或者">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-3-27/66567191.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-4-2/74225968.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-4-3/11731777.jpg">
+<meta property="og:updated_time" content="2018-04-03T16:01:49.722Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Zookeeper学习-一致性协议">
+<meta name="twitter:description" content="一致性协议二阶段提交1.提交事务请求 2.执行事务提交如果任何一个参与者返回No，或者等待超时时间后，协调者无法接收所有的反馈，那么执行事务中断。 优点：原理简单、实现方便。缺点：1.同步阻塞：各个参与者在等待其他参与者响应的过程中，将无法进行其他任何操作。2.单点问题：一旦协调者出现问题，那么整个二阶段提交流程将无法运转。参与者会一直处于锁定事务资源的状态中。3.数据不一致性：由于网络的原因或者">
+<meta name="twitter:image" content="http://oqp1ywek9.bkt.clouddn.com/18-3-27/66567191.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="芝兰生于深谷，不以无人而不芳" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">芝兰生于深谷，不以无人而不芳</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Zookeeper学习-一致性协议" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/27/Zookeeper学习-一致性协议/" class="article-date">
+  <time datetime="2018-03-27T01:27:14.000Z" itemprop="datePublished">2018-03-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Zookeeper学习-一致性协议
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="一致性协议"><a href="#一致性协议" class="headerlink" title="一致性协议"></a>一致性协议</h3><h4 id="二阶段提交"><a href="#二阶段提交" class="headerlink" title="二阶段提交"></a>二阶段提交</h4><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-27/66567191.jpg" alt="二阶段提交"><br>1.提交事务请求 2.执行事务提交<br>如果任何一个参与者返回No，或者等待超时时间后，协调者无法接收所有的反馈，那么执行事务中断。</p>
+<p>优点：原理简单、实现方便。<br>缺点：<br>1.同步阻塞：各个参与者在等待其他参与者响应的过程中，将无法进行其他任何操作。<br>2.单点问题：一旦协调者出现问题，那么整个二阶段提交流程将无法运转。参与者会一直处于锁定事务资源的状态中。<br>3.数据不一致性：由于网络的原因或者协调者自身宕机，导致只有部门参与者收到Commit请求，于是整个分布式出现数据不一致现象。<br>4.太过保守：任意一点失败都会导致事务的失败。</p>
+<p>二阶段提交协议解决了分布式事务的原子性问题</p>
+<h4 id="三阶段提交"><a href="#三阶段提交" class="headerlink" title="三阶段提交"></a>三阶段提交</h4><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-2/74225968.jpg" alt="三阶段提交"><br>1.选票收集CanCommit 2.提交授权PreCommit 3.确定提交DoCommit</p>
+<p>优点：降低参与者的阻塞范围，能够在出现单点故障后继续达成一致。<br>缺点：参与者接收到PreCommit消息后，如果网络出现分区，协调者所在的节点和参与者无法正常通信，参与者依然会进行事务提交，导致数据不一致。</p>
+<p>三阶段提交避免了二阶段提交中无限等待问题。</p>
+<h4 id="Paxos算法"><a href="#Paxos算法" class="headerlink" title="Paxos算法"></a>Paxos算法</h4><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-3/11731777.jpg" alt="Paxos算法"><br>然后通知Leaner集合的一部分，然后通知剩余Leaner。保证可靠性，防止通知1个Leaner导致单点故障。</p>
+<p>P1：提出编号为M1的提案，完成阶段1.<br>P2:提出编号为M2的提案（M2&gt;M1），完成阶段1.此时不批准小于M2的提案。<br>P1：进入阶段二，发出的Accept请求会被忽略。于是P1重新生成编号M3的提案(M3&gt;M2),完成阶段1。<br>然后无限循环。为了避免这一现象，必须采用一个主Proposer。这样整套Paxos算法流程能够保持活性。</p>
+<p>Paxos算法解决了无限等待问题，解决了”脑裂”问题。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/03/27/Zookeeper学习-一致性协议/" data-id="cjfjuqiwx000dr0vaeo3pfsrw" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/03/23/Zookeeper学习笔记-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Zookeeper学习笔记(1)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java多线程/">Java多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx学习笔记/">Nginx学习笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python基础/">Python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习成长/">学习成长</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/心情/">心情</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/03/27/Zookeeper学习-一致性协议/">Zookeeper学习-一致性协议</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/23/Zookeeper学习笔记-1/">Zookeeper学习笔记(1)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/15/排序算法学习/">排序算法学习</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/01/阅读笔记-3月/">阅读笔记-3月</a>
+          </li>
+        
+          <li>
+            <a href="/2018/02/01/阅读笔记-2月/">阅读笔记-2月</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 殷鑫<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
