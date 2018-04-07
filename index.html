@@ -5,20 +5,20 @@
   
 
   
-  <title>芝兰生于深谷，不以无人而不芳</title>
+  <title>努力是为了将对世界的所有渴望都掌握在手上</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="学习之路">
 <meta property="og:type" content="website">
-<meta property="og:title" content="芝兰生于深谷，不以无人而不芳">
+<meta property="og:title" content="努力是为了将对世界的所有渴望都掌握在手上">
 <meta property="og:url" content="http://yoursite.com/index.html">
-<meta property="og:site_name" content="芝兰生于深谷，不以无人而不芳">
+<meta property="og:site_name" content="努力是为了将对世界的所有渴望都掌握在手上">
 <meta property="og:description" content="学习之路">
 <meta property="og:locale" content="zh-CN">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="芝兰生于深谷，不以无人而不芳">
+<meta name="twitter:title" content="努力是为了将对世界的所有渴望都掌握在手上">
 <meta name="twitter:description" content="学习之路">
   
-    <link rel="alternate" href="/atom.xml" title="芝兰生于深谷，不以无人而不芳" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="努力是为了将对世界的所有渴望都掌握在手上" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -37,7 +37,7 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">芝兰生于深谷，不以无人而不芳</a>
+        <a href="/" id="logo">努力是为了将对世界的所有渴望都掌握在手上</a>
       </h1>
       
     </div>
@@ -65,9 +65,57 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-Zookeeper学习-一致性协议" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Zookeeper学习笔记3" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/03/27/Zookeeper学习-一致性协议/" class="article-date">
+    <a href="/2018/04/04/Zookeeper学习笔记3/" class="article-date">
+  <time datetime="2018-04-04T12:54:14.000Z" itemprop="datePublished">2018-04-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/04/Zookeeper学习笔记3/">Zookeeper与Paxos</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Zookeeper介绍"><a href="#Zookeeper介绍" class="headerlink" title="Zookeeper介绍"></a>Zookeeper介绍</h3><p>Zookeeper为分布式应用提供了高效且可靠的分布式协调服务，提供了诸如统一命名服务、配置管理和分布式锁等分布式的基础服务。在解决分布式一致性方面，采用了ZAB(Zookeeper Atomic Boradcast)的一致性协议。</p>
+<h4 id="Zookeeper是什么"><a href="#Zookeeper是什么" class="headerlink" title="Zookeeper是什么"></a>Zookeeper是什么</h4><p>Zookeeper是一个典型的分布式数据一致性的解决方案。分布式应用程序可以基于它实现诸如数据发布/订阅、负载均衡、命名服务、分布式协调/通知、集群管理、Master选举、分布式锁、分布式队列等功能。</p>
+<p>Zookeeper保证如下分布式一致性特性：<br>1.顺序一致性：客户端发起事务请求，严格按照发起顺序被应用到Zookeeper中。<br>2.原子性：事务请求处理结果在整个集群中所有机器上的应用情况是一致的。要么都成功应用了某一个事务，要么都没应用。<br>3.单一视图：无论客户端连接哪个Zookeeper服务器，看到服务端数据模型都是一致的。<br>4.可靠性：服务端成功应用了一个事务，那么状态会一直保留，直到其他事物对其进行变更。<br>5.实时性：最终一致性，Zookeeper仅仅保证在一定时间段内，客户端最终一定能够从服务端上读取到最新的数据状态。</p>
+<h4 id="Zookeeper设计目标"><a href="#Zookeeper设计目标" class="headerlink" title="Zookeeper设计目标"></a>Zookeeper设计目标</h4><p>1.简单的数据模型:ZooKeeper数据模型是树型结构的名字空间。<br>2.可以构建集群：只要集群中存在超过一半的机器能够正常工作，那么就能够正常对外服务。当客户端和Zookeeper服务器断开后，客户端会自动连接到集群中的其他机器。<br>3.顺序访问：对于每一个更新请求，都会分配一个全局唯一的递增编号，保证事务操作先后顺序。<br>4.高性能：Zookeeper将全量的数据存储在内存中，以此获得服务器吞吐量、减少延迟。</p>
+<h4 id="Zookeeper的基本概念"><a href="#Zookeeper的基本概念" class="headerlink" title="Zookeeper的基本概念"></a>Zookeeper的基本概念</h4><h5 id="集群角色"><a href="#集群角色" class="headerlink" title="集群角色"></a>集群角色</h5><p>引入Leader、Follower和Observer三种角色。Leader服务器为客户端提供读和写服务。Follower和Observer能够提供读服务。<br>唯一区别在于：Observer不参与Leader选举过程，不参与写操作的”过半写成功策略”。</p>
+<h5 id="会话"><a href="#会话" class="headerlink" title="会话"></a>会话</h5><p>Session的sessionTimeout是设置一个客户端会话的超时时间。当由于各种原因导致客户端断开连接，只要在sessionTimeout规定时间内重新连上集群任意一台服务器，那么创建的会话仍然有效。</p>
+<h5 id="数据节点-Znode"><a href="#数据节点-Znode" class="headerlink" title="数据节点(Znode)"></a>数据节点(Znode)</h5><p>Znode是数据模型中的数据单元，Zookeeper将所有数据都存储在内存，数据模型是一颗树(Znode Tree),由斜杠(/)进行分割的路径就是一个Znode，例如<code>/foo/path1</code>。Znode除了保存自己的数据内容，还保存一系列属性信息。<br>Znode分为持久节点和临时节点。持久节点：Znode被创建后，除非主动进行Znode移除操作，否则Znode一直保存在Zookeeper上。临时节点：它的生命周期和客户端会话绑定，一旦客户端会话失效，那么这个客户端创建的所有临时节点都会被移除。<br>特殊属性：SEQUENTIAL。是父节点维护的自增数字。</p>
+<h5 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h5><p>每个Znode维护一个Stat的数据结构，Stat记录Znode的三个数据版本，version(当前ZNode的版本)、cversion(当前Znode子节点的版本)和aversion(当前ZNode的ACL版本)。</p>
+<h5 id="Wathcer"><a href="#Wathcer" class="headerlink" title="Wathcer"></a>Wathcer</h5><p>允许用户在指定节点上注册一些Watcher，当事件触发后，将事件通知到感兴趣的客户端上去。</p>
+<h5 id="ACL"><a href="#ACL" class="headerlink" title="ACL"></a>ACL</h5><p>Zookeeper定义了5种权限。类似于linux rwx<br>1.CREATE：创建子节点的权限。<br>2.READ：获取节点数据和子节点列表的权限。<br>3.WRITE：更新节点数据的权限。<br>4.DELETE：删除子节点的权限。<br>5.ADMIN：设置节点ACL的权限。</p>
+<h3 id="Zookeeper的ZAB协议"><a href="#Zookeeper的ZAB协议" class="headerlink" title="Zookeeper的ZAB协议"></a>Zookeeper的ZAB协议</h3><p>ZAB(Zookeeper 原子消息广播协议)作为数据一致性的核心算法。</p>
+<p>定义了会改变Zookeeper服务器数据状态的事务请求的处理方式：</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/04/Zookeeper学习笔记3/" data-id="cjfpjnemr0002mwva47vtwcjb" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Zookeeper学习笔记2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/27/Zookeeper学习笔记2/" class="article-date">
   <time datetime="2018-03-27T01:27:14.000Z" itemprop="datePublished">2018-03-27</time>
 </a>
     
@@ -79,7 +127,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/27/Zookeeper学习-一致性协议/">Zookeeper学习-一致性协议</a>
+      <a class="article-title" href="/2018/03/27/Zookeeper学习笔记2/">Zookeeper学习-一致性协议</a>
     </h1>
   
 
@@ -100,7 +148,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/27/Zookeeper学习-一致性协议/" data-id="cjfjuqiwx000dr0vaeo3pfsrw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/03/27/Zookeeper学习笔记2/" data-id="cjfpjnelu0000mwvaw1pkssq5" class="article-share-link">Share</a>
       
       
     </footer>
@@ -110,9 +158,9 @@
 
 
   
-    <article id="post-Zookeeper学习笔记-1" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Zookeeper学习笔记1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/03/23/Zookeeper学习笔记-1/" class="article-date">
+    <a href="/2018/03/23/Zookeeper学习笔记1/" class="article-date">
   <time datetime="2018-03-23T03:22:42.000Z" itemprop="datePublished">2018-03-23</time>
 </a>
     
@@ -124,7 +172,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/23/Zookeeper学习笔记-1/">Zookeeper学习笔记(1)</a>
+      <a class="article-title" href="/2018/03/23/Zookeeper学习笔记1/">Zookeeper学习笔记(1)</a>
     </h1>
   
 
@@ -145,7 +193,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/23/Zookeeper学习笔记-1/" data-id="cjfjuqix1000gr0vamryaltiv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/03/23/Zookeeper学习笔记1/" data-id="cjfpjnem00001mwvaevxw885x" class="article-share-link">Share</a>
       
       
     </footer>
@@ -520,56 +568,6 @@
 
 
   
-    <article id="post-阅读笔记-1月" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/01/02/阅读笔记-1月/" class="article-date">
-  <time datetime="2018-01-02T03:04:50.000Z" itemprop="datePublished">2018-01-02</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/学习成长/">学习成长</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/02/阅读笔记-1月/">阅读笔记</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>以下均为阅读文章所搬运及少部分总结的。</p>
-<p>=-= 大自然的搬运工。。</p>
-<h2 id="从Chrome源码看DNS解析过程-2018-1-2"><a href="#从Chrome源码看DNS解析过程-2018-1-2" class="headerlink" title="从Chrome源码看DNS解析过程 2018-1-2"></a>从Chrome源码看DNS解析过程 2018-1-2</h2><p>当一台设备连接到路由器后，会发送DHCP Request的广播，然后会为电脑分配IP地址及DNS服务器地址nameserver。</p>
-<p>Chrome会按照nameservers的顺序发起查询，并将结果缓存下来，有效时间是根据域名设置的TTL决定，在有效期内可以根据结果查询。<br>缓存-&gt;本地host文件(Chrome以Map形式保存host)-&gt;nameserver查询。</p>
-<p>A - 把域名解析到一个IPV4地址上<br>AAAA - 把域名解析到一个IPV6地址上<br>CNAME - 解析到另外一个域名(当很多其它域名指向一个CNAME时，当需要改变IP地址时，只要改变这个CNAME的地址，那么其它的也跟着生效了，但是得做二次解析。)</p>
-<h2 id="缓存穿透、缓存并发、缓存失效之思路变迁"><a href="#缓存穿透、缓存并发、缓存失效之思路变迁" class="headerlink" title="缓存穿透、缓存并发、缓存失效之思路变迁"></a>缓存穿透、缓存并发、缓存失效之思路变迁</h2>
-        
-          <p class="article-more-link">
-            <a href="/2018/01/02/阅读笔记-1月/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/02/阅读笔记-1月/" data-id="cjfjuqiz20014r0va9fr8vl0l" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -600,7 +598,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
     </div>
   </div>
 
@@ -613,11 +611,15 @@
       <ul>
         
           <li>
-            <a href="/2018/03/27/Zookeeper学习-一致性协议/">Zookeeper学习-一致性协议</a>
+            <a href="/2018/04/04/Zookeeper学习笔记3/">Zookeeper与Paxos</a>
           </li>
         
           <li>
-            <a href="/2018/03/23/Zookeeper学习笔记-1/">Zookeeper学习笔记(1)</a>
+            <a href="/2018/03/27/Zookeeper学习笔记2/">Zookeeper学习-一致性协议</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/23/Zookeeper学习笔记1/">Zookeeper学习笔记(1)</a>
           </li>
         
           <li>
@@ -626,10 +628,6 @@
         
           <li>
             <a href="/2018/03/01/阅读笔记-3月/">阅读笔记-3月</a>
-          </li>
-        
-          <li>
-            <a href="/2018/02/01/阅读笔记-2月/">阅读笔记-2月</a>
           </li>
         
       </ul>

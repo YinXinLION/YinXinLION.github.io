@@ -5,13 +5,13 @@
   
 
   
-  <title>Zookeeper学习-一致性协议 | 芝兰生于深谷，不以无人而不芳</title>
+  <title>Zookeeper学习-一致性协议 | 努力是为了将对世界的所有渴望都掌握在手上</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="一致性协议二阶段提交1.提交事务请求 2.执行事务提交如果任何一个参与者返回No，或者等待超时时间后，协调者无法接收所有的反馈，那么执行事务中断。 优点：原理简单、实现方便。缺点：1.同步阻塞：各个参与者在等待其他参与者响应的过程中，将无法进行其他任何操作。2.单点问题：一旦协调者出现问题，那么整个二阶段提交流程将无法运转。参与者会一直处于锁定事务资源的状态中。3.数据不一致性：由于网络的原因或者">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Zookeeper学习-一致性协议">
-<meta property="og:url" content="http://yoursite.com/2018/03/27/Zookeeper学习-一致性协议/index.html">
-<meta property="og:site_name" content="芝兰生于深谷，不以无人而不芳">
+<meta property="og:url" content="http://yoursite.com/2018/03/27/Zookeeper学习笔记2/index.html">
+<meta property="og:site_name" content="努力是为了将对世界的所有渴望都掌握在手上">
 <meta property="og:description" content="一致性协议二阶段提交1.提交事务请求 2.执行事务提交如果任何一个参与者返回No，或者等待超时时间后，协调者无法接收所有的反馈，那么执行事务中断。 优点：原理简单、实现方便。缺点：1.同步阻塞：各个参与者在等待其他参与者响应的过程中，将无法进行其他任何操作。2.单点问题：一旦协调者出现问题，那么整个二阶段提交流程将无法运转。参与者会一直处于锁定事务资源的状态中。3.数据不一致性：由于网络的原因或者">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-3-27/66567191.jpg">
@@ -23,7 +23,7 @@
 <meta name="twitter:description" content="一致性协议二阶段提交1.提交事务请求 2.执行事务提交如果任何一个参与者返回No，或者等待超时时间后，协调者无法接收所有的反馈，那么执行事务中断。 优点：原理简单、实现方便。缺点：1.同步阻塞：各个参与者在等待其他参与者响应的过程中，将无法进行其他任何操作。2.单点问题：一旦协调者出现问题，那么整个二阶段提交流程将无法运转。参与者会一直处于锁定事务资源的状态中。3.数据不一致性：由于网络的原因或者">
 <meta name="twitter:image" content="http://oqp1ywek9.bkt.clouddn.com/18-3-27/66567191.jpg">
   
-    <link rel="alternate" href="/atom.xml" title="芝兰生于深谷，不以无人而不芳" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="努力是为了将对世界的所有渴望都掌握在手上" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -42,7 +42,7 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">芝兰生于深谷，不以无人而不芳</a>
+        <a href="/" id="logo">努力是为了将对世界的所有渴望都掌握在手上</a>
       </h1>
       
     </div>
@@ -68,9 +68,9 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-Zookeeper学习-一致性协议" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Zookeeper学习笔记2" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/03/27/Zookeeper学习-一致性协议/" class="article-date">
+    <a href="/2018/03/27/Zookeeper学习笔记2/" class="article-date">
   <time datetime="2018-03-27T01:27:14.000Z" itemprop="datePublished">2018-03-27</time>
 </a>
     
@@ -103,7 +103,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/27/Zookeeper学习-一致性协议/" data-id="cjfjuqiwx000dr0vaeo3pfsrw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/03/27/Zookeeper学习笔记2/" data-id="cjfpjnelu0000mwvaw1pkssq5" class="article-share-link">Share</a>
       
       
     </footer>
@@ -112,8 +112,17 @@
     
 <nav id="article-nav">
   
+    <a href="/2018/04/04/Zookeeper学习笔记3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Zookeeper与Paxos
+        
+      </div>
+    </a>
   
-    <a href="/2018/03/23/Zookeeper学习笔记-1/" id="article-nav-older" class="article-nav-link-wrap">
+  
+    <a href="/2018/03/23/Zookeeper学习笔记1/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">Zookeeper学习笔记(1)</div>
     </a>
@@ -146,7 +155,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
     </div>
   </div>
 
@@ -159,11 +168,15 @@
       <ul>
         
           <li>
-            <a href="/2018/03/27/Zookeeper学习-一致性协议/">Zookeeper学习-一致性协议</a>
+            <a href="/2018/04/04/Zookeeper学习笔记3/">Zookeeper与Paxos</a>
           </li>
         
           <li>
-            <a href="/2018/03/23/Zookeeper学习笔记-1/">Zookeeper学习笔记(1)</a>
+            <a href="/2018/03/27/Zookeeper学习笔记2/">Zookeeper学习-一致性协议</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/23/Zookeeper学习笔记1/">Zookeeper学习笔记(1)</a>
           </li>
         
           <li>
@@ -172,10 +185,6 @@
         
           <li>
             <a href="/2018/03/01/阅读笔记-3月/">阅读笔记-3月</a>
-          </li>
-        
-          <li>
-            <a href="/2018/02/01/阅读笔记-2月/">阅读笔记-2月</a>
           </li>
         
       </ul>
