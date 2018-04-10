@@ -65,6 +65,48 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-阅读笔记-4月" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/10/阅读笔记-4月/" class="article-date">
+  <time datetime="2018-04-10T13:29:10.000Z" itemprop="datePublished">2018-04-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/学习成长/">学习成长</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/10/阅读笔记-4月/">阅读笔记-4月</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="理解同步、异步、阻塞、非阻塞-美团新零售2面"><a href="#理解同步、异步、阻塞、非阻塞-美团新零售2面" class="headerlink" title="理解同步、异步、阻塞、非阻塞(美团新零售2面)"></a>理解同步、异步、阻塞、非阻塞(美团新零售2面)</h3><p>首先，通过美团的面试让我认识到我的不足之处，除了学外还要多思考多总结。<br>同步、异步关注的是 <strong>消息通信机制</strong>。<br>同步：发出一个调用，在调用没有得到结果前，调用就不返回。一旦调用返回，就能得到返回值。<br>异步：发出一个调用后，调用直接返回，所以没有结果。被调用者通过状态、通知来通知调用者，或者通过回调函数处理这个调用。</p>
+<p>阻塞、非阻塞关注的是 <strong>程序在等待调用结果(消息、返回值)时的状态</strong><br>阻塞：调用结果返回之前，线程会被挂起，线程得到结果之后才会返回。<br>非阻塞：不能立刻得到结果之前，该调用不会阻塞当前线程。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/10/阅读笔记-4月/" data-id="cjftt1xlk0000okvay916kgi5" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Zookeeper学习笔记3" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/04/04/Zookeeper学习笔记3/" class="article-date">
@@ -520,54 +562,6 @@
 
 
   
-    <article id="post-Python入门学习(三)-变量与运算符" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/01/06/Python入门学习(三)-变量与运算符/" class="article-date">
-  <time datetime="2018-01-06T12:28:52.000Z" itemprop="datePublished">2018-01-06</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Python基础/">Python基础</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/06/Python入门学习(三)-变量与运算符/">Python入门学习(三)-变量与运算符</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>首先看一下这段代码</p>
-<p>代码段1<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = 1 # a先指向1</span><br><span class="line">b = a # b指向1</span><br><span class="line">a = 3 # a指向3 但b的指向未改变</span><br><span class="line">print(b) # 打印b的结果为1</span><br></pre></td></tr></table></figure></p>
-<p>代码段2<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = [1,2,3]</span><br><span class="line">b = a</span><br><span class="line">a[0] = &apos;1&apos;</span><br><span class="line">print(b) # b的结果为[&apos;1&apos;,2,3]</span><br></pre></td></tr></table></figure></p>
-<p>由于数字是不可变对象，int是值类型<br>而list是可变对象,引用类型。<br>
-        
-          <p class="article-more-link">
-            <a href="/2018/01/06/Python入门学习(三)-变量与运算符/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/06/Python入门学习(三)-变量与运算符/" data-id="cjfjuqiwu000br0vand6hyiwk" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -611,6 +605,10 @@
       <ul>
         
           <li>
+            <a href="/2018/04/10/阅读笔记-4月/">阅读笔记-4月</a>
+          </li>
+        
+          <li>
             <a href="/2018/04/04/Zookeeper学习笔记3/">Zookeeper与Paxos</a>
           </li>
         
@@ -624,10 +622,6 @@
         
           <li>
             <a href="/2018/03/15/排序算法学习/">排序算法学习</a>
-          </li>
-        
-          <li>
-            <a href="/2018/03/01/阅读笔记-3月/">阅读笔记-3月</a>
           </li>
         
       </ul>
