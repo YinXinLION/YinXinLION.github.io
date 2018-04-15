@@ -65,6 +65,67 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-设计模式(状态模式)" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/15/设计模式(状态模式)/" class="article-date">
+  <time datetime="2018-04-15T07:04:50.000Z" itemprop="datePublished">2018-04-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/设计模式/">设计模式</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/15/设计模式(状态模式)/">状态模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>状态模式，它通过改变对象内部的状态来帮助对象控制自己。</p>
+<p>状态转换机：当执行某一步时，会从上一步的状态转换成下一步的状态。<br>例如投币机：一开始状态为(没有币)，当你投币了变成(有币)状态，当你摇动曲柄了变成(出货)状态，当出货后变成(没有币)状态。<br>简单实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class Machine &#123;</span><br><span class="line">    final static int SOLD_OUT = 0;//售罄</span><br><span class="line">    final static int NO_QUARTER = 1; //没有币</span><br><span class="line">    final static int HAS_QUARTER = 2;//有币</span><br><span class="line">    int state = SOLD_OUT; //state控制着机器的状态</span><br><span class="line">    //投币动作</span><br><span class="line">    public void insert() &#123;</span><br><span class="line">        state = HAS_QUARTER; //处理好动作。不要出现问题就可以。</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>加入，突然又要加一种状态进去，例如曲柄摇动后，可能会有另外奖励状态，如果使用状态转换机，那么我们要修改原有代码，并保证他不会出错。</p>
+<p>我们需要不维护我们现有的代码，我们重写它以便于将状态对象封装在各自的类中，然后再动作发生时委托给当前的状态。(一个状态是一个对象，委托给状态执行需要的任务)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//定义状态接口</span><br><span class="line">public interface State &#123;</span><br><span class="line">    insert();//投入硬币</span><br><span class="line">    trunCrank();//摇动曲柄</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//具体状态对象</span><br><span class="line">public class SoldState implements State &#123; //出货状态</span><br><span class="line">    //方法具体实现</span><br><span class="line">&#125;</span><br><span class="line">public class SoldOutState implements State &#123; //售罄状态</span><br><span class="line">    Machine machine;</span><br><span class="line">    public SoldOutState(Machine machine) &#123; //传入machine是为了方便修改machine中的状态</span><br><span class="line">        this.machine = machine;</span><br><span class="line">    &#125;</span><br><span class="line">    //方法具体实现</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//投币机</span><br><span class="line">public class Machine &#123;</span><br><span class="line">    State soldOutState;</span><br><span class="line">    State soldState;</span><br><span class="line"></span><br><span class="line">    State state = soldOutState; //可变状态</span><br><span class="line">    public void insertQuarter() &#123; //执行投币方法</span><br><span class="line">        state.insertQuarter();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过从结构上改变实现，做到了一下几点：</p>
+<ol>
+<li>将每个状态的行为局部化到它自己的类中。</li>
+<li>将容易产生问题的if语句删除，以便日后维护。</li>
+<li>让每一个状态对”修改关闭”，对”扩展开放”(可以添加新的状态类呀)。</li>
+</ol>
+<p><strong>状态模式</strong> :允许对象在内部状态改变时改变它的行为，对象看起来好像修改了它的类。</p>
+<p>要点：</p>
+<ol>
+<li>和程序状态机不同，状态模式用类代表状态。</li>
+<li>状态模式和策略模式有相同的类图，但是他们的意图不同。(策略：由子类决定如何实现算法中的某些步骤 状态：封装基于状态的行为，并将行为委托到当前状态)</li>
+<li>状态可以由State类或Context(machine类)控制。</li>
+<li>状态类可以被多个Context实例共享。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/15/设计模式(状态模式)/" data-id="cjg0kxbf90000egvaii1fhsyt" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-阅读笔记-4月" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/04/10/阅读笔记-4月/" class="article-date">
@@ -108,7 +169,7 @@
 <p>在JAVA api中可以看到<code>Array.sort()</code>使用了模板方法模式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">private static void legacyMergeSort(Object[] a) &#123; //由于是数组没法使用继承，则变成static全局访问</span><br><span class="line">    Object[] aux = a.clone();</span><br><span class="line">    mergeSort(aux, a, 0, a.length, 0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">private static void mergeSort(Object[] src,</span><br><span class="line">                                 Object[] dest,</span><br><span class="line">                                 int low,</span><br><span class="line">                                 int high,</span><br><span class="line">                                 int off) &#123; //这个方法相当于是一个算法模板，定义一系列流程</span><br><span class="line">       int length = high - low;</span><br><span class="line"></span><br><span class="line">       // Insertion sort on smallest arrays</span><br><span class="line">       if (length &lt; INSERTIONSORT_THRESHOLD) &#123;</span><br><span class="line">           for (int i=low; i&lt;high; i++)</span><br><span class="line">               for (int j=i; j&gt;low &amp;&amp;</span><br><span class="line">                        ((Comparable) dest[j-1]).compareTo(dest[j])&gt;0; j--)</span><br><span class="line">                   swap(dest, j, j-1);</span><br><span class="line">           return;</span><br><span class="line">       &#125;</span><br><span class="line">      //省略</span><br></pre></td></tr></table></figure>
 <p>观察Comparable对象的compareTo,这个就是子类要做的事情，要重新去实现，子类实现Comparable接口，并且实现compareTo方法。 这只是api其中一个运用到模板方法模式。还有java.io的InputStream的read()方法，这个方法又会被<code>read(byte b[], int off, int len)</code>模板方法使用。</p>
-<p>策略模式和模板方法模式都封装算法，一个用的是组合，一个用的是继承。<br>模板方法模式：让代码重用，部分实行延迟到子类(工厂方法是模板方法一个特殊版本)。</p>
+<p>策略模式和模板方法模式都封装算法，一个用的是 <strong>组合</strong>，一个用的是 <strong>继承</strong>。<br>模板方法模式：让代码重用，部分实行延迟到子类(工厂方法是模板方法一个特殊版本)。</p>
 <h3 id="迭代器模式-2018-4-13"><a href="#迭代器模式-2018-4-13" class="headerlink" title="迭代器模式 2018-4-13"></a>迭代器模式 2018-4-13</h3><p><strong>迭代器模式：</strong> 提供一种方法顺序访问一个聚合对象中的各个元素，而又不暴露其内部的表示。客户端不需要知道聚合对象内部是如何实现的，只需要使用统一的接口即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public interface Iterator &#123; //java api迭代器接口</span><br><span class="line">    public boolean hasNext();</span><br><span class="line">    public Object next();</span><br><span class="line">    public void remove();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//具体hasNext、next、remove实现</span><br><span class="line">public class MyArrayListIterator implement Iterator &#123;</span><br><span class="line">    //具体实现</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface createIterator &#123;</span><br><span class="line">    public Iterator createIte();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -532,66 +593,11 @@
 
 
   
-    <article id="post-在京东实习的笔记" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/01/08/在京东实习的笔记/" class="article-date">
-  <time datetime="2018-01-08T15:00:29.000Z" itemprop="datePublished">2018-01-08</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/总结/">总结</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/08/在京东实习的笔记/">京东实习记录</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="记录部分自己的工作内容"><a href="#记录部分自己的工作内容" class="headerlink" title="记录部分自己的工作内容"></a>记录部分自己的工作内容</h3><p><strong>2018-1-15 == 2018-1-19</strong><br>1.完成商品shop端LOC相对有效期上线。商品的服务有效期分为固定有效期和相对有效期。修改前端页面，完成VUE的逻辑控制。<br>2.完成man端商品系统对接下架MQ接口。主要是使用MQ的Producer进行消息存入，对方从MQ中读取消息。如果商品上架审核未通过，调用MQ。<br>3.完成正义联盟优化，</p>
-<ol>
-<li>增加类目判断(绑定监听事件，如果触发三级类目，则用ajax进行get请求发送，然后根据结果是否显示)</li>
-<li>待售商品列表中，商品状态是系统下架待审核的，修改后商品信息，点击开始销售，页面提示信息为：您的商品已经保存到 “在售商品管理”中，实际商品还在待售商品列表中。<br>通过EditWare.vm页面到发布成功页面，判断商品的状态，如果是，则在显示对应的（vm里修改逻辑）<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-1-18/5847440.jpg" alt=""><br>4.进行京东拍卖新老发布页切换Bug修复。新发布页中不必填的SkuPrice通过网页传入值为0，需要在后端进行判断，是否是拍卖商家，然后进行jdPrice的默认设置9999999。</li>
-</ol>
-<p><strong>2018-1-22 == 2018-1-26</strong><br>1.完成拍卖新老发布页切换 已上线<br>2.完成基于Spring-Batch的批处理man端系统 审核下架接奖惩上线。<br>3.WareMan端审核下架接奖惩上线<br>4.正义联盟已上线</p>
-<p><strong>2018-1-29- == 2018-2-2</strong><br>1.修复shop端的关联版式(关联版式关联商品增加关联结果显示)<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-2-5/76917573.jpg" alt=""><br>2.商品Man端/批处理系统 卖点设置</p>
-<ol>
-<li>商品批量管理 – 新增卖点设置。</li>
-<li>商品信息管理 – SKU设置增加卖点设置。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-2-5/77435066.jpg" alt=""><br>用到，动态绑定，ajax提交，popdesign组件（方便开发者实现网页效果)<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-2-5/79120644.jpg" alt=""><br>使用VUE来开发页面，requst中存放文件,并将结果交给Controller，然后根据执行类型获取指定的<code>ExcuteClass</code>，通过jsf，远程调用，将CSV文件发送给批处理系统，批处理接收到 将每一行解析为一个Item对象。然后对每一个Item进行卖点设置即可。</li>
-</ol>
-        
-          <p class="article-more-link">
-            <a href="/2018/01/08/在京东实习的笔记/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/08/在京东实习的笔记/" data-id="cjfjuqixb000lr0vauduro5jd" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">下一页 &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">下一页 &raquo;</a>
   </nav>
 
 </section>
@@ -602,7 +608,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">分类</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java多线程/">Java多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx学习笔记/">Nginx学习笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python基础/">Python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习成长/">学习成长</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/心情/">心情</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java多线程/">Java多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx学习笔记/">Nginx学习笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python基础/">Python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习成长/">学习成长</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/心情/">心情</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
     </div>
   </div>
 
@@ -630,6 +636,10 @@
       <ul>
         
           <li>
+            <a href="/2018/04/15/设计模式(状态模式)/">状态模式</a>
+          </li>
+        
+          <li>
             <a href="/2018/04/10/阅读笔记-4月/">阅读笔记-4月</a>
           </li>
         
@@ -643,10 +653,6 @@
         
           <li>
             <a href="/2018/03/23/Zookeeper学习笔记1/">Zookeeper学习笔记(1)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/03/15/排序算法学习/">排序算法学习</a>
           </li>
         
       </ul>
