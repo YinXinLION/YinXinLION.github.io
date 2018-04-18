@@ -65,6 +65,131 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-阅读笔记-3月" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/01/阅读笔记-3月/" class="article-date">
+  <time datetime="2018-03-01T15:01:10.000Z" itemprop="datePublished">2018-03-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/学习成长/">学习成长</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/01/阅读笔记-3月/">阅读笔记-3月</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="最小生成树算法"><a href="#最小生成树算法" class="headerlink" title="最小生成树算法"></a>最小生成树算法</h3><h4 id="Kruskal算法"><a href="#Kruskal算法" class="headerlink" title="Kruskal算法"></a>Kruskal算法</h4><p>适用范围：要求无向图。<br>思路：运用并查集，先将每个节点作为一个集合，然后以边的权重建立一个最小堆，然后获取最小的边，查看这两个点是否在同一个集合，不在则将这条边保存在result中，并且并查集合并两个点。不断地循环取出最小的边。</p>
+<h5 id="Prim算法"><a href="#Prim算法" class="headerlink" title="Prim算法"></a>Prim算法</h5><p>使用范围：要求无向图。<br>思路：建立一个Hashset查看点是否在set中。从某一个点出发，找到边最小的，看这个点是否在set中不在则加入result，并把这个点相邻的边都加上。总之就是不断地找最小的边，并且不能产生回路。</p>
+<h3 id="递归和动态规划-2018-3-4"><a href="#递归和动态规划-2018-3-4" class="headerlink" title="递归和动态规划 2018-3-4"></a>递归和动态规划 2018-3-4</h3><p>暴力递归：</p>
+<ol>
+<li>把问题转化为规模缩小了的同类问题的子问题。</li>
+<li>有明确的不需要继续进行的递归的条件。</li>
+<li>有当得到了子问题的结果之后的决策过程。</li>
+<li>不记录每一个子问题的解。</li>
+</ol>
+<p>动态规划：</p>
+<ol>
+<li>从暴力递归中来。</li>
+<li>将每一个子问题的解记录下来，避免重复计算。</li>
+<li>将暴力递归的过程，抽象成了状态表达。</li>
+<li>存在化简状态表达。</li>
+</ol>
+<h3 id="MySQL索引原则-2018-3-7"><a href="#MySQL索引原则-2018-3-7" class="headerlink" title="MySQL索引原则 2018-3-7"></a>MySQL索引原则 2018-3-7</h3><p>1.最左前缀匹配原则。mysql会一直向右匹配直到遇到范围查询(&gt;,&lt;,between,like)就停止匹配，如果建立(a,b,c,d)索引,abcd的顺序可以任意调整。<br>2.=和in可以乱序,mysql优化器会优化，a=1 b=2 c=3建立(a,b,c)索引可以任意顺序。<br>3.尽量选择区分度高的列作为索引<br>4.索引列不能参与计算(检索时元素应用函数才能比较，成本太大)<br>5.尽量扩展索引，不要新建索引。</p>
+<h3 id="基于内存管理方案-2018-3-8"><a href="#基于内存管理方案-2018-3-8" class="headerlink" title="基于内存管理方案 2018-3-8"></a>基于内存管理方案 2018-3-8</h3><ol>
+<li>单一连续区：每次只运行一个程序，用户程序独占内存。</li>
+<li>固定分区：系统把内存空间分割成若干个连续区域，每个分区只能装一个进程。</li>
+<li>可变分区：根据进程需求，把可分配的内存空间分割出一个分区，分配给进程。</li>
+<li>页式存储管理方案<br>(1)用户进程地址空间被划分成大小相等的部分，成为页或页面<br>(2)内存空间按照同样大小进行划分，称为页框。<br>(3)以页为单位进行内存分配，按进程需求来分配页。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-8/64888252.jpg" alt=""><br>一个进程一个页表，通过查页表项来实现。</li>
+<li>段式存储管理方案<br>(1)用户进程地址空间按照程序自身逻辑关系划分成若干个程序段，每个程序段都有一个段名。<br>(2)内存空间被动态分成若干长度不同的区域，称为物理段。<br>(3)内存分配规则：以段为单位进行分配，每段在内存占据连续空间，各段之间可以不相同。<br>(4)逻辑地址为段号+段内地址。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-8/29113555.jpg" alt=""></li>
+<li>段页式存储管理方案<br>(1)用户进程地址空间先按段进行划分，每一段再按页面进行划分。</li>
+</ol>
+<h3 id="虚拟内存技术"><a href="#虚拟内存技术" class="headerlink" title="虚拟内存技术"></a>虚拟内存技术</h3><p>基本思想：每个程序拥有自己的地址空间，这个空间被分割成很多个块，每一个块称为页面。<br>每一页都有连续的地址范围。这些页被映射到物理内存，但并不是所有页都必须在内存中才能运行程序。<br>当程序引用到一部分在物理内存中的地址空间时，由硬件立刻执行必要的映射。<br>当程序引用到一部分不再物理内存中的地址空间时，由操作系统（缺页异常）负责将缺失的部分装入物理内存并重新执行失败的指令。</p>
+<h3 id="TCP三次握手与四次挥手"><a href="#TCP三次握手与四次挥手" class="headerlink" title="TCP三次握手与四次挥手"></a>TCP三次握手与四次挥手</h3><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-8/7765990.jpg" alt=""><br>第一次握手：建立连接，SYN为1;客户端进入SYN_SEND状态。<br>第二次握手：服务器收到SYN报文，对SYN报文确认ACK=seq+1，SYN置1；服务器进入SYN_RECV状态。<br>第三次握手：客户端收到服务器SYN+ACK，向服务器发送ACK；发送完毕，服务器客户端进入ESTABLISHED。</p>
+<p>第一次挥手：主机1向主机2发送FIN报文段；此时，主机1进入FIN_WAIT1.<br>第二次挥手：主机2接收到FIN后，进入CLOSE_WAIT状态，发送ACK，主机1接收到ACK后，进入FIN_WAIT2状态<br>第三次挥手：主机2向主机1发送FIN报文段，主机2进入LAST_ACK状态，<br>第四次挥手：主机1向主机2发送ACK，主机1进入TIME_WAIT状态。</p>
+<h3 id="简易实现LRU-HashMap-链表"><a href="#简易实现LRU-HashMap-链表" class="headerlink" title="简易实现LRU HashMap + 链表"></a>简易实现LRU HashMap + 链表</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">public class LRUCache&lt;K,V&gt; &#123;</span><br><span class="line">    private int MAX_CACHE_SIZE;//map的容量</span><br><span class="line">    private Entry first;//最前面</span><br><span class="line">    private Entry last;//最后面</span><br><span class="line">    //hashmap + 链表</span><br><span class="line">    private HashMap&lt;K, Entry&lt;K, V&gt;&gt; hashMap;</span><br><span class="line"></span><br><span class="line">    public void put(K key, V value) &#123;</span><br><span class="line">        Entry entry = getEntry(key);//从hashmap中get</span><br><span class="line">        if (entry == null) &#123;</span><br><span class="line">            //如果没有找到元素，判断size大小</span><br><span class="line">            if (hashMap.size() &gt;= MAX_CACHE_SIZE) &#123;</span><br><span class="line">                //如果大的话，移除last指的元素</span><br><span class="line">                hashMap.remove(last.key);</span><br><span class="line">                removeLast();</span><br><span class="line">            &#125;</span><br><span class="line">            enrty = new Entry();</span><br><span class="line">            moveToFirst(entry);</span><br><span class="line">            hashMap.put(key, entry);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;  </span><br><span class="line">    public void moveToFirst(Entry entry) &#123;</span><br><span class="line">        if (fisrt == null || last == null) &#123;</span><br><span class="line">            first = last = entry;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        entry.next = first;</span><br><span class="line">        first.pre = entry;</span><br><span class="line">        first = entry;</span><br><span class="line">        entry.pre = null;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    public void removeLast() &#123;</span><br><span class="line">        if (last != null)&#123;</span><br><span class="line">            last = last.pre;</span><br><span class="line">            if (last == null)</span><br><span class="line">                first = null;</span><br><span class="line">            else</span><br><span class="line">                last.next = null;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="JAVA消息中间件-MQ"><a href="#JAVA消息中间件-MQ" class="headerlink" title="JAVA消息中间件 MQ"></a>JAVA消息中间件 MQ</h3><h4 id="MQ的几种消息传递方式"><a href="#MQ的几种消息传递方式" class="headerlink" title="MQ的几种消息传递方式"></a>MQ的几种消息传递方式</h4><p><strong>发布-订阅模式</strong><br>发布订阅模式有点类似于我们日常生活中订阅报纸。每一种日报代表一个topic，例如北京日报是一个topic，华商报是另一个topic。<br>对于一份报纸发行方来说，他和所有的订阅者就构成了<strong>一对多</strong>的关系。</p>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-8/82709308.jpg" alt="发布订阅模式"></p>
+<p><strong>点对点模式</strong><br>点对点模式就相当于打电话，由两端的双方独享这一通信链路。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-8/83479861.jpg" alt="点对点模式"></p>
+<p><strong>扩展的对点模式</strong><br>request-response的通信方式很常见，但是不是默认提供的一种模式。在前面的两种模式中都是一方负责发送消息而另外一方负责处理。而我们实际中的很多应用相当于一种一应一答的过程，需要双方都能给对方发送消息。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-8/8544323.jpg" alt=""></p>
+<p><strong>在项目中的理解</strong><br>MQ是一个消息存储/消息中转站。不仅实现简单的消息中转站功能，还实现了消息生产者和消息消费者的认证功能。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-8/52122054.jpg" alt="MQ集群"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/03/01/阅读笔记-3月/" data-id="cjg4i9a9r000xwovag01mryt5" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-阅读笔记-2月" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/02/01/阅读笔记-2月/" class="article-date">
+  <time datetime="2018-02-01T15:25:05.000Z" itemprop="datePublished">2018-02-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/学习成长/">学习成长</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/01/阅读笔记-2月/">阅读笔记-2月</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="日常学习-2018-2-1"><a href="#日常学习-2018-2-1" class="headerlink" title="日常学习 2018-2-1"></a>日常学习 2018-2-1</h3><p>ClassCastException:当试图将对象强制转换为不是实例的子类时，抛出该异常。</p>
+<p>内部类分为4种：</p>
+<ol>
+<li>成员内部类：外部类的成员。</li>
+<li>局部内部类</li>
+<li>静态内部类：类似于静态成员。</li>
+<li>匿名内部类：实现一个接口或者继承一个抽象类。<br>外部类不能任意访问访问内部类的成员，外部类必须创建其内部类的对象(静态内部类除外)。内部类可以访问所有外部类的成员，因为内部类就像是一个类的成员。
+        
+          <p class="article-more-link">
+            <a href="/2018/02/01/阅读笔记-2月/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/02/01/阅读笔记-2月/" data-id="cjg4i9a9u0010wovann2iryd5" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Nginx学习" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/01/28/Nginx学习/" class="article-date">
@@ -106,7 +231,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/28/Nginx学习/" data-id="cjg3semu70001q8va4qj5zjmk" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/01/28/Nginx学习/" data-id="cjg4i9a8u0008wovaw31tyhnd" class="article-share-link">Share</a>
       
       
     </footer>
@@ -147,7 +272,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/28/Python入门学习(四)-模块/" data-id="cjg3semux000cq8vauu1y9zhj" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/01/28/Python入门学习(四)-模块/" data-id="cjg4i9a90000cwovan692ciz5" class="article-share-link">Share</a>
       
       
     </footer>
@@ -202,7 +327,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/08/在京东实习的笔记/" data-id="cjg3semv8000mq8vaftvehvwv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/01/08/在京东实习的笔记/" data-id="cjg4i9a97000jwovauoubi37m" class="article-share-link">Share</a>
       
       
     </footer>
@@ -250,7 +375,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/06/Python入门学习(三)-变量与运算符/" data-id="cjg3semup0005q8vasspz0z1d" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/01/06/Python入门学习(三)-变量与运算符/" data-id="cjg4i9a8t0007wovaj7z98s1b" class="article-share-link">Share</a>
       
       
     </footer>
@@ -300,7 +425,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/02/阅读笔记-1月/" data-id="cjg3semxd001gq8vat3wbuoea" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/01/02/阅读笔记-1月/" data-id="cjg4i9aaa001hwovape5mbkk5" class="article-share-link">Share</a>
       
       
     </footer>
@@ -344,7 +469,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/01/2018年实施计划/" data-id="cjg3semu10000q8vac0qcv87z" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/01/01/2018年实施计划/" data-id="cjg4i9a8d0000wova1pc2bo4u" class="article-share-link">Share</a>
       
       
     </footer>
@@ -389,7 +514,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/29/JAVA反射/" data-id="cjg3semul0004q8vanj764d1e" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/12/29/JAVA反射/" data-id="cjg4i9a8j0001wovadw73sqpf" class="article-share-link">Share</a>
       
       
     </footer>
@@ -436,102 +561,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/28/Lock的使用/" data-id="cjg3semuj0003q8vanuwymd9v" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Python入门学习(二)-组" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/12/27/Python入门学习(二)-组/" class="article-date">
-  <time datetime="2017-12-27T15:01:16.000Z" itemprop="datePublished">2017-12-27</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Python基础/">Python基础</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/27/Python入门学习(二)-组/">Python入门学习(二)-组</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="有序列表"><a href="#有序列表" class="headerlink" title="有序列表"></a>有序列表</h2><p><strong>有序列表</strong>:可以通过index来访问特定元素的列表。<br>元组及列表的表示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[&quot;lion&quot;,&quot;tiger&quot;,1,2,3] #列表</span><br><span class="line">(1,2,3,&quot;lion&quot;,&quot;tiger&quot;) #元组</span><br></pre></td></tr></table></figure></p>
-<p>列表和元组的区别在于：元组是不可变的，列表是可变的，我们可以向列表中添加新的元素，元组却不能。</p>
-<p>不可变的：在Python中，字符串、元组都是不可变的。<br>
-        
-          <p class="article-more-link">
-            <a href="/2017/12/27/Python入门学习(二)-组/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/27/Python入门学习(二)-组/" data-id="cjg3semut0008q8vacs20soxq" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-多线程基础" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/12/27/多线程基础/" class="article-date">
-  <time datetime="2017-12-27T02:53:03.000Z" itemprop="datePublished">2017-12-27</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Java多线程/">Java多线程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/27/多线程基础/">多线程基础</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="多线程基本知识"><a href="#多线程基本知识" class="headerlink" title="多线程基本知识"></a>多线程基本知识</h3><p>Java多线程的创建方式有:1.继承<code>Thread</code> 2.实现<code>Runnalbe</code> 3.线程池创建<br>Java中只支持单继承，<code>Thread</code>的每个线程都是相互独立的。而<code>Runnalbe</code>可以通过实现MyThread然后继承实现，线程间的共享数据。</p>
-<p>线程是一个子任务，CPU以不确定的方式来调用线程中的run方法。<code>start()</code>是启动线程,单独调用<code>run()</code>是执行这个run方法而已。</p>
-<p><code>currentThread()</code>方法可返回代码段正在被那个线程调用的信息。<br><code>isAlive()</code>方法判断当前的线程是否处于活动状态。<br><code>sleep()</code>方法作用是在指定的毫秒数内让当前执行的线程休眠(暂停运行)。并不会释放锁。</p>
-<p>线程优先级:优先级分为1~10，优先级具有继承性，默认为5.<br>
-        
-          <p class="article-more-link">
-            <a href="/2017/12/27/多线程基础/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/27/多线程基础/" data-id="cjg3semvb000oq8vam6ninlci" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/12/28/Lock的使用/" data-id="cjg4i9a8p0004wovaczwxtoo8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -563,9 +593,23 @@
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+    </div>
+  </div>
+
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/MySQL必知必会/" style="font-size: 10px;">MySQL必知必会</a>
+    </div>
+  </div>
+
   
     
   <div class="widget-wrap">
@@ -584,7 +628,15 @@
       <ul>
         
           <li>
-            <a href="/2018/04/17/MySQL必知必会/第一章/">MySQL必知必会学习笔记(1)</a>
+            <a href="/2018/04/18/第三章/">第三章</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/18/MySQL必知必会/第三章/">MySQL必知必会学习笔记(2)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/17/MySQL必知必会/第一二章/">MySQL必知必会学习笔记(1)</a>
           </li>
         
           <li>
@@ -593,14 +645,6 @@
         
           <li>
             <a href="/2018/04/15/设计模式(状态模式)/">状态模式</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/10/阅读笔记-4月/">阅读笔记-4月</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/04/Zookeeper学习笔记3/">Zookeeper与Paxos</a>
           </li>
         
       </ul>
