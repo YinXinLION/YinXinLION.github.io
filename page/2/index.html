@@ -65,6 +65,51 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-排序算法学习" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/15/排序算法学习/" class="article-date">
+  <time datetime="2018-03-15T02:38:14.000Z" itemprop="datePublished">2018-03-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/算法/">算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/15/排序算法学习/">排序算法学习</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h3><p>思想：把最大的推到最后[length-1]位置，然后第二轮把次大的推到[length-2]位置，直到无法再推。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">for (int i = 0; i &lt; s.length - 1; i++) &#123;   //控制次数</span><br><span class="line">      for (int j = 0; j &lt; s.length - i - 1; j++) &#123;</span><br><span class="line">          if (s[j] &gt; s[j+1])&#123;</span><br><span class="line">              int temp = s[j];</span><br><span class="line">              s[j] = s[j+1];</span><br><span class="line">              s[j+1] = temp;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+        
+          <p class="article-more-link">
+            <a href="/2018/03/15/排序算法学习/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/03/15/排序算法学习/" data-id="cjg4i9a9g000nwova59gh5z9u" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-阅读笔记-3月" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/03/01/阅读笔记-3月/" class="article-date">
@@ -524,53 +569,6 @@
 
 
   
-    <article id="post-Lock的使用" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/12/28/Lock的使用/" class="article-date">
-  <time datetime="2017-12-28T03:45:11.000Z" itemprop="datePublished">2017-12-28</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Java多线程/">Java多线程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/28/Lock的使用/">Lock的使用</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="使用ReentrantLock"><a href="#使用ReentrantLock" class="headerlink" title="使用ReentrantLock"></a>使用ReentrantLock</h3><p><code>synchronized</code>使用<code>wait/notify</code>实现等待/通知模式.<code>ReentrantLock</code>同样可以实现，他需要借助<code>Condition</code>。<br><code>notify/notifyAll</code>进行通知时，被通知的线程是由JVM随机选择的。<code>Condition</code>具有准确选择性通知。<br><code>synchronized</code>相当于只有一个<code>Condition</code>对象，当线程调用<code>wait</code>时，线程进入同一个等待队列。<br><code>Condition</code>的出现,可以让线程进入多个不同的等待队列。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pirvate Lock lock = new ReentrantLock();</span><br><span class="line"></span><br><span class="line">lock.lock(); //上锁</span><br><span class="line">lock.unlock(); //释放锁</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">private Condition condition = lock.newCondition();</span><br><span class="line">condition.await();// 等待 线程进入WAITING状态</span><br><span class="line">condition.singal();// 唤醒</span><br></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2017/12/28/Lock的使用/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/28/Lock的使用/" data-id="cjg4i9a8p0004wovaczwxtoo8" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -628,11 +626,15 @@
       <ul>
         
           <li>
+            <a href="/2018/04/20/MySQL必知必会/第五章/">MySQL必知必会学习笔记(3)</a>
+          </li>
+        
+          <li>
             <a href="/2018/04/18/第三章/">第三章</a>
           </li>
         
           <li>
-            <a href="/2018/04/18/MySQL必知必会/第三章/">MySQL必知必会学习笔记(2)</a>
+            <a href="/2018/04/18/MySQL必知必会/第三四章/">MySQL必知必会学习笔记(2)</a>
           </li>
         
           <li>
@@ -641,10 +643,6 @@
         
           <li>
             <a href="/2018/04/16/设计模式(代理模式)/">代理模式</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/15/设计模式(状态模式)/">状态模式</a>
           </li>
         
       </ul>
