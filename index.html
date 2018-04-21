@@ -97,6 +97,12 @@
 <p><strong>在多个列上降序排序</strong> 如果想在多个列上进行降序排序，必须对每个列指定DESC关键字。</p>
 <p>在字典排序中，A被视为与a相同，这是MySQL的默认行为。</p>
 <p><code>ORDER BY</code> 子句的位置 在给出 <code>ORDER BY</code> 子句时，应该保证它位于 <code>FROM</code> 子句之后。如果使用<code>LIMIT</code> ，它必须位于 <code>ORDER BY</code>之后。使用子句的次序不对将产生错误消息。</p>
+<h2 id="过滤数据"><a href="#过滤数据" class="headerlink" title="过滤数据"></a>过滤数据</h2><p>在SELECT语句中，数据根据WHERE子句中指定的搜索条件进行过滤。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_name, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_price = 2.50;</span><br></pre></td></tr></table></figure></p>
+<p>数据可以再应用层过滤，但效率不高，数据库对数据过滤进行了优化。</p>
+<p>WHERE子句的位置：在同时使用ORDER BY和WHERE子句时，应该让ORDER BY位于WHERE之后。</p>
+<p>范围检查：使用BETWEEN操作符。匹配范围中所有的值，包括制定的开始值和结束值。</p>
+<p>空值检查：<code>WHERE prod_price IS NULL;</code></p>
+<p>NULL与不匹配问题：未知具有特殊的含义，数据库不知道它们是否匹配，所以在匹配过滤或不匹配过滤时不返回它们。</p>
 
       
     </div>
