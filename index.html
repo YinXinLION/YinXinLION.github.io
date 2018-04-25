@@ -65,9 +65,148 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-MySQL必知必会/第五章" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-MySQL必知必会/第十章" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/04/20/MySQL必知必会/第五章/" class="article-date">
+    <a href="/2018/04/24/MySQL必知必会/第十章/" class="article-date">
+  <time datetime="2018-04-24T14:00:00.000Z" itemprop="datePublished">2018-04-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/24/MySQL必知必会/第十章/">MySQL必知必会学习笔记(5)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="计算字段"><a href="#计算字段" class="headerlink" title="计算字段"></a>计算字段</h2><p>存储在表中的数据都不是程序所需要的，我们需要从数据库中检索并加以转换从而得到我们想要的数据样子。</p>
+<p><strong>拼接字段：</strong> 将值联结到一起构成单个值。<code>Concat()</code>函数。<br><code>Concat()</code> 拼接串，即把多个串连接起来形成一个较长的串。<br><code>Concat()</code> 需要一个或多个指定的串，各个串之间用逗号分隔。</p>
+<p><code>Rtrim()</code>: 删除数据右侧多余的空格</p>
+<p><strong>使用别名：</strong> 别名是一个字段或值得替换名。别名用<code>AS</code>关键字赋予。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT Concat(RTrim(vend_name), &apos;(&apos;, RTrim(vend_country),&apos;)&apos;) AS vend_title</span><br><span class="line">FROM vendors</span><br><span class="line">ORDER BY vend_name;</span><br></pre></td></tr></table></figure></p>
+<p>它指示SQL创建一个包含指定计算的名为 vend_title 的计算字段。任何客户机应用都可以按名引用这个列，就像它是一个实际的表列一样。</p>
+<p>别名的其他用途：在实际表名中列名不符合规范例如(列名中有空格)，此时需要重新命名。</p>
+<p><strong>执行算术计算：</strong> 另一种常见用途为对检索出的数据进行算术计算。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_id, quantity, item_price , quantity * item_price AS expanded_price</span><br><span class="line">FROM orderitems</span><br><span class="line">WHERE order_num = 20005;</span><br></pre></td></tr></table></figure></p>
+<p>操作符除了有乘，还有 加，减，除。</p>
+<h2 id="使用函数"><a href="#使用函数" class="headerlink" title="使用函数"></a>使用函数</h2><p><strong>常见的文本处理函数</strong><br><code>Left()</code>:返回串左边的字符。<br><code>Length()</code>:返回串的长度。<br><code>Locate()</code>:找出串的第一个子串。<br><code>Lower()</code>:将串转换为小写。<br><code>LTrim()</code>:去掉串左边的空格。<br><code>Right()</code>:返回串右边的字符。<br><code>RTrim()</code>:去掉串右边的空格。<br><code>Soundex()</code>:返回串的SOUNDEX值。<br><code>SubString()</code>:返回子串的字符。<br><code>Upper()</code>:将串转换为大写。</p>
+<p><strong>常见日期和时间处理函数</strong><br><code>AddDate()</code>  增加一个日期（天、周等）<br><code>AddTime()</code>  增加一个时间（时、分等）<br><code>CurDate()</code>  返回当前日期<br><code>CurTime()</code>  返回当前时间<br><code>Date()</code>  返回日期时间的日期部分<br><code>Time()</code>  返回一个日期时间的时间部分<br><code>Date_Format()</code>  返回一个格式化的日期或时间串<br><code>Now()</code>  返回当前日期和时间</p>
+<p>datetime数据类型：有年月日和时分秒<br>如果datetime要和’2015-06-01’比较 如果刚好有’2015-06-01 00:00:00’则会匹配成功返回结果。<br>但如果不是则需要<code>Date(date) = &#39;2015-06-01&#39;</code></p>
+<p><strong>数值处理函数</strong><br><code>Abs()</code>  返回一个数的绝对值<br><code>Sqrt()</code>  返回一个数的平方根</p>
+<h2 id="汇总数据"><a href="#汇总数据" class="headerlink" title="汇总数据"></a>汇总数据</h2><p>我们经常要汇总数据而不是把它们实际检索出来。</p>
+<ol>
+<li>确定表中的行数。</li>
+<li>获得表中行组的和。</li>
+<li>找出表列的最大值、最小值、平均值。</li>
+</ol>
+<p><strong>聚集函数：</strong> 运行在行组上的，计算和返回单个值得函数。<br><code>AVG()</code>:返回某列的平均值 只用于单列，并且忽略值为NULL的行<br><code>COUNT()</code>:返回某列的行数<br><code>MAX()</code>:返回某列的最大值<br><code>MIN()</code>:返回某列的最小值<br><code>SUM()</code>:返回某列值之和</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT AVG(prod_price) AS avg_price</span><br><span class="line">FROM products;</span><br></pre></td></tr></table></figure>
+<p>此 SELECT 语句返回值 avg_Price ，它包含 products 表中所有产品的平均价格。</p>
+<p><code>COUNT()</code>函数有两种使用方式</p>
+<ol>
+<li>使用<code>COUNT(*)</code>对表中行的数目进行计数，不管表列中包含的是空值(NULL)还是非空值。</li>
+<li>使用COUNT(column)对特定列中具有值得行进行计数，忽略NULL值。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/24/MySQL必知必会/第十章/" data-id="cjgefzoro0001n8va5zfmjgh5" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-MySQL必知必会/第七八九章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/24/MySQL必知必会/第七八九章/" class="article-date">
+  <time datetime="2018-04-24T01:21:28.000Z" itemprop="datePublished">2018-04-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/24/MySQL必知必会/第七八九章/">MySQL必知必会学习笔记(4)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="数据过滤"><a href="#数据过滤" class="headerlink" title="数据过滤"></a>数据过滤</h2><h3 id="组合WHERE子句"><a href="#组合WHERE子句" class="headerlink" title="组合WHERE子句"></a>组合WHERE子句</h3><p><strong>AND 操作符：</strong> 用在WHERE子句中的关键字，用来指示检索满足所有给定条件的行。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_id, prod_price, prod_name</span><br><span class="line">FROM products</span><br><span class="line">WHERE vend_id = 1003 AND prod_price &lt;= 10;</span><br></pre></td></tr></table></figure></p>
+<p>此SQL语句检索由供应商 1003 制造且价格小于等于10美元的所有产品的名称和价格。<br>AND 指示DBMS只返回满足所有给定条件的行。还可以添加多个过滤条件，每添加一条就要使用一个 AND 。</p>
+<p><strong>OR 操作符：</strong> WHERE子句中使用的关键字，用来表示检索任一给定条件的行。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_name, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE vend_id =1002 OR vend_id = 1003;</span><br></pre></td></tr></table></figure></p>
+<p>此SQL语句检索由任一个指定供应商制造的所有产品的产品名和价格。<br>OR 操作符告诉DBMS匹配任一条件而不是同时匹配两个条件。</p>
+<p><strong>计算次序问题：</strong> AND和OR计算次序会有些问题(解决方法:使用圆括号)<br>SQL语句在处理OR操作符前，优先处理AND操作符。所以，要使用圆括号明确地分组相应的操作符。</p>
+<p><strong>IN操作符：</strong> 用来指定条件范围，范围中的每个条件都可以进行匹配。<br>IN 取合法值的由逗号分隔的清单，全都括在圆括号中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_name, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE vend_id IN (1002,1003)</span><br><span class="line">ORDER BY prod_name;</span><br></pre></td></tr></table></figure></p>
+<p>此 SELECT 语句检索供应商 1002 和 1003 制造的所有产品.</p>
+<p>为什么要使用IN操作符?</p>
+<ol>
+<li>在使用长的合法选项清单时，IN操作符语法更清晰直观。</li>
+<li>使用IN时，计算的次序更容易管理(使用的操作符更少)。</li>
+<li>IN操作符一般比OR操作符清单执行的更快。</li>
+<li>IN最大的优点是可以包含其他SELECT语句，使得能够更动态地建立 WHERE 子句。</li>
+</ol>
+<p><strong>NOT操作符：</strong> 否定它之后所跟的任何条件。<br>列出除 1002和1003 之外的所有供应商制造的产品.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_name, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE vend_id NOT IN (1002,1003)</span><br><span class="line">ORDER BY prod_name;</span><br></pre></td></tr></table></figure></p>
+<p>MySQL支持使用 NOT 对 IN 、 BETWEEN 和EXISTS子句取反，这与多数其他 DBMS允许使用 NOT 对各种条件取反有很大的差别。</p>
+<h2 id="用通配符进行过滤"><a href="#用通配符进行过滤" class="headerlink" title="用通配符进行过滤"></a>用通配符进行过滤</h2><p>如果过滤值已知，可以使用前面所提到的方法。<br>如果想找产品名包含某个单词的所有产品，那么必须使用通配符。利用通配符可创建比较特定数据的搜索模式。<br><strong>通配符：</strong> 用来匹配值的一部分的特殊字符。它是极重要和有用的搜索工具。<br><strong>搜索模式：</strong> 由字面值、通配符或两者组合构成的搜索条件。<br>为在搜索子句中使用通配符，必须使用 LIKE 操作符。 LIKE 告诉MySQL，后跟的搜索模式利用通配符匹配而不用直接相等匹配，进行比较。</p>
+<p>百分号(%)通配符：%表示任何字符出现任意次数。<br>根据MySQL的配置方式，搜索是可以区分大小写的。(我的MySQL模式是不区分)</p>
+<p>注意NULL，虽然似乎%通配符可以匹配任何东西，但有一个例外，即NULL。 即使是<code>WHERE prod_name LIKE &#39;%&#39;</code>也不能匹配用值NULL作为产品名的行。</p>
+<p>下划线(<code>_</code>)通配符：只能匹配单个字符。</p>
+<p>使用通配符的技巧：</p>
+<ol>
+<li>不要过度使用通配符。能用其他操作符，尽量用其他操作符。</li>
+<li>尽可能不要放在搜索模式开始处。不然搜索起来是最慢的。</li>
+</ol>
+<h2 id="用正则表达式进行搜索"><a href="#用正则表达式进行搜索" class="headerlink" title="用正则表达式进行搜索"></a>用正则表达式进行搜索</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_name</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_name REGEXP &apos;1000&apos;</span><br><span class="line">ORDER BY prod_name;</span><br></pre></td></tr></table></figure>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-24/89430836.jpg" alt=""><br>除关键字 LIKE 被 REGEXP 替代外，这条语句看上去非常像使用LIKE 的语句.它告诉MySQL： REGEXP 后所跟的东西作<br>为正则表达式（与文字正文 1000 匹配的一个正则表达式）处理。</p>
+<p>LIKE和REGEXP的差别：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_name</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_name LIKE &apos;1000&apos;</span><br><span class="line">ORDER BY prod_name;</span><br><span class="line"></span><br><span class="line">SELECT prod_name</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_name REGEXP &apos;1000&apos;</span><br><span class="line">ORDER BY prod_name;</span><br></pre></td></tr></table></figure></p>
+<p> LIKE 匹配 <strong>整个</strong> 列。如果被匹配的文本在列值中出现， LIKE 将不会找到它，相应的行也不被返回.而 REGEXP 在列值内进行匹配，如果被匹配的文本在列值中出现， REGEXP 将会找到它，相应的行将被返回。</p>
+<p>进行OR匹配<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_name</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_name REGEXP &apos;1000|2000&apos;</span><br><span class="line">ORDER BY prod_name;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-24/93656752.jpg" alt=""></p>
+<p>匹配几个字符之一<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_name</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_name REGEXP &apos;[123] Ton&apos;</span><br><span class="line">ORDER BY prod_name;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-24/10212670.jpg" alt=""><br>[123] 定义一组字符，它的意思是匹配 1 或 2 或 3 ，因此， 1 ton 和 2 ton 都匹配且返回.</p>
+<p>匹配范围<br>集合可定义要匹配的一个或多个字符。[0123456789]简化可以为[0-9]<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_name</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_name REGEXP &apos;[1-5] Ton&apos;</span><br><span class="line">ORDER BY prod_name;</span><br></pre></td></tr></table></figure></p>
+<p>这里使用正则表达式 [1-5] Ton 。 [1-5] 定义了一个范围，这个表达式意思是匹配 1 到 5 .</p>
+<p><code>*</code> 0个或多个匹配<br><code>+</code> 1个或多个匹配(等于{1,})<br><code>?</code> 0个或1个匹配(等于{0,1})<br><code>{n}</code> 指定数目的匹配<br><code>{n,}</code> 不少于n个数目的匹配<br><code>{n,m}</code> 匹配数目的范围</p>
+<p>定位符：<br><code>^</code> 文本的开始<br><code>$</code> 文本的结尾<br><code>[[:&lt;:]]</code> 词的开始<br><code>[[:&gt;:]]</code> 词的结尾</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/24/MySQL必知必会/第七八九章/" data-id="cjgefzorj0000n8vaguwkie61" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-MySQL必知必会/第五六章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/20/MySQL必知必会/第五六章/" class="article-date">
   <time datetime="2018-04-20T14:27:28.000Z" itemprop="datePublished">2018-04-20</time>
 </a>
     
@@ -79,7 +218,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/20/MySQL必知必会/第五章/">MySQL必知必会学习笔记(3)</a>
+      <a class="article-title" href="/2018/04/20/MySQL必知必会/第五六章/">MySQL必知必会学习笔记(3)</a>
     </h1>
   
 
@@ -107,47 +246,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/04/20/MySQL必知必会/第五章/" data-id="cjg83p6ow0000v0vak3g3bcj7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/04/20/MySQL必知必会/第五六章/" data-id="cjgefzorr0003n8va3c2p9umm" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
 
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-第三章" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/04/18/第三章/" class="article-date">
-  <time datetime="2018-04-18T02:56:01.000Z" itemprop="datePublished">2018-04-18</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/18/第三章/">第三章</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/04/18/第三章/" data-id="cjg4i9a9k000rwova9kj04u6p" class="article-share-link">Share</a>
-      
-      
     </footer>
   </div>
   
@@ -543,51 +646,6 @@
 
 
   
-    <article id="post-Zookeeper学习笔记1" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/03/23/Zookeeper学习笔记1/" class="article-date">
-  <time datetime="2018-03-23T03:22:42.000Z" itemprop="datePublished">2018-03-23</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/23/Zookeeper学习笔记1/">Zookeeper学习笔记(1)</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="分布式架构"><a href="#分布式架构" class="headerlink" title="分布式架构"></a>分布式架构</h2><h3 id="从集中式到分布式"><a href="#从集中式到分布式" class="headerlink" title="从集中式到分布式"></a>从集中式到分布式</h3><p>由于集中式系统规模大，运维人员难以维护，加上容易出现单点故障，PC机性能的不断提升，导致慢慢走向分布式系统时代。</p>
-<h4 id="集中式特点"><a href="#集中式特点" class="headerlink" title="集中式特点"></a>集中式特点</h4><p>集中式系统就是指由一台或多台主计算机组成中心节点，数据集中存储于这个中心节点，所有业务单元也都部署在中心节点上。<br>特点：部署结构简单。需要有性能卓越的主机。</p>
-<h4 id="分布式特点"><a href="#分布式特点" class="headerlink" title="分布式特点"></a>分布式特点</h4><p>定义：通过消息传递进行通信和协调工作的。<br>特征：1.分布性 2.对等性 3.并发性 4.缺乏全局时钟 5.故障总是会发生。</p>
-<h4 id="分布式环境的会遇到的问题"><a href="#分布式环境的会遇到的问题" class="headerlink" title="分布式环境的会遇到的问题"></a>分布式环境的会遇到的问题</h4><p>1.通信异常：引入网络因素，网络本身是不可靠的，可能导致分布式无法顺利完成一次网络通信。<br>2.网络分区：分布式系统中部分节点之间的网络延时不断增大，最终导致分布式系统中只有部分节点能够正常通信，另一些节点不能。我们将这个现象称为网络分区，或者叫”脑裂”。<br>3.三态：网络会出现各种各样的问题，每一次请求或响应，可能会存在成功、失败、超时。<br>4.节点故障：每个节点都会出现故障，服务器节点可能会出现宕机或”僵死”。</p>
-<h3 id="ACID到CAP-BASE"><a href="#ACID到CAP-BASE" class="headerlink" title="ACID到CAP/BASE"></a>ACID到CAP/BASE</h3><h4 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h4><p>事务：由一系列对系统中数据进行访问与更新的操作所组成的一个程序执行逻辑单元。<br>事务的4个特征：1.原子性 2.一致性 3.隔离性(读取未提交、读取已提交、可重复度、序列化) 4.持久性。</p>
-<h4 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h4><p>分布式事务：是指事务的参与者、支持事务的服务器、资源服务器以及事务管理器分别位于分布式系统的不同节点之上。通常一个分布式事务中会涉及对多个数据源或业务系统的操作。</p>
-<h5 id="CAP和BASE"><a href="#CAP和BASE" class="headerlink" title="CAP和BASE"></a>CAP和BASE</h5><p>CAP定理：一个分布式系统不可能同时满足一致性、可用性、分区容错性。最多只能满足其中两项。<br>一致性：多个副本之间是否能够保持一致的特性。<br>可用性：指系统提供的服务必须一致处于高可用状态，对于用户的每一个操作请求总是能够在有限的时间内返回结果。系统必须存在一个合理的响应时间，且返回一个正常的响应结果（要么成功，要么失败）。<br>分区容错性：故障发生时，仍能够保证对外提供满足一致性和可用性的服务，除非整个网络环境都发生了故障。</p>
-<p>BASE定理：即使无法做到强一致性，但每个应用都可以根据自身的业务特点，采用适当的方式来使系统达到最终一致性。</p>
-<p>最终一致性的五类主要变种：<br>1.因果一致性：A更新完数据后通知B，B能够访问A的最新值，如果B要进行更新，必须基于A更新后的值。同时，与A无因果关系的C没有此限制。<br>2.读己之所写：A更新数据后，自己总能访问到更新过得最新值，不会看到旧值。<br>3.会话一致性：执行更新操作后，客户端能够在统一个会话中始终读取到该数据项的最新值。<br>4.单调读一致性：如果一个进程从系统中读取出一个数据项的某个值后，那么系统对于该进程后续的任何数据访问都不应该返回更旧的值。<br>5.单调写一致性：一个系统需要能够保证来自同一个进程的写操作被顺序的执行。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/23/Zookeeper学习笔记1/" data-id="cjg4i9a9e000kwova4jqvceb4" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -645,11 +703,15 @@
       <ul>
         
           <li>
-            <a href="/2018/04/20/MySQL必知必会/第五章/">MySQL必知必会学习笔记(3)</a>
+            <a href="/2018/04/24/MySQL必知必会/第十章/">MySQL必知必会学习笔记(5)</a>
           </li>
         
           <li>
-            <a href="/2018/04/18/第三章/">第三章</a>
+            <a href="/2018/04/24/MySQL必知必会/第七八九章/">MySQL必知必会学习笔记(4)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/20/MySQL必知必会/第五六章/">MySQL必知必会学习笔记(3)</a>
           </li>
         
           <li>
@@ -658,10 +720,6 @@
         
           <li>
             <a href="/2018/04/17/MySQL必知必会/第一二章/">MySQL必知必会学习笔记(1)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/16/设计模式(代理模式)/">代理模式</a>
           </li>
         
       </ul>
