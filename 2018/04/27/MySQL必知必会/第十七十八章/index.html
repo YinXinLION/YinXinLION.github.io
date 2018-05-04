@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>MySQL必知必会学习笔记(8) | 努力是为了将对世界的所有渴望都掌握在手上</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="组合查询多数SQL查询只包含从一个或多个表中返回数据的单条SELECT语句。MYSQL也允许执行多个查询(多条SELECT语句)，并将结果作为单个查询结果集返回。这些组合查询通常称为并(union)或复合查询。 两种情况，需要使用组合查询：  在单个查询中从不同的表返回类似结构的数据； 对单个表执行多个查询，按单个查询返回数据。  多数情况下，组合相同表的两个查询完成的工作与具有多个WHERE子句">
+<meta name="keywords" content="MySQL必知必会">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL必知必会学习笔记(8)">
+<meta property="og:url" content="http://yoursite.com/2018/04/27/MySQL必知必会/第十七十八章/index.html">
+<meta property="og:site_name" content="努力是为了将对世界的所有渴望都掌握在手上">
+<meta property="og:description" content="组合查询多数SQL查询只包含从一个或多个表中返回数据的单条SELECT语句。MYSQL也允许执行多个查询(多条SELECT语句)，并将结果作为单个查询结果集返回。这些组合查询通常称为并(union)或复合查询。 两种情况，需要使用组合查询：  在单个查询中从不同的表返回类似结构的数据； 对单个表执行多个查询，按单个查询返回数据。  多数情况下，组合相同表的两个查询完成的工作与具有多个WHERE子句">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-5-3/10105867.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-5-3/50459364.jpg">
+<meta property="og:updated_time" content="2018-05-03T14:51:19.384Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL必知必会学习笔记(8)">
+<meta name="twitter:description" content="组合查询多数SQL查询只包含从一个或多个表中返回数据的单条SELECT语句。MYSQL也允许执行多个查询(多条SELECT语句)，并将结果作为单个查询结果集返回。这些组合查询通常称为并(union)或复合查询。 两种情况，需要使用组合查询：  在单个查询中从不同的表返回类似结构的数据； 对单个表执行多个查询，按单个查询返回数据。  多数情况下，组合相同表的两个查询完成的工作与具有多个WHERE子句">
+<meta name="twitter:image" content="http://oqp1ywek9.bkt.clouddn.com/18-5-3/10105867.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="努力是为了将对世界的所有渴望都掌握在手上" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">努力是为了将对世界的所有渴望都掌握在手上</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-MySQL必知必会/第十七十八章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/27/MySQL必知必会/第十七十八章/" class="article-date">
+  <time datetime="2018-04-27T02:35:00.000Z" itemprop="datePublished">2018-04-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MySQL必知必会学习笔记(8)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="组合查询"><a href="#组合查询" class="headerlink" title="组合查询"></a>组合查询</h2><p>多数SQL查询只包含从一个或多个表中返回数据的单条SELECT语句。MYSQL也允许执行多个查询(多条SELECT语句)，并将结果作为单个查询结果集返回。这些组合查询通常称为并(union)或复合查询。</p>
+<p>两种情况，需要使用组合查询：</p>
+<ol>
+<li>在单个查询中从不同的表返回类似结构的数据；</li>
+<li>对单个表执行多个查询，按单个查询返回数据。</li>
+</ol>
+<p>多数情况下，组合相同表的两个查询完成的工作与具有多个WHERE子句条件的单条查询完成的工作相同。因此，两种都要试下，以确定对特定的查询哪一种性能更好。</p>
+<p><strong>创建组合查询：</strong> 可用UNION操作符来组合数条SQL查询。利用UNION，可给出多条SELECT语句，将它们的结果组合成单个结果集。</p>
+<p>给出每条SELECT语句，在各条语句之间放上关键字UNION。</p>
+<p>示例：需要价格小于等于 5 的所有物品的一个列表，而且还想包括供应商 1001 和 1002 生产的所有物品（不考虑价格）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 1.</span><br><span class="line">SELECT vend_id, prod_id, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_price &lt;= 5;</span><br><span class="line"></span><br><span class="line"># 2.</span><br><span class="line">SELECT vend_id, prod_id, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE vend_id IN (1001,1002);</span><br><span class="line"></span><br><span class="line"># 组合两条语句</span><br><span class="line">SELECT vend_id, prod_id, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_price &lt;= 5</span><br><span class="line">UNION</span><br><span class="line">SELECT vend_id, prod_id, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE vend_id IN (1001,1002);</span><br></pre></td></tr></table></figure></p>
+<p>UNION指示MYSQL执行两条SELECT语句，并把结果组合成单个查询结果集。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-5-3/10105867.jpg" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 使用多条WHERE子句而不使用UNION相同的查询</span><br><span class="line">SELECT vend_id, prod_id, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_price &lt;= 5 OR vend_id IN (1001,1002);</span><br></pre></td></tr></table></figure>
+<p><strong>UNION规则：</strong></p>
+<ol>
+<li>UNION必须由两条或两条以上的SELECT语句组成，语句之间用关键字UNION分割</li>
+<li>UNION的每个查询必须包含相同的列、表达式或聚集函数。</li>
+<li>列数据类型必须兼容：类型不必相同，但必须是DBMS可以隐含地转换类型。</li>
+</ol>
+<p><strong>包含或取消重复行：</strong> UNION从查询结果中自动去除了重复的行。这是UNION的默认行为，但是如果需要它，可以改变它。如果想返回所有匹配的行，可使用UNION ALL而不是UNION。</p>
+<p><strong>对组合查询结果排序：</strong> SELECT语句的输出用ORDER BY子句排序。在用UNION组合查询时，只能使用一条ORDER BY子句，它必须出现在最后一条SELECT语句之后。对于结果集，不存在用一种方式排序一部分，用另一种方式排序，因此不允许使用多条ORDER BY子句。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SELECT vend_id, prod_id, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_price &lt;= 5</span><br><span class="line">UNION</span><br><span class="line">SELECT vend_id, prod_id, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE vend_id IN (1001,1002)</span><br><span class="line">ORDER BY vend_id, prod_price;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-5-3/50459364.jpg" alt=""><br>虽然ORDER BY子句似乎只是最后一条SELECT语句的组成部分，但实际上MySQL将用它来排序所有SELECT语句返回的所有结果。</p>
+<p>UNION的组合查询可以应用不同的表。</p>
+<h2 id="全文本搜索"><a href="#全文本搜索" class="headerlink" title="全文本搜索"></a>全文本搜索</h2><p>MySQL支持几种基本的数据库引擎，并非所有的引擎都支持全文本搜索。最常使用的引擎为MyISAM和InnoDB(前者支持全文本搜索，后者不支持)。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/27/MySQL必知必会/第十七十八章/" data-id="cjgryx1yc0000dova30iue88t" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/04/25/MySQL必知必会/第十五十六章/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">MySQL必知必会学习笔记(7)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java多线程/">Java多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx学习笔记/">Nginx学习笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python基础/">Python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习成长/">学习成长</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/心情/">心情</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/MySQL必知必会/" style="font-size: 10px;">MySQL必知必会</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/04/27/MySQL必知必会/第十七十八章/">MySQL必知必会学习笔记(8)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/25/MySQL必知必会/第十五十六章/">MySQL必知必会学习笔记(7)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/25/MySQL必知必会/第十三十四章/">MySQL必知必会学习笔记(6)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/24/MySQL必知必会/第十十一十二章/">MySQL必知必会学习笔记(5)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/24/MySQL必知必会/第七八九章/">MySQL必知必会学习笔记(4)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 殷鑫<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

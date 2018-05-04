@@ -65,9 +65,207 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-MySQL必知必会/第十章" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-MySQL必知必会/第十七十八章" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/04/24/MySQL必知必会/第十章/" class="article-date">
+    <a href="/2018/04/27/MySQL必知必会/第十七十八章/" class="article-date">
+  <time datetime="2018-04-27T02:35:00.000Z" itemprop="datePublished">2018-04-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/27/MySQL必知必会/第十七十八章/">MySQL必知必会学习笔记(8)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="组合查询"><a href="#组合查询" class="headerlink" title="组合查询"></a>组合查询</h2><p>多数SQL查询只包含从一个或多个表中返回数据的单条SELECT语句。MYSQL也允许执行多个查询(多条SELECT语句)，并将结果作为单个查询结果集返回。这些组合查询通常称为并(union)或复合查询。</p>
+<p>两种情况，需要使用组合查询：</p>
+<ol>
+<li>在单个查询中从不同的表返回类似结构的数据；</li>
+<li>对单个表执行多个查询，按单个查询返回数据。</li>
+</ol>
+<p>多数情况下，组合相同表的两个查询完成的工作与具有多个WHERE子句条件的单条查询完成的工作相同。因此，两种都要试下，以确定对特定的查询哪一种性能更好。</p>
+<p><strong>创建组合查询：</strong> 可用UNION操作符来组合数条SQL查询。利用UNION，可给出多条SELECT语句，将它们的结果组合成单个结果集。</p>
+<p>给出每条SELECT语句，在各条语句之间放上关键字UNION。</p>
+<p>示例：需要价格小于等于 5 的所有物品的一个列表，而且还想包括供应商 1001 和 1002 生产的所有物品（不考虑价格）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 1.</span><br><span class="line">SELECT vend_id, prod_id, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_price &lt;= 5;</span><br><span class="line"></span><br><span class="line"># 2.</span><br><span class="line">SELECT vend_id, prod_id, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE vend_id IN (1001,1002);</span><br><span class="line"></span><br><span class="line"># 组合两条语句</span><br><span class="line">SELECT vend_id, prod_id, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_price &lt;= 5</span><br><span class="line">UNION</span><br><span class="line">SELECT vend_id, prod_id, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE vend_id IN (1001,1002);</span><br></pre></td></tr></table></figure></p>
+<p>UNION指示MYSQL执行两条SELECT语句，并把结果组合成单个查询结果集。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-5-3/10105867.jpg" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 使用多条WHERE子句而不使用UNION相同的查询</span><br><span class="line">SELECT vend_id, prod_id, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_price &lt;= 5 OR vend_id IN (1001,1002);</span><br></pre></td></tr></table></figure>
+<p><strong>UNION规则：</strong></p>
+<ol>
+<li>UNION必须由两条或两条以上的SELECT语句组成，语句之间用关键字UNION分割</li>
+<li>UNION的每个查询必须包含相同的列、表达式或聚集函数。</li>
+<li>列数据类型必须兼容：类型不必相同，但必须是DBMS可以隐含地转换类型。</li>
+</ol>
+<p><strong>包含或取消重复行：</strong> UNION从查询结果中自动去除了重复的行。这是UNION的默认行为，但是如果需要它，可以改变它。如果想返回所有匹配的行，可使用UNION ALL而不是UNION。</p>
+<p><strong>对组合查询结果排序：</strong> SELECT语句的输出用ORDER BY子句排序。在用UNION组合查询时，只能使用一条ORDER BY子句，它必须出现在最后一条SELECT语句之后。对于结果集，不存在用一种方式排序一部分，用另一种方式排序，因此不允许使用多条ORDER BY子句。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SELECT vend_id, prod_id, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_price &lt;= 5</span><br><span class="line">UNION</span><br><span class="line">SELECT vend_id, prod_id, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE vend_id IN (1001,1002)</span><br><span class="line">ORDER BY vend_id, prod_price;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-5-3/50459364.jpg" alt=""><br>虽然ORDER BY子句似乎只是最后一条SELECT语句的组成部分，但实际上MySQL将用它来排序所有SELECT语句返回的所有结果。</p>
+<p>UNION的组合查询可以应用不同的表。</p>
+<h2 id="全文本搜索"><a href="#全文本搜索" class="headerlink" title="全文本搜索"></a>全文本搜索</h2><p>MySQL支持几种基本的数据库引擎，并非所有的引擎都支持全文本搜索。最常使用的引擎为MyISAM和InnoDB(前者支持全文本搜索，后者不支持)。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/27/MySQL必知必会/第十七十八章/" data-id="cjgryx1yc0000dova30iue88t" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-MySQL必知必会/第十五十六章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/25/MySQL必知必会/第十五十六章/" class="article-date">
+  <time datetime="2018-04-25T14:50:00.000Z" itemprop="datePublished">2018-04-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/25/MySQL必知必会/第十五十六章/">MySQL必知必会学习笔记(7)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="联结表"><a href="#联结表" class="headerlink" title="联结表"></a>联结表</h2><p>联结是利用SQL的SELECT能执行的最重要的操作，很好地理解联结及其语法是SQL的一个极为重要的组成部分。</p>
+<p>外键：外键为某个表中的一列，它包含另一个表的主键值，定义了两个表之间的关系。</p>
+<p>关系数据可以有效地存储和方便地处理。因此，关系数据库的可伸缩性远比非关系数据库要好。</p>
+<p><strong>可伸缩性：</strong> 能够适应不断增加的工作量而不失败。设计良好的数据库或应用程序称之为可伸缩性好。</p>
+<p>为什么要使用联结？<br>分解数据为多个表能更有效地存储，更方便地处理，并且具有更大的可伸缩性。但是有代价的，如果数据存储在多个表中，怎么样用单条SELECT语句检索出数据？<br>使用联结！使用特殊的语法，可以联结多个表返回一组输出，联结在运行时关联表中正确的行。<br>联结由MySQL根据需要建立，它存在于查询的执行当中。</p>
+<p><strong>创建联结</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT vend_name, prod_name, prod_price</span><br><span class="line">FROM vendors, products</span><br><span class="line">WHERE vendors.vend_id = products.vend_id</span><br><span class="line">ORDER BY vend_name, prod_name;</span><br></pre></td></tr></table></figure></p>
+<p>FROM语句列出两个表，分别是vendors,products。这两个表用WHERE子句正确联结，WHERE子句指示MYSQL匹配vendors表中的vend_id和表中的vend_id.（vendors.vend_id = products.vend_id）<br>这里需要这种完全限定列名，因为如果只给出 vend_id ，则MySQL不知道指的是哪一个。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-26/8885408.jpg" alt=""></p>
+<p>在一条 SELECT 语句中联结几个表时，相应的关系是在运行中构造的。WHERE子句作为过滤条件，它只包含那些匹配给定条件的行。没有WHERE子句，第一个表中的每个行将与第二个表中的每个行配对，而不管他们逻辑上是否可以配在一起。</p>
+<p><strong>笛卡尔积：</strong> 没有联结条件的的表关系返回结果为笛卡尔积。检索出的行的数目将是将是第一个表中的行数乘以第二个表中的行数。</p>
+<p><strong>不要忘了WHERE子句：</strong> 应该保证所有联结都有WHERE子句，否则MYSQL将返回很多数据。并且保证WHERE子句的正确性。</p>
+<p><strong>内部联结（内连接）</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT vend_name, prod_name, prod_price</span><br><span class="line">FROM vendors INNER JOIN products</span><br><span class="line">ON vendors.vend_id = products.vend_id;</span><br></pre></td></tr></table></figure></p>
+<p>这个与上面的语句结果相同，FROM子句不同。两表之间关系以INNER JOIN指定。使用这种语法时，联结条件用特定的ON子句而不是WHERE子句给出。传递给ON的实际条件与传递给WHERE的相同。</p>
+<p>两种语法结果都相同，但要优先使用INNER JOIN 语法哦。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 联结多个表</span><br><span class="line">SELECT prod_name, vend_name, prod_price, quantity</span><br><span class="line">FROM orderitems, products, vendors</span><br><span class="line">WHERE products.vend_id = vendors.vend_id AND orderitems.prod_id = products.prod_id AND order_num = 20005;</span><br></pre></td></tr></table></figure>
+<p>MYSQL在运行时关联指定的每个表以处理联结。这种处理非常消耗资源。联结的表越多，性能下降的越厉害。</p>
+<h2 id="创建高级联结"><a href="#创建高级联结" class="headerlink" title="创建高级联结"></a>创建高级联结</h2><p><strong>别名：</strong> 别名除了用于列名和计算字段外，SQL还允许给表名起别名。理由：1.缩短SQL语句。2.允许在单条SELECT语句中多次使用相同的表。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT cust_name, cust_contact</span><br><span class="line">FROM customers AS c, orders AS o, orderitems  AS oi</span><br><span class="line">WHERE c.cust_id = o.cust_id  AND oi.order_num = o.order_num AND prod_id = &apos;TNT2&apos;;</span><br></pre></td></tr></table></figure>
+<p>表别名不仅能用于WHERE子句，还可以用于SELECT的列表、ORDER BY子句以及语句的其他部分。</p>
+<p>用自联结而不用子查询：子联结通常作为外部语句用来替代从相同表中检索数据时使用的子查询语句。 虽然最终结果是相同的，但有时候处理联结远比处理子查询快的多。应该都试一下。</p>
+<p>自然连接：<br>自然连接是一种特殊的等值连接，他要求两个关系表中进行比较的必须是相同的属性列，无须添加连接条件，并且在结果中消除重复的属性列。</p>
+<p><strong>外部连接：</strong> 连接包含了那些在相关表中没有关联行的行。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT customers.cust_id, orders.order_num</span><br><span class="line">FROM customers LEFT OUTER JOIN orders</span><br><span class="line">ON customers.cust_id = orders.cust_id;</span><br></pre></td></tr></table></figure></p>
+<p>SELECT 语句使用了关键字 OUTER JOIN 来指定联结的类型。与内部联结关联两个表中的行不同的是，外部联结还包括没有关联行的行。为了从右边的表中选择所<br>有行，应该使用 RIGHT OUTER JOIN。</p>
+<p>外部连接的基本类型:存在两种基本的外部连接形式(左外部连接和右外部连接)。之间唯一差别是表的顺序不同。</p>
+<p>使用聚集函数的连接：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># COUNT(column) 会忽略 NULL 所以会出现技数为0</span><br><span class="line">SELECT customers.cust_name, customers.cust_id, COUNT(orders.order_num) AS num_ord</span><br><span class="line">FROM customers LEFT OUTER JOIN orders</span><br><span class="line">ON customers.cust_id = orders.cust_id</span><br><span class="line">GROUP BY customers.cust_id;</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用连接和连接条件</strong></p>
+<ol>
+<li>注意所使用的连接类型。一般我们使用内部连接，但使用外部连接也是有效。</li>
+<li>保证使用正确的连接条件，否则将返回不正确的数据。</li>
+<li>应该总是提供连接条件，否则会得出笛卡尔积。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/25/MySQL必知必会/第十五十六章/" data-id="cjgryx1ym0005dovasjiez15r" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-MySQL必知必会/第十三十四章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/25/MySQL必知必会/第十三十四章/" class="article-date">
+  <time datetime="2018-04-25T02:08:00.000Z" itemprop="datePublished">2018-04-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/25/MySQL必知必会/第十三十四章/">MySQL必知必会学习笔记(6)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="分组数据"><a href="#分组数据" class="headerlink" title="分组数据"></a>分组数据</h2><p><strong>创建分组：</strong> 分组是在SELECT语句的GROUP BY子句中建立的。<br>让我们理解一下分组<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT vend_id, COUNT(*) AS num_prods</span><br><span class="line">FROM products</span><br><span class="line">GROUP BY vend_id;</span><br></pre></td></tr></table></figure></p>
+<p>GROUP BY 子句指示MySQL按 vend_id 排序并分组数据。这导致对每个 vend_id 而不是整个表计算 num_prods 一次。如果在 SELECT 中使用表达式，则必须在<br>GROUP BY 子句中指定相同的表达式。不能使用别名。<br>GROUP BY 子句指示MySQL分组数据，然后对每个组而不是整个结果集进行聚集。</p>
+<p>使用GROUP BY子句前，需要知道的规定：</p>
+<ol>
+<li>GROUP BY 子句可以包含任意数目的列。这使得能对分组进行嵌套，为数据分组提供更细致的控制。</li>
+<li>在建立分组时，指定的所有列都一起计算</li>
+<li>GROUP BY子句列出的每个列都必须是检索列或有效的表达式(不能是聚集函数)。如果在 SELECT 中使用表达式，则必须在GROUP BY 子句中指定相同的表达式。不能使用别名。</li>
+<li>除聚集计算语句外， SELECT 语句中的每个列都必须在 GROUP BY 子句中给出。</li>
+<li>如果分组列中具有 NULL 值，则 NULL 将作为一个分组返回。如果列中有多行 NULL 值，它们将分为一组。</li>
+<li>GROUP BY 子句必须出现在 WHERE 子句之后， ORDER BY 子句之前。</li>
+</ol>
+<p>使用ROLLUP：使用WITH ROLLUP关键字，可以得到每个分组以及每个分组汇总级别的值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT vend_id, COUNT(*) AS num_prods</span><br><span class="line">FROM products</span><br><span class="line">GROUP BY vend_id WITH ROLLUP;</span><br></pre></td></tr></table></figure></p>
+<p><a href="http://blog.itpub.net/29773961/viewspace-1255419/" target="_blank" rel="noopener">http://blog.itpub.net/29773961/viewspace-1255419/</a></p>
+<h2 id="过滤分组"><a href="#过滤分组" class="headerlink" title="过滤分组"></a>过滤分组</h2><p>WHERE子句过滤的是行而不是分组。要想过滤分组，要使用HAVING子句。HAVING支持的操作符和WHERE一样。<br>示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT cust_id, COUNT(*) AS orders</span><br><span class="line">FROM orders</span><br><span class="line">GROUP BY cust_id</span><br><span class="line">HAVING COUNT(*) &gt;= 2;</span><br><span class="line"># 最后一行增加了HAVING 子句，它过滤 COUNT(*) &gt;=2 （两个以上的订单）的那些分组。</span><br></pre></td></tr></table></figure></p>
+<p><strong>WHERE和HAVING的差别</strong><br>WHERE在数据分组前进行过滤，HAVING在数据分组后进行过滤。</p>
+<p><strong>ORDER BY和GROUP BY的差别</strong></p>
+<ol>
+<li>ORDER BY：排序产生的输出。GROUP BY：分组行，但输出可能不是分组的顺序。</li>
+<li>ORDER BY：任意列都可以使用(非选择的列也可以使用)。 GROUP BY：只可能使用选择列或表达式列，而且必须使用每个选择列表达式。</li>
+<li>ORDER BY：不一定需要。 GROUP BY：如果和聚集函数一起使用列(或表达式),则必须使用。</li>
+</ol>
+<p>不要忘记ORDER BY：一般在使用GROUP BY子句时，应该也给出ORDER BY子句。这是保证数据正确排序的唯一方法。</p>
+<p><strong>SELECT子句顺序</strong><br>SELECT：要返回的列或表达式。<br>FROM：从中检索数据的表。<br>WHERE：行级过滤。<br>GROUP BY：分组说明。<br>HAVING：组级过滤。<br>ORDER BY：输出排序顺序。<br>LIMIT：要检索的行数。</p>
+<h2 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h2><p>SQL允许创建子查询，即嵌套在其他查询中的查询。</p>
+<p>示例：需要列出订购物品TNT2的所有客户。<br>(1)检索包含物品TNT2的所有订单的编号。<br>(2)检索具有前一步骤列出的订单编号的所有客户的ID。<br>(3)检索前一步骤返回的所有客户ID的客户信息。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">SELECT order_num</span><br><span class="line">FROM orderitems</span><br><span class="line">WHERE prod_id = &apos;TNT2&apos;;</span><br><span class="line"></span><br><span class="line">SELECT cust_id</span><br><span class="line">FROM orders</span><br><span class="line">WHERE order_num IN (20005, 20007);</span><br><span class="line"></span><br><span class="line">SELECT cust_id</span><br><span class="line">FROM orders</span><br><span class="line">WHERE order_num IN (SELECT ord4dser_num</span><br><span class="line">                    FROM orderitems</span><br><span class="line">                    WHERE prod_id = &apos;TNT2&apos;);</span><br><span class="line"></span><br><span class="line">SELECT cust_name, cust_contact</span><br><span class="line">FROM customer</span><br><span class="line">WHERE cust_id IN (SELECT cust_id</span><br><span class="line">                  FROM orders</span><br><span class="line">                  WHERE order_num IN (SELECT ord4dser_num</span><br><span class="line">                                      FROM orderitems</span><br><span class="line">                                      WHERE prod_id = &apos;TNT2&apos;));</span><br></pre></td></tr></table></figure></p>
+<p>子查询并不总是执行这种类型的数据检索的最有效的方法。</p>
+<p>示例：显示 customers表中每个客户的订单总数。<br>(1)从 customers 表中检索客户列表。<br>(2)对于检索出的每个客户，统计其在 orders 表中的订单数目。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 对客户10001的订单进行计数</span><br><span class="line">SELECT COUNT(*) AS orders</span><br><span class="line">FROM orders</span><br><span class="line">WHERE cust_id = 10001;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT cust_name, cust_state, (SELECT COUNT(*)</span><br><span class="line">                               FROM orders</span><br><span class="line">                               WHERE orders.cust_id = customers.cust_id) AS orders</span><br><span class="line">FROM customers</span><br><span class="line">ORDER BY cust_name;</span><br></pre></td></tr></table></figure>
+<p>该子查询对检索出的每个客户执行一次。子查询执行了5次，因此检索除了5个客户。</p>
+<p><strong>相关子查询：</strong> 涉及外部查询的子查询。(上面这个示例称为相关子查询)</p>
+<p>逐渐增加子查询来建立查询：首先，建立和测试最内层的查询。然后，用硬编码数据建立和测试外层查询，并且仅在确认它正常后才嵌入子查询。这时，再次测试它，对于要增加的每个查询，重复这些步骤。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/25/MySQL必知必会/第十三十四章/" data-id="cjgryx1yh0001dovaazwd47sx" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-MySQL必知必会/第十十一十二章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/24/MySQL必知必会/第十十一十二章/" class="article-date">
   <time datetime="2018-04-24T14:00:00.000Z" itemprop="datePublished">2018-04-24</time>
 </a>
     
@@ -79,7 +277,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/24/MySQL必知必会/第十章/">MySQL必知必会学习笔记(5)</a>
+      <a class="article-title" href="/2018/04/24/MySQL必知必会/第十十一十二章/">MySQL必知必会学习笔记(5)</a>
     </h1>
   
 
@@ -113,11 +311,12 @@
 <li>使用<code>COUNT(*)</code>对表中行的数目进行计数，不管表列中包含的是空值(NULL)还是非空值。</li>
 <li>使用COUNT(column)对特定列中具有值得行进行计数，忽略NULL值。</li>
 </ol>
+<p>在指定别名以包含某个聚集函数的结果时，不应该使用表中实际的列名。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/04/24/MySQL必知必会/第十章/" data-id="cjgefzoro0001n8va5zfmjgh5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/04/24/MySQL必知必会/第十十一十二章/" data-id="cjgryx1yk0003dovadi3pyud8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
@@ -486,166 +685,6 @@
 
 
   
-    <article id="post-阅读笔记-4月" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/04/10/阅读笔记-4月/" class="article-date">
-  <time datetime="2018-04-10T13:29:10.000Z" itemprop="datePublished">2018-04-10</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/学习成长/">学习成长</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/10/阅读笔记-4月/">阅读笔记-4月</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="理解同步、异步、阻塞、非阻塞-美团新零售2面-2018-4-11"><a href="#理解同步、异步、阻塞、非阻塞-美团新零售2面-2018-4-11" class="headerlink" title="理解同步、异步、阻塞、非阻塞(美团新零售2面) 2018-4-11"></a>理解同步、异步、阻塞、非阻塞(美团新零售2面) 2018-4-11</h3><p>首先，通过美团的面试让我认识到我的不足之处，除了学外还要多思考多总结。<br>同步、异步关注的是 <strong>消息通信机制</strong>。<br>同步：发出一个调用，在调用没有得到结果前，调用就不返回。一旦调用返回，就能得到返回值。<br>异步：发出一个调用后，调用直接返回，所以没有结果。被调用者通过状态、通知来通知调用者，或者通过回调函数处理这个调用。</p>
-<p>阻塞、非阻塞关注的是 <strong>程序在等待调用结果(消息、返回值)时的状态</strong><br>阻塞：调用结果返回之前，线程会被挂起，线程得到结果之后才会返回。<br>非阻塞：不能立刻得到结果之前，该调用不会阻塞当前线程。</p>
-<h3 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h3><p>定义了一个创建对象的接口，但由子类决定创建的对象是哪一个。工厂方法让类把实例化推迟到子类。<br>抽象工厂：提供一个接口，用于创建相关或依赖对象的家族，而不需要明确指定具体类。定义一个负责创建一组相关的产品的接口。</p>
-<h3 id="命令模式-2018-4-12"><a href="#命令模式-2018-4-12" class="headerlink" title="命令模式 2018-4-12"></a>命令模式 2018-4-12</h3><p><strong>命令模式</strong> 将”请求”封装成对象(命令对象),以便使用不同的请求、队列或者日志来参数化其他对象。命令模式也支持可撤销的操作。<br>形象生动的例子：Lion去餐馆点餐，通过createOrder()创建一个订单，这个订单通过takeOrder()函数交给服务员，然后调用orderUp()方法通知厨师准备餐点，然后厨师执行makeBurger(),makeShake()等方法，output出甜点和汉堡。</p>
-<p>Lion是Client，订单是Command，服务员是调用者，通过takeOrder()就是将命令对象(订单)交给调用者，然后orderUp相当于让调用者执行execute方法，告诉接收者(厨师),execute里执行的就是接收者工作的细节。 客户与接收者实现解耦。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public interface Command&#123; //命令 定义execute接口</span><br><span class="line">    public void execute();</span><br><span class="line">&#125;</span><br><span class="line">public LightCommand implement Command&#123; //具体的命令</span><br><span class="line">    public Light light;</span><br><span class="line">    public LightCommand(Light light) &#123;</span><br><span class="line">      this.light = light;</span><br><span class="line">    &#125;</span><br><span class="line">    public void execute() &#123;</span><br><span class="line">        light.on(); //具体细节  厨师执行的动作</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">public class ControlPanel &#123;  // 调用者  相当于服务员</span><br><span class="line">    public Command command;</span><br><span class="line">    public void setCommand(Command command) &#123; //takeOrder()</span><br><span class="line">        this.command = command;</span><br><span class="line">    &#125;</span><br><span class="line">    public void push() &#123; //相当于orderUp</span><br><span class="line">        command.execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">public class Main&#123;</span><br><span class="line">    public static void main(String[] argv) &#123;</span><br><span class="line">        ControlPanel panel;</span><br><span class="line">        panel.push(); //发出命令 然后接收者执行</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="适配器模式和外观模式-2018-4-12"><a href="#适配器模式和外观模式-2018-4-12" class="headerlink" title="适配器模式和外观模式 2018-4-12"></a>适配器模式和外观模式 2018-4-12</h3><p><strong>适配器模式：</strong> 将一个类的接口，转换成客户期望的另一个接口。适配器让原本接口不兼容的类可以合作无间。<br>分为对象适配器和类适配器（需要多重继承，java不支持）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">pulbic interface Duck &#123;</span><br><span class="line">    public void quack(); //客户端只能调用此方法</span><br><span class="line">&#125;</span><br><span class="line">public interface Dog &#123; //被适配者</span><br><span class="line">    public void wang(); //Dog的汪要让客户端调用</span><br><span class="line">&#125;</span><br><span class="line">public class DogT implement Dog &#123;</span><br><span class="line">    public void wang()&#123;</span><br><span class="line">      //汪汪汪</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">public class Adapter implement Duck &#123; //适配器</span><br><span class="line">    Dog dog;</span><br><span class="line">    public Adapter(Dog dog) &#123;</span><br><span class="line">      this.dog = dog;</span><br><span class="line">    &#125;</span><br><span class="line">    public void quack() &#123;</span><br><span class="line">        dog.wang();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">public class Main &#123;</span><br><span class="line">  public static void main(String[] argv) &#123;</span><br><span class="line">      Adapter adapter;</span><br><span class="line">      adapter.quack();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>客户使用适配器的过程：1.客户通过目标接口调用适配器的方法对适配器发出请求 2.适配器使用被适配者接口把请求转换成被适配者的一个或多个调用接口。 3.客户接收到调用的结果，但并未察觉这一切是适配器在起转换作用。</p>
-<p>装饰者模式是用来增强行为，适配器模式是起到接口转换作用，如何去调用被适配者的。</p>
-<p><strong>外观模式：</strong>：提供一个统一的接口，用来访问子系统中的一群接口。外观定义了一个高层接口，让子系统更容易使用。外观模式的意图是简化接口。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public void all() &#123;</span><br><span class="line">    子系统A.run();</span><br><span class="line">    子系统B.run();</span><br><span class="line">    子系统C.run();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>“最少知识原则”:不要让太多的类耦合在一起。(让我们的朋友圈子维持在最小的状态)。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public float getTemp() &#123;</span><br><span class="line">    return station.getThermometer().getTemperature(); //耦合了2个类</span><br><span class="line">&#125;</span><br><span class="line">//改写 直接return station.getTemperature();   station加一个向温度计请求温度</span><br></pre></td></tr></table></figure></p>
-<h3 id="模板方法模式"><a href="#模板方法模式" class="headerlink" title="模板方法模式"></a>模板方法模式</h3><p>模板方法模式：在一个方法中定义一个算法的骨架，而将一些步骤延迟到子类中。模板方法使得子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public abstract class Drink &#123;  //父类</span><br><span class="line">    void final prepare() &#123;  //实现模板方法</span><br><span class="line">        boilWater();</span><br><span class="line">        brew();</span><br><span class="line">        something(); //钩子函数 子类可实现可不实现 它可以让子类有能力为其抽象类做一些决定</span><br><span class="line">    &#125;</span><br><span class="line">    abstract void brew(); //子类实现具体方法</span><br><span class="line">    public void boilWater() &#123;</span><br><span class="line">        //实现</span><br><span class="line">    &#125;</span><br><span class="line">    public boolean something() &#123;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br><span class="line">public coffee extend Drink &#123;</span><br><span class="line">    public void brew() &#123;</span><br><span class="line">        //实现</span><br><span class="line">    &#125;</span><br><span class="line">    public boolean something &#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>“好莱坞原则”：高层组件会决定如何调用底层组件，不要让底层组件去调用高层。</p>
-<p>在JAVA api中可以看到<code>Array.sort()</code>使用了模板方法模式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">private static void legacyMergeSort(Object[] a) &#123; //由于是数组没法使用继承，则变成static全局访问</span><br><span class="line">    Object[] aux = a.clone();</span><br><span class="line">    mergeSort(aux, a, 0, a.length, 0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">private static void mergeSort(Object[] src,</span><br><span class="line">                                 Object[] dest,</span><br><span class="line">                                 int low,</span><br><span class="line">                                 int high,</span><br><span class="line">                                 int off) &#123; //这个方法相当于是一个算法模板，定义一系列流程</span><br><span class="line">       int length = high - low;</span><br><span class="line"></span><br><span class="line">       // Insertion sort on smallest arrays</span><br><span class="line">       if (length &lt; INSERTIONSORT_THRESHOLD) &#123;</span><br><span class="line">           for (int i=low; i&lt;high; i++)</span><br><span class="line">               for (int j=i; j&gt;low &amp;&amp;</span><br><span class="line">                        ((Comparable) dest[j-1]).compareTo(dest[j])&gt;0; j--)</span><br><span class="line">                   swap(dest, j, j-1);</span><br><span class="line">           return;</span><br><span class="line">       &#125;</span><br><span class="line">      //省略</span><br></pre></td></tr></table></figure>
-<p>观察Comparable对象的compareTo,这个就是子类要做的事情，要重新去实现，子类实现Comparable接口，并且实现compareTo方法。 这只是api其中一个运用到模板方法模式。还有java.io的InputStream的read()方法，这个方法又会被<code>read(byte b[], int off, int len)</code>模板方法使用。</p>
-<p>策略模式和模板方法模式都封装算法，一个用的是 <strong>组合</strong>，一个用的是 <strong>继承</strong>。<br>模板方法模式：让代码重用，部分实行延迟到子类(工厂方法是模板方法一个特殊版本)。</p>
-<h3 id="迭代器模式-2018-4-13"><a href="#迭代器模式-2018-4-13" class="headerlink" title="迭代器模式 2018-4-13"></a>迭代器模式 2018-4-13</h3><p><strong>迭代器模式：</strong> 提供一种方法顺序访问一个聚合对象中的各个元素，而又不暴露其内部的表示。客户端不需要知道聚合对象内部是如何实现的，只需要使用统一的接口即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public interface Iterator &#123; //java api迭代器接口</span><br><span class="line">    public boolean hasNext();</span><br><span class="line">    public Object next();</span><br><span class="line">    public void remove();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//具体hasNext、next、remove实现</span><br><span class="line">public class MyArrayListIterator implement Iterator &#123;</span><br><span class="line">    //具体实现</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface createIterator &#123;</span><br><span class="line">    public Iterator createIte();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public class MyArrayList implement createIterator&#123;</span><br><span class="line">    //createIte()返回某个Iterator对象</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>迭代器模式让我们能游走于聚合内的每一个元素，而又不暴露其内部的表示。有一个统一的方法访问聚合中的每一个对象。让聚合专注应该的事情上，让接口与实现变得更简洁。</p>
-<p>“单一责任”：一个类应该只有一个引起变化的原因。<br>当一个模块或一个类被设计成只支持一组相关的功能时，我们说它具有高内聚;反之，当被设计成支持一组不想关的功能时，我们说它具有低内聚。</p>
-<h3 id="组合模式-2018-4-13"><a href="#组合模式-2018-4-13" class="headerlink" title="组合模式 2018-4-13"></a>组合模式 2018-4-13</h3><p>组合模式：允许你将对象组合成树形结构来表现”整体/部分”层次结构。组合能让客户以一致的方式处理个别以及对象组合。<br>使用组合结构，我们能够把相同的操作应用在组合和个别对象上。(大多情况下，我们可以忽略对象组合和个别对象之间的差别。)<br>组合模式让我们能用树形方式创建对象的结构，树里面包含了组合以及个别的对象。</p>
-<p>例如：最顶层的菜单，拥有所有的菜单和菜单项，顶层菜单下面有A菜单，B菜单，C菜单。C菜单下面有很多菜单项。<br>这些菜单和菜单项都继承自同一个接口，但是有些菜单的功能，菜单项却不适合调用，这就要求客户端编写时保证不会出现错误情况发生，捕获异常方式解决。</p>
-<p>组合模式：客户可以将对象的集合以及个别的对象一视同仁。(用一致的方式对待所有对象)</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/04/10/阅读笔记-4月/" data-id="cjg4i9a9v0012wova3ap50zen" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Zookeeper学习笔记3" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/04/04/Zookeeper学习笔记3/" class="article-date">
-  <time datetime="2018-04-04T12:54:14.000Z" itemprop="datePublished">2018-04-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/04/Zookeeper学习笔记3/">Zookeeper与Paxos</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="Zookeeper介绍"><a href="#Zookeeper介绍" class="headerlink" title="Zookeeper介绍"></a>Zookeeper介绍</h3><p>Zookeeper为分布式应用提供了高效且可靠的分布式协调服务，提供了诸如统一命名服务、配置管理和分布式锁等分布式的基础服务。在解决分布式一致性方面，采用了ZAB(Zookeeper Atomic Boradcast)的一致性协议。</p>
-<h4 id="Zookeeper是什么"><a href="#Zookeeper是什么" class="headerlink" title="Zookeeper是什么"></a>Zookeeper是什么</h4><p>Zookeeper是一个典型的分布式数据一致性的解决方案。分布式应用程序可以基于它实现诸如数据发布/订阅、负载均衡、命名服务、分布式协调/通知、集群管理、Master选举、分布式锁、分布式队列等功能。</p>
-<p>Zookeeper保证如下分布式一致性特性：<br>1.顺序一致性：客户端发起事务请求，严格按照发起顺序被应用到Zookeeper中。<br>2.原子性：事务请求处理结果在整个集群中所有机器上的应用情况是一致的。要么都成功应用了某一个事务，要么都没应用。<br>3.单一视图：无论客户端连接哪个Zookeeper服务器，看到服务端数据模型都是一致的。<br>4.可靠性：服务端成功应用了一个事务，那么状态会一直保留，直到其他事物对其进行变更。<br>5.实时性：最终一致性，Zookeeper仅仅保证在一定时间段内，客户端最终一定能够从服务端上读取到最新的数据状态。</p>
-<h4 id="Zookeeper设计目标"><a href="#Zookeeper设计目标" class="headerlink" title="Zookeeper设计目标"></a>Zookeeper设计目标</h4><p>1.简单的数据模型:ZooKeeper数据模型是树型结构的名字空间。<br>2.可以构建集群：只要集群中存在超过一半的机器能够正常工作，那么就能够正常对外服务。当客户端和Zookeeper服务器断开后，客户端会自动连接到集群中的其他机器。<br>3.顺序访问：对于每一个更新请求，都会分配一个全局唯一的递增编号，保证事务操作先后顺序。<br>4.高性能：Zookeeper将全量的数据存储在内存中，以此获得服务器吞吐量、减少延迟。</p>
-<h4 id="Zookeeper的基本概念"><a href="#Zookeeper的基本概念" class="headerlink" title="Zookeeper的基本概念"></a>Zookeeper的基本概念</h4><h5 id="集群角色"><a href="#集群角色" class="headerlink" title="集群角色"></a>集群角色</h5><p>引入Leader、Follower和Observer三种角色。Leader服务器为客户端提供读和写服务。Follower和Observer能够提供读服务。<br>唯一区别在于：Observer不参与Leader选举过程，不参与写操作的”过半写成功策略”。</p>
-<h5 id="会话"><a href="#会话" class="headerlink" title="会话"></a>会话</h5><p>Session的sessionTimeout是设置一个客户端会话的超时时间。当由于各种原因导致客户端断开连接，只要在sessionTimeout规定时间内重新连上集群任意一台服务器，那么创建的会话仍然有效。</p>
-<h5 id="数据节点-Znode"><a href="#数据节点-Znode" class="headerlink" title="数据节点(Znode)"></a>数据节点(Znode)</h5><p>Znode是数据模型中的数据单元，Zookeeper将所有数据都存储在内存，数据模型是一颗树(Znode Tree),由斜杠(/)进行分割的路径就是一个Znode，例如<code>/foo/path1</code>。Znode除了保存自己的数据内容，还保存一系列属性信息。<br>Znode分为持久节点和临时节点。持久节点：Znode被创建后，除非主动进行Znode移除操作，否则Znode一直保存在Zookeeper上。临时节点：它的生命周期和客户端会话绑定，一旦客户端会话失效，那么这个客户端创建的所有临时节点都会被移除。<br>特殊属性：SEQUENTIAL。是父节点维护的自增数字。</p>
-<h5 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h5><p>每个Znode维护一个Stat的数据结构，Stat记录Znode的三个数据版本，version(当前ZNode的版本)、cversion(当前Znode子节点的版本)和aversion(当前ZNode的ACL版本)。</p>
-<h5 id="Wathcer"><a href="#Wathcer" class="headerlink" title="Wathcer"></a>Wathcer</h5><p>允许用户在指定节点上注册一些Watcher，当事件触发后，将事件通知到感兴趣的客户端上去。</p>
-<h5 id="ACL"><a href="#ACL" class="headerlink" title="ACL"></a>ACL</h5><p>Zookeeper定义了5种权限。类似于linux rwx<br>1.CREATE：创建子节点的权限。<br>2.READ：获取节点数据和子节点列表的权限。<br>3.WRITE：更新节点数据的权限。<br>4.DELETE：删除子节点的权限。<br>5.ADMIN：设置节点ACL的权限。</p>
-<h3 id="Zookeeper的ZAB协议"><a href="#Zookeeper的ZAB协议" class="headerlink" title="Zookeeper的ZAB协议"></a>Zookeeper的ZAB协议</h3><p>ZAB(Zookeeper 原子消息广播协议)作为数据一致性的核心算法。</p>
-<p>定义了会改变Zookeeper服务器数据状态的事务请求的处理方式：</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/04/04/Zookeeper学习笔记3/" data-id="cjg4i9a95000gwovapos7zcv2" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Zookeeper学习笔记2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/03/27/Zookeeper学习笔记2/" class="article-date">
-  <time datetime="2018-03-27T01:27:14.000Z" itemprop="datePublished">2018-03-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/27/Zookeeper学习笔记2/">Zookeeper学习-一致性协议</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="一致性协议"><a href="#一致性协议" class="headerlink" title="一致性协议"></a>一致性协议</h3><h4 id="二阶段提交"><a href="#二阶段提交" class="headerlink" title="二阶段提交"></a>二阶段提交</h4><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-27/66567191.jpg" alt="二阶段提交"><br>1.提交事务请求 2.执行事务提交<br>如果任何一个参与者返回No，或者等待超时时间后，协调者无法接收所有的反馈，那么执行事务中断。</p>
-<p>优点：原理简单、实现方便。<br>缺点：<br>1.同步阻塞：各个参与者在等待其他参与者响应的过程中，将无法进行其他任何操作。<br>2.单点问题：一旦协调者出现问题，那么整个二阶段提交流程将无法运转。参与者会一直处于锁定事务资源的状态中。<br>3.数据不一致性：由于网络的原因或者协调者自身宕机，导致只有部门参与者收到Commit请求，于是整个分布式出现数据不一致现象。<br>4.太过保守：任意一点失败都会导致事务的失败。</p>
-<p>二阶段提交协议解决了分布式事务的原子性问题</p>
-<h4 id="三阶段提交"><a href="#三阶段提交" class="headerlink" title="三阶段提交"></a>三阶段提交</h4><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-2/74225968.jpg" alt="三阶段提交"><br>1.选票收集CanCommit 2.提交授权PreCommit 3.确定提交DoCommit</p>
-<p>优点：降低参与者的阻塞范围，能够在出现单点故障后继续达成一致。<br>缺点：参与者接收到PreCommit消息后，如果网络出现分区，协调者所在的节点和参与者无法正常通信，参与者依然会进行事务提交，导致数据不一致。</p>
-<p>三阶段提交避免了二阶段提交中无限等待问题。</p>
-<h4 id="Paxos算法"><a href="#Paxos算法" class="headerlink" title="Paxos算法"></a>Paxos算法</h4><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-3/11731777.jpg" alt="Paxos算法"><br>然后通知Leaner集合的一部分，然后通知剩余Leaner。保证可靠性，防止通知1个Leaner导致单点故障。</p>
-<p>P1：提出编号为M1的提案，完成阶段1.<br>P2:提出编号为M2的提案（M2&gt;M1），完成阶段1.此时不批准小于M2的提案。<br>P1：进入阶段二，发出的Accept请求会被忽略。于是P1重新生成编号M3的提案(M3&gt;M2),完成阶段1。<br>然后无限循环。为了避免这一现象，必须采用一个主Proposer。这样整套Paxos算法流程能够保持活性。</p>
-<p>Paxos算法解决了无限等待问题，解决了”脑裂”问题。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/27/Zookeeper学习笔记2/" data-id="cjg4i9a92000fwova4b70k3yg" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -703,23 +742,23 @@
       <ul>
         
           <li>
-            <a href="/2018/04/24/MySQL必知必会/第十章/">MySQL必知必会学习笔记(5)</a>
+            <a href="/2018/04/27/MySQL必知必会/第十七十八章/">MySQL必知必会学习笔记(8)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/25/MySQL必知必会/第十五十六章/">MySQL必知必会学习笔记(7)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/25/MySQL必知必会/第十三十四章/">MySQL必知必会学习笔记(6)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/24/MySQL必知必会/第十十一十二章/">MySQL必知必会学习笔记(5)</a>
           </li>
         
           <li>
             <a href="/2018/04/24/MySQL必知必会/第七八九章/">MySQL必知必会学习笔记(4)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/20/MySQL必知必会/第五六章/">MySQL必知必会学习笔记(3)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/18/MySQL必知必会/第三四章/">MySQL必知必会学习笔记(2)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/17/MySQL必知必会/第一二章/">MySQL必知必会学习笔记(1)</a>
           </li>
         
       </ul>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>MySQL必知必会学习笔记(6) | 努力是为了将对世界的所有渴望都掌握在手上</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="分组数据创建分组： 分组是在SELECT语句的GROUP BY子句中建立的。让我们理解一下分组123SELECT vend_id, COUNT(*) AS num_prodsFROM productsGROUP BY vend_id; GROUP BY 子句指示MySQL按 vend_id 排序并分组数据。这导致对每个 vend_id 而不是整个表计算 num_prods 一次。如果在 SELEC">
+<meta name="keywords" content="MySQL必知必会">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL必知必会学习笔记(6)">
+<meta property="og:url" content="http://yoursite.com/2018/04/25/MySQL必知必会/第十三十四章/index.html">
+<meta property="og:site_name" content="努力是为了将对世界的所有渴望都掌握在手上">
+<meta property="og:description" content="分组数据创建分组： 分组是在SELECT语句的GROUP BY子句中建立的。让我们理解一下分组123SELECT vend_id, COUNT(*) AS num_prodsFROM productsGROUP BY vend_id; GROUP BY 子句指示MySQL按 vend_id 排序并分组数据。这导致对每个 vend_id 而不是整个表计算 num_prods 一次。如果在 SELEC">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-25T14:49:59.727Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL必知必会学习笔记(6)">
+<meta name="twitter:description" content="分组数据创建分组： 分组是在SELECT语句的GROUP BY子句中建立的。让我们理解一下分组123SELECT vend_id, COUNT(*) AS num_prodsFROM productsGROUP BY vend_id; GROUP BY 子句指示MySQL按 vend_id 排序并分组数据。这导致对每个 vend_id 而不是整个表计算 num_prods 一次。如果在 SELEC">
+  
+    <link rel="alternate" href="/atom.xml" title="努力是为了将对世界的所有渴望都掌握在手上" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">努力是为了将对世界的所有渴望都掌握在手上</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-MySQL必知必会/第十三十四章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/25/MySQL必知必会/第十三十四章/" class="article-date">
+  <time datetime="2018-04-25T02:08:00.000Z" itemprop="datePublished">2018-04-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MySQL必知必会学习笔记(6)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="分组数据"><a href="#分组数据" class="headerlink" title="分组数据"></a>分组数据</h2><p><strong>创建分组：</strong> 分组是在SELECT语句的GROUP BY子句中建立的。<br>让我们理解一下分组<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT vend_id, COUNT(*) AS num_prods</span><br><span class="line">FROM products</span><br><span class="line">GROUP BY vend_id;</span><br></pre></td></tr></table></figure></p>
+<p>GROUP BY 子句指示MySQL按 vend_id 排序并分组数据。这导致对每个 vend_id 而不是整个表计算 num_prods 一次。如果在 SELECT 中使用表达式，则必须在<br>GROUP BY 子句中指定相同的表达式。不能使用别名。<br>GROUP BY 子句指示MySQL分组数据，然后对每个组而不是整个结果集进行聚集。</p>
+<p>使用GROUP BY子句前，需要知道的规定：</p>
+<ol>
+<li>GROUP BY 子句可以包含任意数目的列。这使得能对分组进行嵌套，为数据分组提供更细致的控制。</li>
+<li>在建立分组时，指定的所有列都一起计算</li>
+<li>GROUP BY子句列出的每个列都必须是检索列或有效的表达式(不能是聚集函数)。如果在 SELECT 中使用表达式，则必须在GROUP BY 子句中指定相同的表达式。不能使用别名。</li>
+<li>除聚集计算语句外， SELECT 语句中的每个列都必须在 GROUP BY 子句中给出。</li>
+<li>如果分组列中具有 NULL 值，则 NULL 将作为一个分组返回。如果列中有多行 NULL 值，它们将分为一组。</li>
+<li>GROUP BY 子句必须出现在 WHERE 子句之后， ORDER BY 子句之前。</li>
+</ol>
+<p>使用ROLLUP：使用WITH ROLLUP关键字，可以得到每个分组以及每个分组汇总级别的值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT vend_id, COUNT(*) AS num_prods</span><br><span class="line">FROM products</span><br><span class="line">GROUP BY vend_id WITH ROLLUP;</span><br></pre></td></tr></table></figure></p>
+<p><a href="http://blog.itpub.net/29773961/viewspace-1255419/" target="_blank" rel="noopener">http://blog.itpub.net/29773961/viewspace-1255419/</a></p>
+<h2 id="过滤分组"><a href="#过滤分组" class="headerlink" title="过滤分组"></a>过滤分组</h2><p>WHERE子句过滤的是行而不是分组。要想过滤分组，要使用HAVING子句。HAVING支持的操作符和WHERE一样。<br>示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT cust_id, COUNT(*) AS orders</span><br><span class="line">FROM orders</span><br><span class="line">GROUP BY cust_id</span><br><span class="line">HAVING COUNT(*) &gt;= 2;</span><br><span class="line"># 最后一行增加了HAVING 子句，它过滤 COUNT(*) &gt;=2 （两个以上的订单）的那些分组。</span><br></pre></td></tr></table></figure></p>
+<p><strong>WHERE和HAVING的差别</strong><br>WHERE在数据分组前进行过滤，HAVING在数据分组后进行过滤。</p>
+<p><strong>ORDER BY和GROUP BY的差别</strong></p>
+<ol>
+<li>ORDER BY：排序产生的输出。GROUP BY：分组行，但输出可能不是分组的顺序。</li>
+<li>ORDER BY：任意列都可以使用(非选择的列也可以使用)。 GROUP BY：只可能使用选择列或表达式列，而且必须使用每个选择列表达式。</li>
+<li>ORDER BY：不一定需要。 GROUP BY：如果和聚集函数一起使用列(或表达式),则必须使用。</li>
+</ol>
+<p>不要忘记ORDER BY：一般在使用GROUP BY子句时，应该也给出ORDER BY子句。这是保证数据正确排序的唯一方法。</p>
+<p><strong>SELECT子句顺序</strong><br>SELECT：要返回的列或表达式。<br>FROM：从中检索数据的表。<br>WHERE：行级过滤。<br>GROUP BY：分组说明。<br>HAVING：组级过滤。<br>ORDER BY：输出排序顺序。<br>LIMIT：要检索的行数。</p>
+<h2 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h2><p>SQL允许创建子查询，即嵌套在其他查询中的查询。</p>
+<p>示例：需要列出订购物品TNT2的所有客户。<br>(1)检索包含物品TNT2的所有订单的编号。<br>(2)检索具有前一步骤列出的订单编号的所有客户的ID。<br>(3)检索前一步骤返回的所有客户ID的客户信息。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">SELECT order_num</span><br><span class="line">FROM orderitems</span><br><span class="line">WHERE prod_id = &apos;TNT2&apos;;</span><br><span class="line"></span><br><span class="line">SELECT cust_id</span><br><span class="line">FROM orders</span><br><span class="line">WHERE order_num IN (20005, 20007);</span><br><span class="line"></span><br><span class="line">SELECT cust_id</span><br><span class="line">FROM orders</span><br><span class="line">WHERE order_num IN (SELECT ord4dser_num</span><br><span class="line">                    FROM orderitems</span><br><span class="line">                    WHERE prod_id = &apos;TNT2&apos;);</span><br><span class="line"></span><br><span class="line">SELECT cust_name, cust_contact</span><br><span class="line">FROM customer</span><br><span class="line">WHERE cust_id IN (SELECT cust_id</span><br><span class="line">                  FROM orders</span><br><span class="line">                  WHERE order_num IN (SELECT ord4dser_num</span><br><span class="line">                                      FROM orderitems</span><br><span class="line">                                      WHERE prod_id = &apos;TNT2&apos;));</span><br></pre></td></tr></table></figure></p>
+<p>子查询并不总是执行这种类型的数据检索的最有效的方法。</p>
+<p>示例：显示 customers表中每个客户的订单总数。<br>(1)从 customers 表中检索客户列表。<br>(2)对于检索出的每个客户，统计其在 orders 表中的订单数目。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 对客户10001的订单进行计数</span><br><span class="line">SELECT COUNT(*) AS orders</span><br><span class="line">FROM orders</span><br><span class="line">WHERE cust_id = 10001;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT cust_name, cust_state, (SELECT COUNT(*)</span><br><span class="line">                               FROM orders</span><br><span class="line">                               WHERE orders.cust_id = customers.cust_id) AS orders</span><br><span class="line">FROM customers</span><br><span class="line">ORDER BY cust_name;</span><br></pre></td></tr></table></figure>
+<p>该子查询对检索出的每个客户执行一次。子查询执行了5次，因此检索除了5个客户。</p>
+<p><strong>相关子查询：</strong> 涉及外部查询的子查询。(上面这个示例称为相关子查询)</p>
+<p>逐渐增加子查询来建立查询：首先，建立和测试最内层的查询。然后，用硬编码数据建立和测试外层查询，并且仅在确认它正常后才嵌入子查询。这时，再次测试它，对于要增加的每个查询，重复这些步骤。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/25/MySQL必知必会/第十三十四章/" data-id="cjgryx1yh0001dovaazwd47sx" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/04/25/MySQL必知必会/第十五十六章/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          MySQL必知必会学习笔记(7)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/24/MySQL必知必会/第十十一十二章/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">MySQL必知必会学习笔记(5)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java多线程/">Java多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx学习笔记/">Nginx学习笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python基础/">Python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习成长/">学习成长</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/心情/">心情</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/MySQL必知必会/" style="font-size: 10px;">MySQL必知必会</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/04/27/MySQL必知必会/第十七十八章/">MySQL必知必会学习笔记(8)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/25/MySQL必知必会/第十五十六章/">MySQL必知必会学习笔记(7)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/25/MySQL必知必会/第十三十四章/">MySQL必知必会学习笔记(6)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/24/MySQL必知必会/第十十一十二章/">MySQL必知必会学习笔记(5)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/24/MySQL必知必会/第七八九章/">MySQL必知必会学习笔记(4)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 殷鑫<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

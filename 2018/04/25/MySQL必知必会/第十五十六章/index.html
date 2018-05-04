@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>MySQL必知必会学习笔记(7) | 努力是为了将对世界的所有渴望都掌握在手上</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="联结表联结是利用SQL的SELECT能执行的最重要的操作，很好地理解联结及其语法是SQL的一个极为重要的组成部分。 外键：外键为某个表中的一列，它包含另一个表的主键值，定义了两个表之间的关系。 关系数据可以有效地存储和方便地处理。因此，关系数据库的可伸缩性远比非关系数据库要好。 可伸缩性： 能够适应不断增加的工作量而不失败。设计良好的数据库或应用程序称之为可伸缩性好。 为什么要使用联结？分解数据为">
+<meta name="keywords" content="MySQL必知必会">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL必知必会学习笔记(7)">
+<meta property="og:url" content="http://yoursite.com/2018/04/25/MySQL必知必会/第十五十六章/index.html">
+<meta property="og:site_name" content="努力是为了将对世界的所有渴望都掌握在手上">
+<meta property="og:description" content="联结表联结是利用SQL的SELECT能执行的最重要的操作，很好地理解联结及其语法是SQL的一个极为重要的组成部分。 外键：外键为某个表中的一列，它包含另一个表的主键值，定义了两个表之间的关系。 关系数据可以有效地存储和方便地处理。因此，关系数据库的可伸缩性远比非关系数据库要好。 可伸缩性： 能够适应不断增加的工作量而不失败。设计良好的数据库或应用程序称之为可伸缩性好。 为什么要使用联结？分解数据为">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-4-26/8885408.jpg">
+<meta property="og:updated_time" content="2018-04-27T02:29:59.598Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL必知必会学习笔记(7)">
+<meta name="twitter:description" content="联结表联结是利用SQL的SELECT能执行的最重要的操作，很好地理解联结及其语法是SQL的一个极为重要的组成部分。 外键：外键为某个表中的一列，它包含另一个表的主键值，定义了两个表之间的关系。 关系数据可以有效地存储和方便地处理。因此，关系数据库的可伸缩性远比非关系数据库要好。 可伸缩性： 能够适应不断增加的工作量而不失败。设计良好的数据库或应用程序称之为可伸缩性好。 为什么要使用联结？分解数据为">
+<meta name="twitter:image" content="http://oqp1ywek9.bkt.clouddn.com/18-4-26/8885408.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="努力是为了将对世界的所有渴望都掌握在手上" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">努力是为了将对世界的所有渴望都掌握在手上</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-MySQL必知必会/第十五十六章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/25/MySQL必知必会/第十五十六章/" class="article-date">
+  <time datetime="2018-04-25T14:50:00.000Z" itemprop="datePublished">2018-04-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MySQL必知必会学习笔记(7)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="联结表"><a href="#联结表" class="headerlink" title="联结表"></a>联结表</h2><p>联结是利用SQL的SELECT能执行的最重要的操作，很好地理解联结及其语法是SQL的一个极为重要的组成部分。</p>
+<p>外键：外键为某个表中的一列，它包含另一个表的主键值，定义了两个表之间的关系。</p>
+<p>关系数据可以有效地存储和方便地处理。因此，关系数据库的可伸缩性远比非关系数据库要好。</p>
+<p><strong>可伸缩性：</strong> 能够适应不断增加的工作量而不失败。设计良好的数据库或应用程序称之为可伸缩性好。</p>
+<p>为什么要使用联结？<br>分解数据为多个表能更有效地存储，更方便地处理，并且具有更大的可伸缩性。但是有代价的，如果数据存储在多个表中，怎么样用单条SELECT语句检索出数据？<br>使用联结！使用特殊的语法，可以联结多个表返回一组输出，联结在运行时关联表中正确的行。<br>联结由MySQL根据需要建立，它存在于查询的执行当中。</p>
+<p><strong>创建联结</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT vend_name, prod_name, prod_price</span><br><span class="line">FROM vendors, products</span><br><span class="line">WHERE vendors.vend_id = products.vend_id</span><br><span class="line">ORDER BY vend_name, prod_name;</span><br></pre></td></tr></table></figure></p>
+<p>FROM语句列出两个表，分别是vendors,products。这两个表用WHERE子句正确联结，WHERE子句指示MYSQL匹配vendors表中的vend_id和表中的vend_id.（vendors.vend_id = products.vend_id）<br>这里需要这种完全限定列名，因为如果只给出 vend_id ，则MySQL不知道指的是哪一个。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-26/8885408.jpg" alt=""></p>
+<p>在一条 SELECT 语句中联结几个表时，相应的关系是在运行中构造的。WHERE子句作为过滤条件，它只包含那些匹配给定条件的行。没有WHERE子句，第一个表中的每个行将与第二个表中的每个行配对，而不管他们逻辑上是否可以配在一起。</p>
+<p><strong>笛卡尔积：</strong> 没有联结条件的的表关系返回结果为笛卡尔积。检索出的行的数目将是将是第一个表中的行数乘以第二个表中的行数。</p>
+<p><strong>不要忘了WHERE子句：</strong> 应该保证所有联结都有WHERE子句，否则MYSQL将返回很多数据。并且保证WHERE子句的正确性。</p>
+<p><strong>内部联结（内连接）</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT vend_name, prod_name, prod_price</span><br><span class="line">FROM vendors INNER JOIN products</span><br><span class="line">ON vendors.vend_id = products.vend_id;</span><br></pre></td></tr></table></figure></p>
+<p>这个与上面的语句结果相同，FROM子句不同。两表之间关系以INNER JOIN指定。使用这种语法时，联结条件用特定的ON子句而不是WHERE子句给出。传递给ON的实际条件与传递给WHERE的相同。</p>
+<p>两种语法结果都相同，但要优先使用INNER JOIN 语法哦。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 联结多个表</span><br><span class="line">SELECT prod_name, vend_name, prod_price, quantity</span><br><span class="line">FROM orderitems, products, vendors</span><br><span class="line">WHERE products.vend_id = vendors.vend_id AND orderitems.prod_id = products.prod_id AND order_num = 20005;</span><br></pre></td></tr></table></figure>
+<p>MYSQL在运行时关联指定的每个表以处理联结。这种处理非常消耗资源。联结的表越多，性能下降的越厉害。</p>
+<h2 id="创建高级联结"><a href="#创建高级联结" class="headerlink" title="创建高级联结"></a>创建高级联结</h2><p><strong>别名：</strong> 别名除了用于列名和计算字段外，SQL还允许给表名起别名。理由：1.缩短SQL语句。2.允许在单条SELECT语句中多次使用相同的表。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT cust_name, cust_contact</span><br><span class="line">FROM customers AS c, orders AS o, orderitems  AS oi</span><br><span class="line">WHERE c.cust_id = o.cust_id  AND oi.order_num = o.order_num AND prod_id = &apos;TNT2&apos;;</span><br></pre></td></tr></table></figure>
+<p>表别名不仅能用于WHERE子句，还可以用于SELECT的列表、ORDER BY子句以及语句的其他部分。</p>
+<p>用自联结而不用子查询：子联结通常作为外部语句用来替代从相同表中检索数据时使用的子查询语句。 虽然最终结果是相同的，但有时候处理联结远比处理子查询快的多。应该都试一下。</p>
+<p>自然连接：<br>自然连接是一种特殊的等值连接，他要求两个关系表中进行比较的必须是相同的属性列，无须添加连接条件，并且在结果中消除重复的属性列。</p>
+<p><strong>外部连接：</strong> 连接包含了那些在相关表中没有关联行的行。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT customers.cust_id, orders.order_num</span><br><span class="line">FROM customers LEFT OUTER JOIN orders</span><br><span class="line">ON customers.cust_id = orders.cust_id;</span><br></pre></td></tr></table></figure></p>
+<p>SELECT 语句使用了关键字 OUTER JOIN 来指定联结的类型。与内部联结关联两个表中的行不同的是，外部联结还包括没有关联行的行。为了从右边的表中选择所<br>有行，应该使用 RIGHT OUTER JOIN。</p>
+<p>外部连接的基本类型:存在两种基本的外部连接形式(左外部连接和右外部连接)。之间唯一差别是表的顺序不同。</p>
+<p>使用聚集函数的连接：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># COUNT(column) 会忽略 NULL 所以会出现技数为0</span><br><span class="line">SELECT customers.cust_name, customers.cust_id, COUNT(orders.order_num) AS num_ord</span><br><span class="line">FROM customers LEFT OUTER JOIN orders</span><br><span class="line">ON customers.cust_id = orders.cust_id</span><br><span class="line">GROUP BY customers.cust_id;</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用连接和连接条件</strong></p>
+<ol>
+<li>注意所使用的连接类型。一般我们使用内部连接，但使用外部连接也是有效。</li>
+<li>保证使用正确的连接条件，否则将返回不正确的数据。</li>
+<li>应该总是提供连接条件，否则会得出笛卡尔积。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/25/MySQL必知必会/第十五十六章/" data-id="cjgryx1ym0005dovasjiez15r" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/04/27/MySQL必知必会/第十七十八章/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          MySQL必知必会学习笔记(8)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/25/MySQL必知必会/第十三十四章/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">MySQL必知必会学习笔记(6)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java多线程/">Java多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx学习笔记/">Nginx学习笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python基础/">Python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习成长/">学习成长</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/心情/">心情</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/MySQL必知必会/" style="font-size: 10px;">MySQL必知必会</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/04/27/MySQL必知必会/第十七十八章/">MySQL必知必会学习笔记(8)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/25/MySQL必知必会/第十五十六章/">MySQL必知必会学习笔记(7)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/25/MySQL必知必会/第十三十四章/">MySQL必知必会学习笔记(6)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/24/MySQL必知必会/第十十一十二章/">MySQL必知必会学习笔记(5)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/24/MySQL必知必会/第七八九章/">MySQL必知必会学习笔记(4)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 殷鑫<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
