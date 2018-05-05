@@ -17,7 +17,13 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-5-3/10105867.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-5-3/50459364.jpg">
-<meta property="og:updated_time" content="2018-05-03T14:51:19.384Z">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-5-4/21099563.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-5-4/7723783.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-5-5/88149461.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-5-5/19857906.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-5-5/53959579.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-5-5/77841923.jpg">
+<meta property="og:updated_time" content="2018-05-05T10:46:32.770Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL必知必会学习笔记(8)">
 <meta name="twitter:description" content="组合查询多数SQL查询只包含从一个或多个表中返回数据的单条SELECT语句。MYSQL也允许执行多个查询(多条SELECT语句)，并将结果作为单个查询结果集返回。这些组合查询通常称为并(union)或复合查询。 两种情况，需要使用组合查询：  在单个查询中从不同的表返回类似结构的数据； 对单个表执行多个查询，按单个查询返回数据。  多数情况下，组合相同表的两个查询完成的工作与具有多个WHERE子句">
@@ -112,7 +118,49 @@
 <p><strong>对组合查询结果排序：</strong> SELECT语句的输出用ORDER BY子句排序。在用UNION组合查询时，只能使用一条ORDER BY子句，它必须出现在最后一条SELECT语句之后。对于结果集，不存在用一种方式排序一部分，用另一种方式排序，因此不允许使用多条ORDER BY子句。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SELECT vend_id, prod_id, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_price &lt;= 5</span><br><span class="line">UNION</span><br><span class="line">SELECT vend_id, prod_id, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE vend_id IN (1001,1002)</span><br><span class="line">ORDER BY vend_id, prod_price;</span><br></pre></td></tr></table></figure></p>
 <p><img src="http://oqp1ywek9.bkt.clouddn.com/18-5-3/50459364.jpg" alt=""><br>虽然ORDER BY子句似乎只是最后一条SELECT语句的组成部分，但实际上MySQL将用它来排序所有SELECT语句返回的所有结果。</p>
 <p>UNION的组合查询可以应用不同的表。</p>
-<h2 id="全文本搜索"><a href="#全文本搜索" class="headerlink" title="全文本搜索"></a>全文本搜索</h2><p>MySQL支持几种基本的数据库引擎，并非所有的引擎都支持全文本搜索。最常使用的引擎为MyISAM和InnoDB(前者支持全文本搜索，后者不支持)。</p>
+<h2 id="全文本搜索"><a href="#全文本搜索" class="headerlink" title="全文本搜索"></a>全文本搜索</h2><p>MySQL支持几种基本的数据库引擎，并非所有的引擎都支持全文本搜索。最常使用的引擎为MyISAM和InnoDB(前者支持全文本搜索，后者不支持)。<br>LIKE关键字，利用通配操作符匹配文本。能够查找包含特殊值或部分值得行。<br>正则表达式，可编写查找所需行的非常复杂的匹配模式。</p>
+<p>虽然这些搜索机制很有用，但存在几个重要的限制：性能，明确控制，智能化结果</p>
+<ol>
+<li>性能：通配符和正则表达式匹配通常要求MySQL尝试匹配表中所有行(这些搜索极少使用表索引)，因此，由于被搜索行数不断增加，这些搜索可能非常耗时。</li>
+<li>明确控制：使用通配符和正则表达式很难(并不是总能)明确地控制匹配什么和不匹配什么。例如，指定一个词必须匹配，一个词必须不匹配，而一个词仅在第一个词匹配的情况下才可以匹配或者才可以不匹配。</li>
+<li>智能化的结果： 基于通配符和正则表达式的搜索，它们都不能提供一种智能化的选择结果的方法。例如，一个特殊词的搜索会返回包含该词的所有行，而不区分包含单个匹配的行和包含多个匹配的行(按照可能更好的匹配来排列它们)。不会找出不包含该词但包含相关词的行。</li>
+</ol>
+<p>这些限制可以用全文本搜索，在使用全文本搜索时，MySQL不需要分别查看每个行，不需要分别分析和处理每个词。MySQL创建指定列中各词的一个索引，搜索可以对这些词进行。这样，MySQL可以快速有效的决定哪些词匹配(那些行包含它们，哪些词不匹配，它们的匹配频率等等)</p>
+<h3 id="使用全文本搜索"><a href="#使用全文本搜索" class="headerlink" title="使用全文本搜索"></a>使用全文本搜索</h3><p>为了进行全文本搜索，必须索引被搜索的列，而且要随之数据的改变不断地重新索引。对表的适当设计，MySQL会自动进行所有的索引和重新索引。<br>在索引之后，SELECT可与<code>Match()</code>和<code>Against()</code>一起使用以实际执行搜索。</p>
+<p>一般在创建表时使用全文本搜索。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE productnotes</span><br><span class="line">(</span><br><span class="line">    note_id int NOT NULL AUTO_INCREMENT,</span><br><span class="line">    prod_id char(10) NOT NULL,</span><br><span class="line">    note_date datetime NOT NULL,</span><br><span class="line">    note_text text NULL,</span><br><span class="line">    PRIMARY KEY(note_id),</span><br><span class="line">    FULLTEXT(note_text)</span><br><span class="line">) ENGINE=MyISAM;</span><br></pre></td></tr></table></figure></p>
+<p>MYSQL根据子句FULLTEXT(note_text)的指示对它进行索引。这里的FULLTEXT索引单个列，如果需要也可以指定多个列。<br>在定义后，MYSQL会自动维护该索引。在增加、更新、删除时，索引随之自动更新。</p>
+<p><strong>不要再导入数据时使用FULLTEXT：</strong> 更新索引要花时间，先导入完数据，然后修改表，定义FULLTEXT。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT note_text</span><br><span class="line">FROM productnotes</span><br><span class="line">WHERE Match(note_text) Against(&apos;rabbit&apos;);</span><br></pre></td></tr></table></figure>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-5-4/21099563.jpg" alt=""><br>Match(note_text) 指示MySQL针对指定的列进行搜索， Against(‘rabbit’) 指定词 rabbit 作为搜索文本.</p>
+<p>使用完整的Match()说明：传递给Match()的值必须与FULLTEXT()定义中的相同。如果指定多个列，则必须列出他们(次序要正确)。</p>
+<p>除非使用BINARY方式，否则全文本搜索不区分大小写。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 使用LIKE可以完成同上的功能</span><br><span class="line">SELECT note_text</span><br><span class="line">FROM productnotes</span><br><span class="line">WHERE note_text LIKE &apos;%rabbit%&apos;;</span><br></pre></td></tr></table></figure></p>
+<p>这条 SELECT 语句同样检索出两行，但次序不同。</p>
+<p>上面两条SELECT语句都不包含ORDER BY子句。(使用LIKE)会以不特别有用的顺序返回数据。(使用全文本搜索)返回以文本匹配的良好程度排序的数据。全文本搜索一个重要部分就是对结果排序。具有较高优先级的行先返回。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT note_text, Match(note_text) Against(&apos;rabbit&apos;) AS rank</span><br><span class="line">FROM productnotes;</span><br></pre></td></tr></table></figure>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-5-4/7723783.jpg" alt=""><br>不包含词 rabbit 的行等级为0,包含rabbit的两行每行都有一个等级值，文本中词靠前的行的等级值比词靠后的行的等级值高。</p>
+<p>排序多个索引项，匹配词多的行等级值高于匹配词少的行。全文本搜索由于数据是索引的，比LIKE搜索快。</p>
+<h3 id="使用查询扩展（适用于4-1-1之后版本）"><a href="#使用查询扩展（适用于4-1-1之后版本）" class="headerlink" title="使用查询扩展（适用于4.1.1之后版本）"></a>使用查询扩展（适用于4.1.1之后版本）</h3><p>查询扩展用来设法放宽返回的全文本搜索结果的范围。<br>如果你想找出所有提到 anvils 的注释。只有一个注释包含词 anvils ，但你还想找出可能与你的搜索有关的所有其他行，即使它们不包含词anvils 。<br>这也是查询扩展的一项任务，在使用查询扩展时，MySQL对数据和索引进行两遍扫描来完成搜索：<br>首先，进行一个基本的全文本搜索，找出与搜索条件匹配的所有行；<br>其次，MySQL检查这些匹配行并选择所有有用的词。<br>再其次，MySQL再次进行全文本搜索，这次不仅使用原来的条件，而且还是用所有有用的词。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 这是没有查询扩展的例子</span><br><span class="line">SELECT note_text</span><br><span class="line">FROM productnotes</span><br><span class="line">WHERE Match(note_text) Against(&apos;anvils&apos;);</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-5-5/88149461.jpg" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 使用了查询扩展</span><br><span class="line">SELECT note_text</span><br><span class="line">FROM productnotes</span><br><span class="line">WHERE Match(note_text) Against(&apos;anvils&apos; WITH QUERY EXPANSION);</span><br></pre></td></tr></table></figure>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-5-5/19857906.jpg" alt=""><br>第一行包含词anvils，因此等级高，第二行与anvils无关，但它包含第一行中的两个词(customer和recommend),因此被检索出来。第三行，包含这两个相同的词，但在文本位置靠后且分开得更远，所以等级3.</p>
+<h3 id="布尔文本搜索"><a href="#布尔文本搜索" class="headerlink" title="布尔文本搜索"></a>布尔文本搜索</h3><p>MySQL支持全文本搜索的另外一种形式，称为布尔方式。以布尔方式，可提供关于如下内容的细节：<br>要匹配的词、要排斥的词、排列提示、表达式分组。<br>没有定义FULLTEXT索引也可以使用它，但速度很慢。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># IN BOOLEAN MODE的作用</span><br><span class="line">SELECT note_text</span><br><span class="line">FROM productnotes</span><br><span class="line">WHERE Match(note_text) Against(&apos;heavy&apos; IN BOOLEAN MODE);</span><br></pre></td></tr></table></figure>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-5-5/53959579.jpg" alt=""><br>此全文本搜索检索包含词 heavy 的所有行（有两行）。使用了关键字 IN BOOLEAN MODE ，但实际上没有指定布尔操作符，因此，其结果与没有指定布尔方式的结果相同。</p>
+<p>为了匹配包含heavy但不包含任意以rope开始的词的行，可使用一下查询：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT note_text</span><br><span class="line">FROM productnotes</span><br><span class="line">WHERE Match(note_text) Against(&apos;heavy -rope*&apos; IN BOOLEAN MODE);</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-5-5/77841923.jpg" alt=""><br>这次只返回一行。这一次仍然匹配词 heavy ，但 -rope<em> 明确地指示MySQL排除包含 rope</em>(任何以 rope 开始的词，包括ropes)的行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT note_text</span><br><span class="line">FROM productnotes</span><br><span class="line">WHERE Match(note_text) Against(&apos;+rabbit +bait&apos; IN BOOLEAN MODE);</span><br></pre></td></tr></table></figure>
+<p>搜索匹配包含词rabbit和bait的行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT note_text</span><br><span class="line">FROM productnotes</span><br><span class="line">WHERE Match(note_text) Against(&apos;rabbit bait&apos; IN BOOLEAN MODE);</span><br></pre></td></tr></table></figure>
+<p>搜索匹配包含rabbit和bait中的至少一个词的行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT note_text</span><br><span class="line">FROM productnotes</span><br><span class="line">WHERE Match(note_text) Against(&apos;&quot;rabbit bait&quot;&apos; IN BOOLEAN MODE);</span><br></pre></td></tr></table></figure>
+<p>搜索匹配短语rabbit bait而不是匹配两个词rabbit和bait。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT note_text</span><br><span class="line">FROM productnotes</span><br><span class="line">WHERE Match(note_text) Against(&apos;&gt;rabbit &lt;carrot&apos; IN BOOLEAN MODE);</span><br></pre></td></tr></table></figure>
+<p>匹配rabbit和carrot，增加前者的等级，降低后者的等级。</p>
+<p>在索引全文本数据时，短词被忽略且从索引中排除。(短词：3个或3个以下字符的词)</p>
+<p>MYSQL规定，如果一个词出现在50%以上的行中，则将它作为一个非用词忽略。(MySQL带有一个内建的非用词)</p>
+<p>忽略词的单引号。例如don’t索引为dont。</p>
+<p>仅在MyISAM数据库引擎中支持全文本搜索。</p>
+<p>MYSQL全文本搜索不支持邻近操作符。(他能搜索相邻的词)</p>
 
       
     </div>
@@ -127,6 +175,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2018/05/05/MySQL必知必会/第十九章/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          MySQL必知必会学习笔记(9)
+        
+      </div>
+    </a>
   
   
     <a href="/2018/04/25/MySQL必知必会/第十五十六章/" id="article-nav-older" class="article-nav-link-wrap">
@@ -176,7 +233,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
     </div>
   </div>
 
@@ -187,6 +244,10 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2018/05/05/MySQL必知必会/第十九章/">MySQL必知必会学习笔记(9)</a>
+          </li>
         
           <li>
             <a href="/2018/04/27/MySQL必知必会/第十七十八章/">MySQL必知必会学习笔记(8)</a>
@@ -202,10 +263,6 @@
         
           <li>
             <a href="/2018/04/24/MySQL必知必会/第十十一十二章/">MySQL必知必会学习笔记(5)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/24/MySQL必知必会/第七八九章/">MySQL必知必会学习笔记(4)</a>
           </li>
         
       </ul>
