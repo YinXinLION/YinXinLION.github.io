@@ -65,6 +65,57 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-设计模式(代理模式)" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/16/设计模式(代理模式)/" class="article-date">
+  <time datetime="2018-04-16T13:53:50.000Z" itemprop="datePublished">2018-04-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/设计模式/">设计模式</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/16/设计模式(代理模式)/">代理模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>代理模式：为另一个对象提供一个替身或占位符以控制对这个对象的访问。</p>
+<p>让我们来看一下远程代理：<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-16/40586514.jpg" alt=""><br>本地堆(客户对象-&gt;客户辅助对象) | 远程堆(服务辅助对象-&gt;服务对象)<br>客户对象：以为在和正真的服务沟通,以为客户辅助对象就是能够真正做事情的东西。<br>客户辅助对象：这是个代理对象。他假装自己是服务。<br>服务辅助对象：从客户辅助对象处取得请求,对它解包,调用真正服务上的方法。<br>服务对象：真正提供服务的方法,他的方法真正在做事情。</p>
+<p>java RMI提供了客户辅助对象和服务辅助对象，为客户辅助对象创建和服务对象相同的方法。<br>RMI：将客户辅助对象成为stub(桩)，服务辅助对象成为skeleton(骨架).<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//客户会调用这个接口，所以 客户服务者，服务对象都要实现这个接口</span><br><span class="line">public interface MyRemote extends Remote&#123;</span><br><span class="line">    //注意！！ 返回值必须是基本类型或可序列化类型。</span><br><span class="line">    String sayHello() throws RuntimeException;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">//服务具体实现</span><br><span class="line"></span><br><span class="line">public class MyRemoteImpl extends UnicastRemoteObject implements MyRemote&#123;</span><br><span class="line">    protected MyRemoteImpl() throws RemoteException &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    @Override</span><br><span class="line">    public String sayHello() throws RuntimeException &#123;</span><br><span class="line">        return &quot;hello&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            MyRemote service = new MyRemoteImpl();</span><br><span class="line">            Naming.bind(&quot;RemoteHello&quot;, service);//注册</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; catch (MalformedURLException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; catch (AlreadyBoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class Client &#123; //客户调用</span><br><span class="line">    public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException &#123;</span><br><span class="line">        MyRemote service = (MyRemote) Naming.lookup(&quot;rmi://127.0.0.1/RemoteHello&quot;);//从RMI 注册中获取</span><br><span class="line">        System.out.println(service.sayHello());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>客户并不知道如何去跟远程对象沟通，代理控制了远程对象的访问，客户去操作代理对象。<br>被代理的对象可以是：远程对象(远程代理)、创建开销大的对象(虚拟代理)、或需要安全控制的对象(保护代理)。</p>
+<p>代理模式和装饰者模式很像：但是代理模式是为其他对象提供一种代理以控制对这个对象的访问。装饰者模式是用来增强增加对象行为的。他们结构类似，但目的不同哦。</p>
+<p>动态代理：运行时才将它的类创建传来，所以叫动态代理。可以通过方法<code>isProxyClass()</code>来判断这个类是否是代理类。<br>通过<code>Proxy.newProxyInstance()</code>方法动态地创建代理。</p>
+<p>防火墙代理：控制网络资源的访问，保护主题免于”坏客户”的侵害。<br>智能引用代理：当主题被引用时，进行额外的动作，例如计算一个对象被引用的次数。<br>缓存代理：为开销大的运算结果提供暂时存储，它也允许多个客户共享结果，以减少计算或网络延迟。<br>同步代理：在多线程的情况下为主题提供安全的访问。<br>复杂隐藏代理：也成为外观模式，代理控制访问。<br>写入时复制代理：用来控制对象的复制，方法是延迟对象的复制，直到客户真的需要为止。</p>
+<p>远程代理管理客户和远程对象之间的交互。<br>虚拟代理控制访问实例化开销大的对象，可以在访问时做一些处理(启动一个线程进行创建对象，防止因等待对象而挂起)、<br>保护代理基于调用者控制对象方法的访问。做一些处理(判断这个方法名是否允许执行)</p>
+<p>代理会造成你的设计中类的数目增加。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/16/设计模式(代理模式)/" data-id="cjg4i9a9p000wwovah0j3qgmz" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-设计模式(状态模式)" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/04/15/设计模式(状态模式)/" class="article-date">
@@ -552,47 +603,6 @@
 
 
   
-    <article id="post-Python入门学习(四)-模块" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/01/28/Python入门学习(四)-模块/" class="article-date">
-  <time datetime="2018-01-28T02:31:44.000Z" itemprop="datePublished">2018-01-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/28/Python入门学习(四)-模块/">Python入门学习(四)</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="while循环"><a href="#while循环" class="headerlink" title="while循环"></a>while循环</h3><p>先来看下Python的while和for循环<br>while循环可以在结束时执行一个逻辑，看代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">counter = 1</span><br><span class="line">while counter &lt;= 10 :</span><br><span class="line">    counter += 1</span><br><span class="line">    print(counter)</span><br><span class="line">else:</span><br><span class="line">    print(&apos;EOF&apos;)</span><br><span class="line"></span><br><span class="line">#当while执行false时，可执行else代码块。</span><br></pre></td></tr></table></figure></p>
-        
-          <p class="article-more-link">
-            <a href="/2018/01/28/Python入门学习(四)-模块/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/28/Python入门学习(四)-模块/" data-id="cjg4i9a90000cwovan692ciz5" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -650,7 +660,11 @@
       <ul>
         
           <li>
-            <a href="/2018/05/05/MySQL必知必会/第十九章/">MySQL必知必会学习笔记(9)</a>
+            <a href="/2018/05/30/MySQL必知必会/第二十二章/">MySQL必知必会学习笔记(10)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/05/MySQL必知必会/第十九二十二十一章/">MySQL必知必会学习笔记(9)</a>
           </li>
         
           <li>
@@ -663,10 +677,6 @@
         
           <li>
             <a href="/2018/04/25/MySQL必知必会/第十三十四章/">MySQL必知必会学习笔记(6)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/24/MySQL必知必会/第十十一十二章/">MySQL必知必会学习笔记(5)</a>
           </li>
         
       </ul>

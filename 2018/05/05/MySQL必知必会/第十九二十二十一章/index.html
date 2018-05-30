@@ -11,11 +11,11 @@
 <meta name="keywords" content="MySQL必知必会">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL必知必会学习笔记(9)">
-<meta property="og:url" content="http://yoursite.com/2018/05/05/MySQL必知必会/第十九章/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/05/05/MySQL必知必会/第十九二十二十一章/index.html">
 <meta property="og:site_name" content="努力是为了将对世界的所有渴望都掌握在手上">
 <meta property="og:description" content="插入数据INSERT是用来插入(或添加)行到数据库表的。插入可以用几种方式使用：  插入完整的行； 插入行的一部分； 插入多行； 插入某些查询的结果  插入完整的行： 要求制定表名和被插入到新行中的值。12345678910INSERT INTO CustomersVALUES(NULL,        &amp;apos;Pep E. Lapew&amp;apos;,        &amp;apos;100 Main">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-05T15:17:21.796Z">
+<meta property="og:updated_time" content="2018-05-30T10:16:34.513Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL必知必会学习笔记(9)">
 <meta name="twitter:description" content="插入数据INSERT是用来插入(或添加)行到数据库表的。插入可以用几种方式使用：  插入完整的行； 插入行的一部分； 插入多行； 插入某些查询的结果  插入完整的行： 要求制定表名和被插入到新行中的值。12345678910INSERT INTO CustomersVALUES(NULL,        &amp;apos;Pep E. Lapew&amp;apos;,        &amp;apos;100 Main">
@@ -65,9 +65,9 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-MySQL必知必会/第十九章" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-MySQL必知必会/第十九二十二十一章" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/05/05/MySQL必知必会/第十九章/" class="article-date">
+    <a href="/2018/05/05/MySQL必知必会/第十九二十二十一章/" class="article-date">
   <time datetime="2018-05-05T10:47:00.000Z" itemprop="datePublished">2018-05-05</time>
 </a>
     
@@ -133,11 +133,36 @@
 <li>使用强制实施引用完整性的数据库，这样MYSQL将不允许删除具有与其他表相关联的数据的行。</li>
 </ol>
 <p><strong>小心使用：</strong> MYSQL没有撤销(undo)按钮。</p>
+<h2 id="创建和操纵表"><a href="#创建和操纵表" class="headerlink" title="创建和操纵表"></a>创建和操纵表</h2><p>创建表的方法有两种：1.使用工具 2.直接用MySQL语句。<br>利用CREATE TABLE创建表，必须给出下列信息：</p>
+<ol>
+<li>新表的名字，在关键字CREATE TABLE之后给出；</li>
+<li>表列的名字和定义，用逗号分隔；<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE customers</span><br><span class="line">(</span><br><span class="line">  cust_id int NOT NULL AUTO_INCREMENT,</span><br><span class="line">  cust_name char(50) NOT NULL,</span><br><span class="line">  PRIMARY KEY(cust_id)</span><br><span class="line">) ENGINE=InnoDB;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果仅想在一个表不存在时创建它，应该在表名后给出IF NOT EXISTS。它查看表名是否存在，并且仅在表名不存在时创建它。</p>
+<h3 id="使用NULL值"><a href="#使用NULL值" class="headerlink" title="使用NULL值"></a>使用NULL值</h3><p>NULL值就是没有值或缺值。允许NULL值得列也允许在插入时不给出该列的值。</p>
+<p>不要把NULL值与空串相混淆。NULL值是没有值，它不是空串。空串是一个有效的值，它不是无值。NULL值用关键字NULL而不是空串指定。</p>
+<h3 id="主键再介绍"><a href="#主键再介绍" class="headerlink" title="主键再介绍"></a>主键再介绍</h3><p>主键值必须唯一。如果主键使用单个列，则它的值必须唯一。如果使用多个列，则这些列的组合值必须唯一。<br><code>PRIMARY KEY(order_num, order_item)</code><br>主键唯一标识表中每个行的列。主键中只能使用不允许NULL值得列。允许NULL值得列不能作为唯一标识。</p>
+<h3 id="使用AUTO-INCREMENT"><a href="#使用AUTO-INCREMENT" class="headerlink" title="使用AUTO_INCREMENT"></a>使用AUTO_INCREMENT</h3><p>AUTO_INCREMENT告诉MYSQL，本列每当增加一行时自动增量。每次执行一个INSERT操作，MYSQL自动对该增列增量，给该列赋予下一个可用的值。<br>每个表只允许一个AUTO_INCREMENT列，而且它必须被索引。</p>
+<p><code>SELECT last_insert_id()</code>此语句返回最后一个AUTO_INCREMENT值，然后可以将它用于后续语句。</p>
+<h3 id="指定默认值"><a href="#指定默认值" class="headerlink" title="指定默认值"></a>指定默认值</h3><p>如果插入行时没有给出值，MySQL允许指定此时使用的默认值。默认值用CREATE TABLE语句中的DEFAULT关键字指定。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE(</span><br><span class="line">      order_num int NOT NULL,</span><br><span class="line">      order_item int NOT NULL,</span><br><span class="line">      quantity int NOT NULL DEFAULT 1,</span><br><span class="line">      PRIMARY KEY(order_num, order_item)</span><br><span class="line">)ENGINE=InnoDB;</span><br></pre></td></tr></table></figure></p>
+<p>MySQL不允许使用函数作为默认值，它只支持常量。<br>使用默认值而不是NULL。</p>
+<h3 id="引擎类型"><a href="#引擎类型" class="headerlink" title="引擎类型"></a>引擎类型</h3><p>MySQL有一个具体管理和处理数据的内部引擎。在你使用CREATE TABLE语句时，该引擎具体创建表，而在你使用SELECT语句或进行其他数据库处理时，该引擎在内部处理你的请求。MySQL具有多种引擎，它打包多个引擎，这些引擎都隐藏在MySQL服务器内，全都能执行CREATE TABLE和SELECT等命令。</p>
+<ol>
+<li>Innodb是一个可靠的事务处理引擎，它不支持全文本搜索。</li>
+<li>MEMORY在功能上等同于MyISAM，但由于数据存储在内存(不是磁盘)中，速度很快(特别适用于临时表)。</li>
+<li>MyISAM是一个性能极高的引擎，它支持全文本搜索，但不支持事务处理。</li>
+</ol>
+<p>使用一个引擎的表不能引用具有使用不同引擎的表的外键。</p>
+<h3 id="更新表"><a href="#更新表" class="headerlink" title="更新表"></a>更新表</h3><p>使用ALTER TABLE语句，1.在ALTER TABLE之后给出要更改的表名(表必须存在)2.所做更改的列表。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 给表添加一个列</span><br><span class="line">ALTER TALBE vendors</span><br><span class="line">ADD vend_phone CHAR(20);</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 删除刚刚添加的列</span><br><span class="line">ALTER TABLE Vendors</span><br><span class="line">DROP COLUMN vend_phone;</span><br></pre></td></tr></table></figure>
+<p>ALTER TABLE的一种常见用途是定义外键。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE orderitems</span><br><span class="line">ADD CONSTRAINT fk_orderitems_orders</span><br><span class="line">FOREGIN KEY(order_item) REFERENCE orders(order_item);</span><br></pre></td></tr></table></figure></p>
+<h3 id="删除表"><a href="#删除表" class="headerlink" title="删除表"></a>删除表</h3><p>删除表使用DROP TABLE语句。<code>DROP TABLE customer2;</code></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/05/MySQL必知必会/第十九章/" data-id="cjgtj8klz0000rkvas0k6bmr4" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/05/05/MySQL必知必会/第十九二十二十一章/" data-id="cjht999h50002acvabrlla4cs" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
@@ -147,6 +172,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2018/05/30/MySQL必知必会/第二十二章/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          MySQL必知必会学习笔记(10)
+        
+      </div>
+    </a>
   
   
     <a href="/2018/04/27/MySQL必知必会/第十七十八章/" id="article-nav-older" class="article-nav-link-wrap">
@@ -209,7 +243,11 @@
       <ul>
         
           <li>
-            <a href="/2018/05/05/MySQL必知必会/第十九章/">MySQL必知必会学习笔记(9)</a>
+            <a href="/2018/05/30/MySQL必知必会/第二十二章/">MySQL必知必会学习笔记(10)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/05/MySQL必知必会/第十九二十二十一章/">MySQL必知必会学习笔记(9)</a>
           </li>
         
           <li>
@@ -222,10 +260,6 @@
         
           <li>
             <a href="/2018/04/25/MySQL必知必会/第十三十四章/">MySQL必知必会学习笔记(6)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/24/MySQL必知必会/第十十一十二章/">MySQL必知必会学习笔记(5)</a>
           </li>
         
       </ul>

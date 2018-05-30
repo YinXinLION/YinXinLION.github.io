@@ -65,9 +65,60 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-MySQL必知必会/第十九章" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-MySQL必知必会/第二十二章" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/05/05/MySQL必知必会/第十九章/" class="article-date">
+    <a href="/2018/05/30/MySQL必知必会/第二十二章/" class="article-date">
+  <time datetime="2018-05-30T13:38:00.000Z" itemprop="datePublished">2018-05-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/30/MySQL必知必会/第二十二章/">MySQL必知必会学习笔记(10)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h2><p>MySQL5添加了对视图的支持。视图，是虚拟的表，与包含数据的表不一样，视图只包含使用时动态检索数据的查询。</p>
+<p>开始理解视图，看这个SELECT语句。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT cust_name, cust_contact</span><br><span class="line">FROM customers, orders, orderitems</span><br><span class="line">WHERE customers.cust_id = orders.cust_id</span><br><span class="line">      AND orderitems.order_num = orders.order_num</span><br><span class="line">      AND prod_id = &apos;TNT2&apos;;</span><br></pre></td></tr></table></figure></p>
+<p>把整个查询包装成一个名为productcustomers的虚拟表,可轻松检索出相同数据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT cust_name, cust_contact</span><br><span class="line">FROM productcustomers</span><br><span class="line">WHERE prod_id = &apos;TNT2&apos;;</span><br></pre></td></tr></table></figure></p>
+<p>productcustomers只是一个视图，它不包含表中应该有的任何列或数据，它包含的是一个SQL查询。</p>
+<h3 id="为什么使用视图"><a href="#为什么使用视图" class="headerlink" title="为什么使用视图"></a>为什么使用视图</h3><ol>
+<li>重用SQL</li>
+<li>简化复杂的SQL查询。</li>
+<li>使用表的组成部分而不是整个表。</li>
+<li>保护数据。可以给用户授予表的特定部分的访问权限而不是整个表的访问权限。</li>
+<li>更改数据格式和表示。视图可返回与底层表的表示和格式不同的数据。</li>
+</ol>
+<p>可以对视图执行SELECT操作，过滤和排序数据，将视图联结到其他视图或表，甚至能添加和更新数据。<br>在添加或更改这些表中的数据时，视图将返回改变过的数据。</p>
+<p><strong>性能问题</strong>：因为视图不包含数据，每次使用视图时，都必须处理查询执行时所需的任一个检索。如果你用多个联结和过滤创建了复杂的视图或者嵌套视图，性能会下降的很厉害。因此，在部署使用了大量视图的应用前，应该进行测试。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/05/30/MySQL必知必会/第二十二章/" data-id="cjht999gu0000acvasq1hx75v" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-MySQL必知必会/第十九二十二十一章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/05/MySQL必知必会/第十九二十二十一章/" class="article-date">
   <time datetime="2018-05-05T10:47:00.000Z" itemprop="datePublished">2018-05-05</time>
 </a>
     
@@ -79,7 +130,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/05/MySQL必知必会/第十九章/">MySQL必知必会学习笔记(9)</a>
+      <a class="article-title" href="/2018/05/05/MySQL必知必会/第十九二十二十一章/">MySQL必知必会学习笔记(9)</a>
     </h1>
   
 
@@ -133,11 +184,36 @@
 <li>使用强制实施引用完整性的数据库，这样MYSQL将不允许删除具有与其他表相关联的数据的行。</li>
 </ol>
 <p><strong>小心使用：</strong> MYSQL没有撤销(undo)按钮。</p>
+<h2 id="创建和操纵表"><a href="#创建和操纵表" class="headerlink" title="创建和操纵表"></a>创建和操纵表</h2><p>创建表的方法有两种：1.使用工具 2.直接用MySQL语句。<br>利用CREATE TABLE创建表，必须给出下列信息：</p>
+<ol>
+<li>新表的名字，在关键字CREATE TABLE之后给出；</li>
+<li>表列的名字和定义，用逗号分隔；<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE customers</span><br><span class="line">(</span><br><span class="line">  cust_id int NOT NULL AUTO_INCREMENT,</span><br><span class="line">  cust_name char(50) NOT NULL,</span><br><span class="line">  PRIMARY KEY(cust_id)</span><br><span class="line">) ENGINE=InnoDB;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果仅想在一个表不存在时创建它，应该在表名后给出IF NOT EXISTS。它查看表名是否存在，并且仅在表名不存在时创建它。</p>
+<h3 id="使用NULL值"><a href="#使用NULL值" class="headerlink" title="使用NULL值"></a>使用NULL值</h3><p>NULL值就是没有值或缺值。允许NULL值得列也允许在插入时不给出该列的值。</p>
+<p>不要把NULL值与空串相混淆。NULL值是没有值，它不是空串。空串是一个有效的值，它不是无值。NULL值用关键字NULL而不是空串指定。</p>
+<h3 id="主键再介绍"><a href="#主键再介绍" class="headerlink" title="主键再介绍"></a>主键再介绍</h3><p>主键值必须唯一。如果主键使用单个列，则它的值必须唯一。如果使用多个列，则这些列的组合值必须唯一。<br><code>PRIMARY KEY(order_num, order_item)</code><br>主键唯一标识表中每个行的列。主键中只能使用不允许NULL值得列。允许NULL值得列不能作为唯一标识。</p>
+<h3 id="使用AUTO-INCREMENT"><a href="#使用AUTO-INCREMENT" class="headerlink" title="使用AUTO_INCREMENT"></a>使用AUTO_INCREMENT</h3><p>AUTO_INCREMENT告诉MYSQL，本列每当增加一行时自动增量。每次执行一个INSERT操作，MYSQL自动对该增列增量，给该列赋予下一个可用的值。<br>每个表只允许一个AUTO_INCREMENT列，而且它必须被索引。</p>
+<p><code>SELECT last_insert_id()</code>此语句返回最后一个AUTO_INCREMENT值，然后可以将它用于后续语句。</p>
+<h3 id="指定默认值"><a href="#指定默认值" class="headerlink" title="指定默认值"></a>指定默认值</h3><p>如果插入行时没有给出值，MySQL允许指定此时使用的默认值。默认值用CREATE TABLE语句中的DEFAULT关键字指定。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE(</span><br><span class="line">      order_num int NOT NULL,</span><br><span class="line">      order_item int NOT NULL,</span><br><span class="line">      quantity int NOT NULL DEFAULT 1,</span><br><span class="line">      PRIMARY KEY(order_num, order_item)</span><br><span class="line">)ENGINE=InnoDB;</span><br></pre></td></tr></table></figure></p>
+<p>MySQL不允许使用函数作为默认值，它只支持常量。<br>使用默认值而不是NULL。</p>
+<h3 id="引擎类型"><a href="#引擎类型" class="headerlink" title="引擎类型"></a>引擎类型</h3><p>MySQL有一个具体管理和处理数据的内部引擎。在你使用CREATE TABLE语句时，该引擎具体创建表，而在你使用SELECT语句或进行其他数据库处理时，该引擎在内部处理你的请求。MySQL具有多种引擎，它打包多个引擎，这些引擎都隐藏在MySQL服务器内，全都能执行CREATE TABLE和SELECT等命令。</p>
+<ol>
+<li>Innodb是一个可靠的事务处理引擎，它不支持全文本搜索。</li>
+<li>MEMORY在功能上等同于MyISAM，但由于数据存储在内存(不是磁盘)中，速度很快(特别适用于临时表)。</li>
+<li>MyISAM是一个性能极高的引擎，它支持全文本搜索，但不支持事务处理。</li>
+</ol>
+<p>使用一个引擎的表不能引用具有使用不同引擎的表的外键。</p>
+<h3 id="更新表"><a href="#更新表" class="headerlink" title="更新表"></a>更新表</h3><p>使用ALTER TABLE语句，1.在ALTER TABLE之后给出要更改的表名(表必须存在)2.所做更改的列表。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 给表添加一个列</span><br><span class="line">ALTER TALBE vendors</span><br><span class="line">ADD vend_phone CHAR(20);</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 删除刚刚添加的列</span><br><span class="line">ALTER TABLE Vendors</span><br><span class="line">DROP COLUMN vend_phone;</span><br></pre></td></tr></table></figure>
+<p>ALTER TABLE的一种常见用途是定义外键。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE orderitems</span><br><span class="line">ADD CONSTRAINT fk_orderitems_orders</span><br><span class="line">FOREGIN KEY(order_item) REFERENCE orders(order_item);</span><br></pre></td></tr></table></figure></p>
+<h3 id="删除表"><a href="#删除表" class="headerlink" title="删除表"></a>删除表</h3><p>删除表使用DROP TABLE语句。<code>DROP TABLE customer2;</code></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/05/MySQL必知必会/第十九章/" data-id="cjgtj8klz0000rkvas0k6bmr4" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/05/05/MySQL必知必会/第十九二十二十一章/" data-id="cjht999h50002acvabrlla4cs" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
@@ -699,57 +775,6 @@
 
 
   
-    <article id="post-设计模式(代理模式)" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/04/16/设计模式(代理模式)/" class="article-date">
-  <time datetime="2018-04-16T13:53:50.000Z" itemprop="datePublished">2018-04-16</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/设计模式/">设计模式</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/16/设计模式(代理模式)/">代理模式</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>代理模式：为另一个对象提供一个替身或占位符以控制对这个对象的访问。</p>
-<p>让我们来看一下远程代理：<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-16/40586514.jpg" alt=""><br>本地堆(客户对象-&gt;客户辅助对象) | 远程堆(服务辅助对象-&gt;服务对象)<br>客户对象：以为在和正真的服务沟通,以为客户辅助对象就是能够真正做事情的东西。<br>客户辅助对象：这是个代理对象。他假装自己是服务。<br>服务辅助对象：从客户辅助对象处取得请求,对它解包,调用真正服务上的方法。<br>服务对象：真正提供服务的方法,他的方法真正在做事情。</p>
-<p>java RMI提供了客户辅助对象和服务辅助对象，为客户辅助对象创建和服务对象相同的方法。<br>RMI：将客户辅助对象成为stub(桩)，服务辅助对象成为skeleton(骨架).<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//客户会调用这个接口，所以 客户服务者，服务对象都要实现这个接口</span><br><span class="line">public interface MyRemote extends Remote&#123;</span><br><span class="line">    //注意！！ 返回值必须是基本类型或可序列化类型。</span><br><span class="line">    String sayHello() throws RuntimeException;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">//服务具体实现</span><br><span class="line"></span><br><span class="line">public class MyRemoteImpl extends UnicastRemoteObject implements MyRemote&#123;</span><br><span class="line">    protected MyRemoteImpl() throws RemoteException &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    @Override</span><br><span class="line">    public String sayHello() throws RuntimeException &#123;</span><br><span class="line">        return &quot;hello&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            MyRemote service = new MyRemoteImpl();</span><br><span class="line">            Naming.bind(&quot;RemoteHello&quot;, service);//注册</span><br><span class="line">        &#125; catch (RemoteException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; catch (MalformedURLException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; catch (AlreadyBoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class Client &#123; //客户调用</span><br><span class="line">    public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException &#123;</span><br><span class="line">        MyRemote service = (MyRemote) Naming.lookup(&quot;rmi://127.0.0.1/RemoteHello&quot;);//从RMI 注册中获取</span><br><span class="line">        System.out.println(service.sayHello());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>客户并不知道如何去跟远程对象沟通，代理控制了远程对象的访问，客户去操作代理对象。<br>被代理的对象可以是：远程对象(远程代理)、创建开销大的对象(虚拟代理)、或需要安全控制的对象(保护代理)。</p>
-<p>代理模式和装饰者模式很像：但是代理模式是为其他对象提供一种代理以控制对这个对象的访问。装饰者模式是用来增强增加对象行为的。他们结构类似，但目的不同哦。</p>
-<p>动态代理：运行时才将它的类创建传来，所以叫动态代理。可以通过方法<code>isProxyClass()</code>来判断这个类是否是代理类。<br>通过<code>Proxy.newProxyInstance()</code>方法动态地创建代理。</p>
-<p>防火墙代理：控制网络资源的访问，保护主题免于”坏客户”的侵害。<br>智能引用代理：当主题被引用时，进行额外的动作，例如计算一个对象被引用的次数。<br>缓存代理：为开销大的运算结果提供暂时存储，它也允许多个客户共享结果，以减少计算或网络延迟。<br>同步代理：在多线程的情况下为主题提供安全的访问。<br>复杂隐藏代理：也成为外观模式，代理控制访问。<br>写入时复制代理：用来控制对象的复制，方法是延迟对象的复制，直到客户真的需要为止。</p>
-<p>远程代理管理客户和远程对象之间的交互。<br>虚拟代理控制访问实例化开销大的对象，可以在访问时做一些处理(启动一个线程进行创建对象，防止因等待对象而挂起)、<br>保护代理基于调用者控制对象方法的访问。做一些处理(判断这个方法名是否允许执行)</p>
-<p>代理会造成你的设计中类的数目增加。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/04/16/设计模式(代理模式)/" data-id="cjg4i9a9p000wwovah0j3qgmz" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -807,7 +832,11 @@
       <ul>
         
           <li>
-            <a href="/2018/05/05/MySQL必知必会/第十九章/">MySQL必知必会学习笔记(9)</a>
+            <a href="/2018/05/30/MySQL必知必会/第二十二章/">MySQL必知必会学习笔记(10)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/05/MySQL必知必会/第十九二十二十一章/">MySQL必知必会学习笔记(9)</a>
           </li>
         
           <li>
@@ -820,10 +849,6 @@
         
           <li>
             <a href="/2018/04/25/MySQL必知必会/第十三十四章/">MySQL必知必会学习笔记(6)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/24/MySQL必知必会/第十十一十二章/">MySQL必知必会学习笔记(5)</a>
           </li>
         
       </ul>
