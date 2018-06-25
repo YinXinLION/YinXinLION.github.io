@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>MySQL必知必会学习笔记(11) | 努力是为了将对世界的所有渴望都掌握在手上</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="对触发器的支持是在MySQL 5中增加的。MySQL语句在需要时被执行，存储过程也是如此。但是，如果你想要某条语句（或某些语句）在事件发生时自动执行，怎么办呢？  每当增加一个顾客到某个数据库表时，都检查其电话号码格式是否正确，州的缩写是否为大写； 每当订购一个产品时，都从库存数量中减去订购的数量； 无论何时删除一行，都在某个存档表中保留一个副本  所有这些例子的共同之处是它们都需要在某个表发生更">
+<meta name="keywords" content="MySQL必知必会">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL必知必会学习笔记(11)">
+<meta property="og:url" content="http://yoursite.com/2018/06/15/MySQL必知必会/第二十五二十六二十七三十章/index.html">
+<meta property="og:site_name" content="努力是为了将对世界的所有渴望都掌握在手上">
+<meta property="og:description" content="对触发器的支持是在MySQL 5中增加的。MySQL语句在需要时被执行，存储过程也是如此。但是，如果你想要某条语句（或某些语句）在事件发生时自动执行，怎么办呢？  每当增加一个顾客到某个数据库表时，都检查其电话号码格式是否正确，州的缩写是否为大写； 每当订购一个产品时，都从库存数量中减去订购的数量； 无论何时删除一行，都在某个存档表中保留一个副本  所有这些例子的共同之处是它们都需要在某个表发生更">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-6-17/18493105.jpg">
+<meta property="og:updated_time" content="2018-06-17T10:28:22.929Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL必知必会学习笔记(11)">
+<meta name="twitter:description" content="对触发器的支持是在MySQL 5中增加的。MySQL语句在需要时被执行，存储过程也是如此。但是，如果你想要某条语句（或某些语句）在事件发生时自动执行，怎么办呢？  每当增加一个顾客到某个数据库表时，都检查其电话号码格式是否正确，州的缩写是否为大写； 每当订购一个产品时，都从库存数量中减去订购的数量； 无论何时删除一行，都在某个存档表中保留一个副本  所有这些例子的共同之处是它们都需要在某个表发生更">
+<meta name="twitter:image" content="http://oqp1ywek9.bkt.clouddn.com/18-6-17/18493105.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="努力是为了将对世界的所有渴望都掌握在手上" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">努力是为了将对世界的所有渴望都掌握在手上</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-MySQL必知必会/第二十五二十六二十七三十章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/15/MySQL必知必会/第二十五二十六二十七三十章/" class="article-date">
+  <time datetime="2018-06-15T07:37:00.000Z" itemprop="datePublished">2018-06-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MySQL必知必会学习笔记(11)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>对触发器的支持是在MySQL 5中增加的。MySQL语句在需要时被执行，存储过程也是如此。但是，如果你想要某条语句（或某些语句）在事件发生时自动执行，怎么办呢？</p>
+<ol>
+<li>每当增加一个顾客到某个数据库表时，都检查其电话号码格式是<br>否正确，州的缩写是否为大写；</li>
+<li>每当订购一个产品时，都从库存数量中减去订购的数量；</li>
+<li>无论何时删除一行，都在某个存档表中保留一个副本</li>
+</ol>
+<p>所有这些例子的共同之处是它们都需要在某个表发生更改时自动处理。这确切地说就是触发器。触发器是MySQL响应以下任意语句而自动执行的一条MySQL语句（或位于 BEGIN 和 END 语句之间的一组语句）：1.DELETE 2.INSERT 3.UPDATE  其他MySQL语句不支持触发器。</p>
+<p>创建触发器时，需要给出4个信息：</p>
+<ol>
+<li>唯一的触发器名；</li>
+<li>触发器关联的表；</li>
+<li>触发器应该响应的活动(DELETE,INSERT或UPDATE)</li>
+<li>触发器何时执行(处理之前或之后)</li>
+</ol>
+<p>保持每个数据库的触发器名唯一：MySQL5中，触发器名必须在每个表里唯一。</p>
+<p>触发器使用CREATE TRIGGER语句创建。(trigger 翻译为 触发；使运行)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CREATE TRIGGER newproduct AFTER INSERT ON products</span><br><span class="line">FOR EACH ROW SELECT &apos;Product added&apos;;</span><br><span class="line">-- 会报错 在mysql的trigger和function中不能出现select * from table形式的查询，因为其会返回一个结果集；</span><br><span class="line">-- [Err] 1415 - Not allowed to return a result set from a trigger</span><br><span class="line">-- 以使用用户变量在function中，然后在外部使用select @用户变量查看你的变量值</span><br></pre></td></tr></table></figure></p>
+<p>CREATE TRIGGER 用来创建名为 newproduct 的新触发器。触发器可在一个操作发生之前或之后执行，这里给出了 AFTER INSERT ，所以此触发器将在 INSERT 语句成功执行后执行。这个触发器还指定 FOREACH ROW ，因此代码对每个插入行执行。</p>
+<p>DELETE触发器：在DELETE触发器代码内，可以引用一个名为OLD的虚拟表，访问被删除的行。OLD的值全部只读，不能更新<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-- 演示使用 OLD 保存将要被删除的行到一个存档表中</span><br><span class="line">CREATE TRIGGER deleteorder BEFORE DELETE ON orders</span><br><span class="line">FOR EACH ROW</span><br><span class="line">BEGIN</span><br><span class="line">  INSERT INTO archive_orders(order_num, order_date, cust_id)</span><br><span class="line">  VALUES(OLD.order_num, OLD.order_date, OLD.cust_id);</span><br><span class="line">END;</span><br></pre></td></tr></table></figure></p>
+<p>UPDATE触发器：</p>
+<ol>
+<li>在UPDATE触发器代码时，可以引用一个名为OLD的虚拟表访问以前的值，引用一个名为NEW的虚拟表访问新更新的值。</li>
+<li>在BEFORE UPDATE触发器中,NEW中的值可能也被更新。</li>
+<li>OLD中的值全都是只读的，不能更新。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-- 保证州名是大写</span><br><span class="line">CREATE TRIGGER updatevendor BEFORE UPDATE ON vendors</span><br><span class="line">FOR EACH ROW SET NEW.vend_state = Upper(NEW.vend_state);</span><br></pre></td></tr></table></figure>
+<p>每次更新一行时，NEW.vend_state中的值都用Upper(NEW.vend_state)替换。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
+<li>创建触发器可能需要特殊的安全访问权限，但是触发器的执行不需要。</li>
+<li>应该用触发器来保证数据的一致性。</li>
+<li>MYSQL触发器不支持CALL语句。</li>
+</ol>
+<p>学习了什么是触发器，如何创建，如何使用它。</p>
+<h2 id="管理事务处理"><a href="#管理事务处理" class="headerlink" title="管理事务处理"></a>管理事务处理</h2><p>MyISAM不支持事务管理，InnoDB支持事务管理。 事务处理可以用来维护数据库的完整性(原子性)，它保证成批的MySQL操作要么完全执行，要么完全不执行。</p>
+<p>事务(transaction):指一组SQL语句。<br>回退(rollback):指撤销执行SQL语句的过程。<br>提交(commit):指将未存储的SQL语句结果写入数据库表。<br>保留点(savepoint):指事务处理中设置的临时占位符，你可以对它发布回退。</p>
+<h3 id="控制事务处理"><a href="#控制事务处理" class="headerlink" title="控制事务处理"></a>控制事务处理</h3><p>MySQL使用下面的语句来标识事务的开始：<code>START TRANSACTION</code></p>
+<h4 id="使用ROLLBACK"><a href="#使用ROLLBACK" class="headerlink" title="使用ROLLBACK"></a>使用ROLLBACK</h4><p>MySQL的ROLLBACK命令用来撤销MySQL语句<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM odertotals;</span><br><span class="line">START TRANSACTION;</span><br><span class="line">DELETE FROM ordertotals;</span><br><span class="line">SELECT * FROM ordertotals;</span><br><span class="line">ROLLBACK;</span><br><span class="line">SELECT * FROM ordertotals;</span><br></pre></td></tr></table></figure></p>
+<p>ROLLBACK只能在一个事务处理内使用(在执行一条START TRANSACTION命令后)。</p>
+<p><strong>哪些语句可以回退？</strong><br>事务处理用来管理INSERT、UPDATE和DELETE语句，不能回退SELECT语句。也不能回退CREATE或DROP操作。事务处理块中可以使用这两天语句，但如果执行回退，他们不会被撤销。</p>
+<h4 id="使用COMMIT"><a href="#使用COMMIT" class="headerlink" title="使用COMMIT"></a>使用COMMIT</h4><p>一般的MySQL语句都是直接针对数据库表执行和编写的，提交操作是自动进行的。<br>但是，在事务处理块中，提交不会隐含地进行。为进行明确的提交，使用COMMIT语句。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">START TRANSACTION;</span><br><span class="line">DELETE FROM orderitems WHERE order_num = 20010;</span><br><span class="line">DELETE FROM orders WHERE order_num = 20010;</span><br><span class="line">COMMIT;</span><br></pre></td></tr></table></figure></p>
+<p>如果第一条DELETE起作用，但第二条失败，则DELETE不会提交(实际上，它是被自动撤销的)<br><strong>隐含事务关闭：</strong> 当COMMIT或ROLLBACK语句执行后，事务会自动关闭(将来的更改会隐含提交)。</p>
+<h4 id="使用保留点"><a href="#使用保留点" class="headerlink" title="使用保留点"></a>使用保留点</h4><p>简单的ROLLBACK和COMMIT语句就可以写入或撤销整个事务处理。但是，只是对简单的事务处理才能这样做，更复杂的事务处理可能需要部分提交或回退。<br>为了支持回退部分事务处理，必须能在事务处理块中合适的位置放置占位符。如果需要回退，可以回退到某个占位符。<br>占位符称为保留点，为了创建占位符，可以使用SAVEPOINT语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SAVEPOINT delete1;</span><br></pre></td></tr></table></figure></p>
+<p>每个保留点都取标识它的唯一名字，以便在回退时，MySQL知道要回退到何处，为了回退到保留点，可进行：<code>ROLLBACK TO delete1;</code></p>
+<p>保留点在事务完成后释放。</p>
+<h4 id="更改默认的提交行为"><a href="#更改默认的提交行为" class="headerlink" title="更改默认的提交行为"></a>更改默认的提交行为</h4><p>默认的MySQL行为是自动提交所有更改，为指示MySQL不自动提交更改，需要使用以下语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SET autocommit=0;</span><br></pre></td></tr></table></figure></p>
+<p>autocommit标志决定是否自动提交更改，不管有没有COMMIT语句。设置autocommit为0(假)指示MySQL不自动提交更改(直到autocommit被设置为真为止)。<br><strong>标志为连接专用：</strong> autocommit标志是针对 <strong>每个连接</strong> 2而不是服务器的。</p>
+<h2 id="全球化和本地化"><a href="#全球化和本地化" class="headerlink" title="全球化和本地化"></a>全球化和本地化</h2><h3 id="字符集和校对顺序"><a href="#字符集和校对顺序" class="headerlink" title="字符集和校对顺序"></a>字符集和校对顺序</h3><p>数据库表被用来存储和检索数据。不同的语言和字符集需要以不同的方式存储和检索。因此，MySQL需要适应不同的字符集(不同的字母和字符),适应不同的排序和检索数据的方法。</p>
+<p><strong>字符集：</strong> 为字母和符号的集合。<br><strong>编码：</strong> 为某个字符集成员的内部表示。<br><strong>校对：</strong> 为规定字符如何比较的指令。</p>
+<h3 id="使用字符集和校对顺序"><a href="#使用字符集和校对顺序" class="headerlink" title="使用字符集和校对顺序"></a>使用字符集和校对顺序</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW CHARACTER SET;</span><br></pre></td></tr></table></figure>
+<p>显示所有可用的字符集以及每个字符集的描述和默认校对。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW COLLATION;</span><br></pre></td></tr></table></figure></p>
+<p>显示所有的校对，以及他们适用的字符集。<br>例如， latin1 对不同的欧洲<br>语言有几种校对，而且许多校对出现两次，一次区分大小写（由 <code>_cs</code> 表示），一次不区分大小写（由 <code>_ci</code> 表示）。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-6-17/18493105.jpg" alt=""></p>
+<p>为了确定所用的字符集和校对，可使用以下语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SHOW VARIABLES LIKE `character%`;</span><br><span class="line">SHOW VARIABLES LIKE `collation%`;</span><br></pre></td></tr></table></figure></p>
+<h2 id="改善性能"><a href="#改善性能" class="headerlink" title="改善性能"></a>改善性能</h2><ol>
+<li>MySQL是用一系列的默认设置预先配置的，从这些设置开始通常是很好的，但过一段时间后你可能需要调整内存分配、缓冲区大小等。</li>
+<li>MySQL一个多用户多线程的DBMS，它经常同时执行多个任务。如果这些任务中的某个执行缓慢，则所有请求都会执行缓慢。如果性能不良，可使用<code>SHOW PROCESSLIST</code>显示所有活动进程。</li>
+<li>使用EXPLAIN语句让MySQL解释它将如何执行一条SELECT语句。</li>
+<li>使用正确的数据类型。</li>
+<li>绝不要检索比需求还要多的数据。不要使用<code>SELECT *</code></li>
+<li>在导入数据时，应该关闭自动提交。</li>
+<li>索引数据库表以改善数据检索性能。</li>
+<li>SELECT语句有一系列复杂的OR条件，可以使用多条SELECT语句和连接他们的UNION语句，可极大改善性能。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/06/15/MySQL必知必会/第二十五二十六二十七三十章/" data-id="cjiudwu4t0000jcvakz55b5s4" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/05/30/MySQL必知必会/第二十二二十三二十四章/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">MySQL必知必会学习笔记(10)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java多线程/">Java多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx学习笔记/">Nginx学习笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python基础/">Python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习成长/">学习成长</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/心情/">心情</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/MySQL必知必会/" style="font-size: 10px;">MySQL必知必会</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/15/MySQL必知必会/第二十五二十六二十七三十章/">MySQL必知必会学习笔记(11)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/30/MySQL必知必会/第二十二二十三二十四章/">MySQL必知必会学习笔记(10)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/05/MySQL必知必会/第十九二十二十一章/">MySQL必知必会学习笔记(9)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/27/MySQL必知必会/第十七十八章/">MySQL必知必会学习笔记(8)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/04/25/MySQL必知必会/第十五十六章/">MySQL必知必会学习笔记(7)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 殷鑫<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

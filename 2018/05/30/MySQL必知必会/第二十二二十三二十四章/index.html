@@ -11,12 +11,12 @@
 <meta name="keywords" content="MySQL必知必会">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL必知必会学习笔记(10)">
-<meta property="og:url" content="http://yoursite.com/2018/05/30/MySQL必知必会/第二十二二十三章/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/05/30/MySQL必知必会/第二十二二十三二十四章/index.html">
 <meta property="og:site_name" content="努力是为了将对世界的所有渴望都掌握在手上">
 <meta property="og:description" content="视图MySQL5添加了对视图的支持。视图，是虚拟的表，与包含数据的表不一样，视图只包含使用时动态检索数据的查询。 开始理解视图，看这个SELECT语句。12345SELECT cust_name, cust_contactFROM customers, orders, orderitemsWHERE customers.cust_id = orders.cust_id      AND order">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-6-10/9057362.jpg">
-<meta property="og:updated_time" content="2018-06-14T16:38:42.365Z">
+<meta property="og:updated_time" content="2018-06-15T05:41:10.184Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL必知必会学习笔记(10)">
 <meta name="twitter:description" content="视图MySQL5添加了对视图的支持。视图，是虚拟的表，与包含数据的表不一样，视图只包含使用时动态检索数据的查询。 开始理解视图，看这个SELECT语句。12345SELECT cust_name, cust_contactFROM customers, orders, orderitemsWHERE customers.cust_id = orders.cust_id      AND order">
@@ -67,9 +67,9 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-MySQL必知必会/第二十二二十三章" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-MySQL必知必会/第二十二二十三二十四章" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/05/30/MySQL必知必会/第二十二二十三章/" class="article-date">
+    <a href="/2018/05/30/MySQL必知必会/第二十二二十三二十四章/" class="article-date">
   <time datetime="2018-05-30T13:38:00.000Z" itemprop="datePublished">2018-05-30</time>
 </a>
     
@@ -160,11 +160,29 @@
 <p>每个参数必须具有指定的类型，这里使用十进制值。关键字 OUT 指出相应的参数用来从存储过程传出一个值（返回给调用者）。MySQL支持 IN （传递给存储过程）、 OUT （从存储过程传出，如这里所用）和 INOUT （对存储过程传入和传出）类型的参数。存储过程的代码位于 BEGIN 和 END 语句内，如前所见，它们是一系列SELECT 语句，用来检索值，然后保存到相应的变量（通过指定 INTO 关键字）。</p>
 <p>执行存储过程语句如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CALL productpricing(@pricelow,</span><br><span class="line">                    @pricehigh,</span><br><span class="line">                    @priceaverage);</span><br></pre></td></tr></table></figure></p>
 <p><strong>变量名</strong>： 所有MySQL变量名都必须以@开始。<br>检索出产品平均价格：<code>SELECT @priceaverage;</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#  ordertotal接受订单号并返回订单号的合计</span><br><span class="line">CREATE PROCEDURE ordertotal(</span><br><span class="line">    IN onnumber INT,</span><br><span class="line">    OUT ototal DECIMAL(8,2)</span><br><span class="line">)</span><br><span class="line">BEGIN</span><br><span class="line">  SELECT Sum(item_price*quantity)</span><br><span class="line">  FROM orderitems</span><br><span class="line">  WHERE order_num = onumber</span><br><span class="line">  INTO ototal;</span><br><span class="line">END;</span><br></pre></td></tr></table></figure>
+<p>onnumber定义为IN，因为订单号要被传入进存储过程。ototal定义为OUT，因为要从存储过程返回合计。INTO使用ototal存储计算出来的合计。<br>调用该存储过程语句如下：<code>CALL ordertotal(20005, @total);</code>然后<code>SELECT @total;</code></p>
+<h3 id="检查存储过程"><a href="#检查存储过程" class="headerlink" title="检查存储过程"></a>检查存储过程</h3><p>显示一个存储过程的CREATE语句，使用SHOW CREATE PROCEDURE语句<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW CREATE PROCEDURE ordertotal;</span><br></pre></td></tr></table></figure></p>
+<p>通过执行该语句，可以获得何时、由谁创建等详细信息的存储过程列表。</p>
+<h2 id="游标"><a href="#游标" class="headerlink" title="游标"></a>游标</h2><p>MySQL5添加了对游标的支持。使用游标的原因：需要在检索出来的行中前进或后退一行或多行。<br>游标，是一个存储在MySQL服务器上的数据库查询，它不是一条SELECT语句，而是被该语句检索出来的结果集。在存储了游标之后，应用程序可以根据需要滚动或浏览其中的数据。（MySQL游标只用于存储过程）</p>
+<h3 id="使用游标"><a href="#使用游标" class="headerlink" title="使用游标"></a>使用游标</h3><ol>
+<li>在能够使用游标前，必须声明(定义)它。这个过程实际上没有检索数据，它只是定义要使用的SELECT语句。</li>
+<li>一旦声明后，必须打开游标以供使用。这个过程用前面定义的SELECT语句把数据实际检索出来。</li>
+<li>对于填有数据的游标，根据需要取出检索各行。</li>
+<li>在结束游标的使用时，必须关闭游标。</li>
+</ol>
+<h3 id="创建游标"><a href="#创建游标" class="headerlink" title="创建游标"></a>创建游标</h3><p>游标用DECLARE语句创建。DECLARE命名游标，并定义相应的SELECT语句，根据需要带WHERE和其他子句。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">--  定义了名为ordernumbers的游标，使用了可以检索所有订单的SELECT语句</span><br><span class="line">CREATE PROCEDURE processorders()</span><br><span class="line">BEGIN</span><br><span class="line">  DECLARE ordernumbers CURSOR</span><br><span class="line">  FOR</span><br><span class="line">  SELECT order_num FROM orders;</span><br><span class="line">END ;</span><br></pre></td></tr></table></figure></p>
+<p>DECLARE 语句用来定义和命名游标，这里为 ordernumbers 。 存储过程处理完成后，游标就消失（因为 <strong>它局限于存储过程</strong> ）。</p>
+<p>游标用OPEN CURSOR语句来打开：<code>OPEN ordernumbers;</code>  (cursor 翻译为 光标)<br>在处理 OPEN 语句时执行查询，存储检索出的数据以供浏览和滚动。<br>游标处理完成后，应当使用如下语句关闭游标：<code>CLOSE ordernumbers;</code><br>CLOSE 释放游标使用的所有内部内存和资源，因此在每个游标不再需要时都应该关闭。<br><strong>隐含关闭：</strong> 如果不明确关闭游标，mysql将会在到达END语句时自动关闭它。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CREATE PROCEDURE processorders()</span><br><span class="line">BEGIN</span><br><span class="line">  -- Declare the cursor</span><br><span class="line">  DECLARE ordernumbers CURSOR</span><br><span class="line">  FOR</span><br><span class="line">  SELECT order_num FROM orders;</span><br><span class="line">  -- OPEN the cursor</span><br><span class="line">  OPEN ordernumbers;</span><br><span class="line">  -- CLOSE the cursor</span><br><span class="line">  CLOSE ordernumbers;</span><br><span class="line">END;</span><br></pre></td></tr></table></figure></p>
+<p>通过使用FETCH语句分别访问它的每一行，FETCH指定检索什么数据(所需的列),检索出来的数据存储在什么地方。它还向前移动游标中的内部行指针，使下一条FETCH语句检索下一行(不重复读取同一行).<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># 从游标中检索单个行（第一行）</span><br><span class="line">CREATE PROCEDURE processorders()</span><br><span class="line">BEGIN</span><br><span class="line">  -- 定义本地变量</span><br><span class="line">  DECLARE o INT;</span><br><span class="line">  -- Declare the cursor</span><br><span class="line">  DECLARE ordernumbers CURSOR</span><br><span class="line">  FOR</span><br><span class="line">  SELECT order_num FROM orders;</span><br><span class="line">  -- OPEN the cursor</span><br><span class="line">  OPEN ordernumbers;</span><br><span class="line">  -- 获取</span><br><span class="line">  FETCH ordernumbers INTO o;</span><br><span class="line">  SELECT o;</span><br><span class="line">  -- CLOSE the cursor</span><br><span class="line">  CLOSE ordernumbers;</span><br><span class="line">END;</span><br></pre></td></tr></table></figure></p>
+<p>下面这个例子，循环检索数据，从第一行到最后一行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">CREATE PRODCEDURE processorders()</span><br><span class="line">BEGIN</span><br><span class="line">  -- 声明本地变量</span><br><span class="line">  DECLARE done TINYINT DEFAULT 0;</span><br><span class="line">  DECLARE o INT;</span><br><span class="line">  -- 声明 游标</span><br><span class="line">  DECLARE ordernumbers CURSOR</span><br><span class="line">  FOR</span><br><span class="line">  SELECT order_num FROM orders;</span><br><span class="line">  -- Declare continue handler</span><br><span class="line">  DECLARE CONTINUE HANDLER FOR SQLSTATE &apos;02000&apos; SET done=1;</span><br><span class="line">  -- Open cursor</span><br><span class="line">  OPEN ordernumbers;</span><br><span class="line">  -- loop through all rows</span><br><span class="line">  REPEAT</span><br><span class="line">    -- Get order number</span><br><span class="line">    FETCH ordernumbers INTO o;</span><br><span class="line">  -- END of loop</span><br><span class="line">  UNTIL done END REPEAT;</span><br><span class="line">  -- Close the cursor</span><br><span class="line">  CLOSE ordernumbers;</span><br><span class="line">END;</span><br></pre></td></tr></table></figure></p>
+<p>最新版<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">CREATE PRODCEDURE processorders()</span><br><span class="line">BEGIN</span><br><span class="line">  -- 声明本地变量</span><br><span class="line">  DECLARE done TINYINT DEFAULT 0;</span><br><span class="line">  DECLARE o INT;</span><br><span class="line">  DECLARE t DECIMAL(8,2);</span><br><span class="line">  -- 声明 游标</span><br><span class="line">  DECLARE ordernumbers CURSOR</span><br><span class="line">  FOR</span><br><span class="line">  SELECT order_num FROM orders;</span><br><span class="line">  -- Declare continue handler</span><br><span class="line">  DECLARE CONTINUE HANDLER FOR SQLSTATE &apos;02000&apos; SET done=1;</span><br><span class="line">  -- 创建一个表用来存储结果</span><br><span class="line">  CREATE TABLE IF NOT EXISTS ordertotals(order_num INT, total DECIMAL(8,2));</span><br><span class="line">  -- Open cursor</span><br><span class="line">  OPEN ordernumbers;</span><br><span class="line">  -- loop through all rows</span><br><span class="line">  REPEAT</span><br><span class="line">    -- Get order number</span><br><span class="line">    FETCH ordernumbers INTO o;</span><br><span class="line">    -- 获取数据</span><br><span class="line">    CALL ordertotal(o, l, t);</span><br><span class="line">    -- 插入数据</span><br><span class="line">    INSERT INTO ordertotals(order_num, total) VALUSE(o, t);</span><br><span class="line">  -- END of loop</span><br><span class="line">  UNTIL done END REPEAT;</span><br><span class="line">  -- Close the cursor</span><br><span class="line">  CLOSE ordernumbers;</span><br><span class="line">END;</span><br></pre></td></tr></table></figure></p>
+<p>查看结果<code>SELECT * FROM ordertotals;</code></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/30/MySQL必知必会/第二十二二十三章/" data-id="cjierr8kn000020vav96ec3rb" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/05/30/MySQL必知必会/第二十二二十三二十四章/" data-id="cjiudwu530002jcvay6tjolnd" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
@@ -174,6 +192,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2018/06/15/MySQL必知必会/第二十五二十六二十七三十章/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          MySQL必知必会学习笔记(11)
+        
+      </div>
+    </a>
   
   
     <a href="/2018/05/05/MySQL必知必会/第十九二十二十一章/" id="article-nav-older" class="article-nav-link-wrap">
@@ -223,7 +250,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
     </div>
   </div>
 
@@ -236,7 +263,11 @@
       <ul>
         
           <li>
-            <a href="/2018/05/30/MySQL必知必会/第二十二二十三章/">MySQL必知必会学习笔记(10)</a>
+            <a href="/2018/06/15/MySQL必知必会/第二十五二十六二十七三十章/">MySQL必知必会学习笔记(11)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/30/MySQL必知必会/第二十二二十三二十四章/">MySQL必知必会学习笔记(10)</a>
           </li>
         
           <li>
@@ -249,10 +280,6 @@
         
           <li>
             <a href="/2018/04/25/MySQL必知必会/第十五十六章/">MySQL必知必会学习笔记(7)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/25/MySQL必知必会/第十三十四章/">MySQL必知必会学习笔记(6)</a>
           </li>
         
       </ul>

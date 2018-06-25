@@ -65,6 +65,67 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-MySQL必知必会/第一二章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/17/MySQL必知必会/第一二章/" class="article-date">
+  <time datetime="2018-04-17T14:34:33.000Z" itemprop="datePublished">2018-04-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/17/MySQL必知必会/第一二章/">MySQL必知必会学习笔记(1)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="了解SQL"><a href="#了解SQL" class="headerlink" title="了解SQL"></a>了解SQL</h2><p><strong>数据库</strong>：保存有组织的数据的容器(通常是一个文件或一组文件)。</p>
+<p><strong>表</strong>：某种特定类型数据的结构化清单。(数据库中的每个表都有一个名字，用来标识自己。表名唯一)<br>表具有一些特性，这些特性定义了数据在表中如何存储，如可以存储什么样的数据，数据如何分解，各部分信息如何命名。<br>不同数据库可以有相同的表名。</p>
+<p><strong>列</strong>：表中的一个字段。所有表都是由一个或多个列组成的。(可以想象表是一个网格，网格中的每一列都存储着一条特定的信息。例如：顾客表，一列存储顾客编号，另一列存储顾客姓名，还有列存储地址)</p>
+<p>正确将数据分解为多个列极为重要。这样可以对数据进行排序/过滤。</p>
+<p><strong>数据类型</strong>：所容许的数据的类型。每个表列都有相应的数据类型，它限制(或容许)该列中存储的数据。</p>
+<p><strong>行</strong>：表中的一个记录。(表中所保存的每个记录存储在自己的行内)。</p>
+<p><strong>主键</strong>：一列(或一组列)，其值能够唯一区分表中每个行。<br>没有主键，更新或删除表中特定行会很困难，因为没有安全的方法保证只涉及相关的行。</p>
+<p>作为主键需要满足的条件：1.任意两行都不具有相同的主键值 2.每个行都必须具有一个主键值（主键列不允许NULL值）。</p>
+<p>主键需要注意的地方：</p>
+<ol>
+<li>不更新主键列中的值</li>
+<li>不重用主键列的值</li>
+</ol>
+<p>SQL：结构化查询语言(Structured Query Language). 与数据库打交道。</p>
+<p>MySQL数据库是基于客户机-服务器的数据库。服务器负责所有数据访问和处理的一个软件。数据更新、添加、删除都由服务器软件完成(允许在数据库服务器上)。客户机上运行着发起请求的软件。</p>
+<p>服务器软件：MYSQL DBMS。<br>客户机：MYSQL提供的工具，或开发语言。</p>
+<p>例如：如果你请求一个按字母顺序列出的产品表，则客户机软件通过网络提交该请求给服务器软件。服务器软件处理这个请求，根据需要过滤、丢弃和排序数据；然后把结果送回到你的客户机软件。</p>
+<p><strong>mysql命令行程序(MySQL连接)</strong><br><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-18/34722498.jpg" alt="mysql命令行"><br><code>mysql -u ben -p -h myserver -P 9999</code>用户名、主机名、端口和口令<br>注意：</p>
+<ol>
+<li>命令输入在<code>mysql&gt;</code>之后。</li>
+<li>命令用<code>;</code>或<code>\g</code>结束，仅按Enter不执行命令。</li>
+<li>输入help或<code>\h</code>获得帮助。(输入help select获得使用select语句的帮助)</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/17/MySQL必知必会/第一二章/" data-id="cjg4i9aad001jwovaqz2pzqzm" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-设计模式(代理模式)" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/04/16/设计模式(代理模式)/" class="article-date">
@@ -552,57 +613,6 @@
 
 
   
-    <article id="post-Nginx学习" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/01/28/Nginx学习/" class="article-date">
-  <time datetime="2018-01-28T06:14:21.000Z" itemprop="datePublished">2018-01-28</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Nginx学习笔记/">Nginx学习笔记</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/28/Nginx学习/">Nginx学习1</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="Nginx概述"><a href="#Nginx概述" class="headerlink" title="Nginx概述"></a>Nginx概述</h3><p>Nginx是一个开源且高性能、可靠的HTTP中间件、代理服务。</p>
-<p>常见的HTTP服务：httpd、GWS(谷歌的)、IIS(微软)</p>
-<p>IO多路复用：<br><img src="https://ooo.0o0.ooo/2017/06/20/594937002ebba.png" alt=""></p>
-<p>IO多路复用的实现方式：select、poll、epoll</p>
-<ul>
-<li>select:通过循环变量fd数组，查看是否有消息。(文件描述符数量存在限制1024个，循环扫描效率底下)。</li>
-<li>epoll:采用回调函数将fd放入就绪，最大连接数无限制。
-        
-          <p class="article-more-link">
-            <a href="/2018/01/28/Nginx学习/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/28/Nginx学习/" data-id="cjg4i9a8u0008wovaw31tyhnd" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -647,7 +657,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
     </div>
   </div>
 
@@ -660,7 +670,11 @@
       <ul>
         
           <li>
-            <a href="/2018/05/30/MySQL必知必会/第二十二二十三章/">MySQL必知必会学习笔记(10)</a>
+            <a href="/2018/06/15/MySQL必知必会/第二十五二十六二十七三十章/">MySQL必知必会学习笔记(11)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/30/MySQL必知必会/第二十二二十三二十四章/">MySQL必知必会学习笔记(10)</a>
           </li>
         
           <li>
@@ -673,10 +687,6 @@
         
           <li>
             <a href="/2018/04/25/MySQL必知必会/第十五十六章/">MySQL必知必会学习笔记(7)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/25/MySQL必知必会/第十三十四章/">MySQL必知必会学习笔记(6)</a>
           </li>
         
       </ul>

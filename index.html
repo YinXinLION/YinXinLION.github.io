@@ -65,9 +65,108 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-MySQL必知必会/第二十二二十三章" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-MySQL必知必会/第二十五二十六二十七三十章" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/05/30/MySQL必知必会/第二十二二十三章/" class="article-date">
+    <a href="/2018/06/15/MySQL必知必会/第二十五二十六二十七三十章/" class="article-date">
+  <time datetime="2018-06-15T07:37:00.000Z" itemprop="datePublished">2018-06-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/15/MySQL必知必会/第二十五二十六二十七三十章/">MySQL必知必会学习笔记(11)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>对触发器的支持是在MySQL 5中增加的。MySQL语句在需要时被执行，存储过程也是如此。但是，如果你想要某条语句（或某些语句）在事件发生时自动执行，怎么办呢？</p>
+<ol>
+<li>每当增加一个顾客到某个数据库表时，都检查其电话号码格式是<br>否正确，州的缩写是否为大写；</li>
+<li>每当订购一个产品时，都从库存数量中减去订购的数量；</li>
+<li>无论何时删除一行，都在某个存档表中保留一个副本</li>
+</ol>
+<p>所有这些例子的共同之处是它们都需要在某个表发生更改时自动处理。这确切地说就是触发器。触发器是MySQL响应以下任意语句而自动执行的一条MySQL语句（或位于 BEGIN 和 END 语句之间的一组语句）：1.DELETE 2.INSERT 3.UPDATE  其他MySQL语句不支持触发器。</p>
+<p>创建触发器时，需要给出4个信息：</p>
+<ol>
+<li>唯一的触发器名；</li>
+<li>触发器关联的表；</li>
+<li>触发器应该响应的活动(DELETE,INSERT或UPDATE)</li>
+<li>触发器何时执行(处理之前或之后)</li>
+</ol>
+<p>保持每个数据库的触发器名唯一：MySQL5中，触发器名必须在每个表里唯一。</p>
+<p>触发器使用CREATE TRIGGER语句创建。(trigger 翻译为 触发；使运行)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CREATE TRIGGER newproduct AFTER INSERT ON products</span><br><span class="line">FOR EACH ROW SELECT &apos;Product added&apos;;</span><br><span class="line">-- 会报错 在mysql的trigger和function中不能出现select * from table形式的查询，因为其会返回一个结果集；</span><br><span class="line">-- [Err] 1415 - Not allowed to return a result set from a trigger</span><br><span class="line">-- 以使用用户变量在function中，然后在外部使用select @用户变量查看你的变量值</span><br></pre></td></tr></table></figure></p>
+<p>CREATE TRIGGER 用来创建名为 newproduct 的新触发器。触发器可在一个操作发生之前或之后执行，这里给出了 AFTER INSERT ，所以此触发器将在 INSERT 语句成功执行后执行。这个触发器还指定 FOREACH ROW ，因此代码对每个插入行执行。</p>
+<p>DELETE触发器：在DELETE触发器代码内，可以引用一个名为OLD的虚拟表，访问被删除的行。OLD的值全部只读，不能更新<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-- 演示使用 OLD 保存将要被删除的行到一个存档表中</span><br><span class="line">CREATE TRIGGER deleteorder BEFORE DELETE ON orders</span><br><span class="line">FOR EACH ROW</span><br><span class="line">BEGIN</span><br><span class="line">  INSERT INTO archive_orders(order_num, order_date, cust_id)</span><br><span class="line">  VALUES(OLD.order_num, OLD.order_date, OLD.cust_id);</span><br><span class="line">END;</span><br></pre></td></tr></table></figure></p>
+<p>UPDATE触发器：</p>
+<ol>
+<li>在UPDATE触发器代码时，可以引用一个名为OLD的虚拟表访问以前的值，引用一个名为NEW的虚拟表访问新更新的值。</li>
+<li>在BEFORE UPDATE触发器中,NEW中的值可能也被更新。</li>
+<li>OLD中的值全都是只读的，不能更新。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-- 保证州名是大写</span><br><span class="line">CREATE TRIGGER updatevendor BEFORE UPDATE ON vendors</span><br><span class="line">FOR EACH ROW SET NEW.vend_state = Upper(NEW.vend_state);</span><br></pre></td></tr></table></figure>
+<p>每次更新一行时，NEW.vend_state中的值都用Upper(NEW.vend_state)替换。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
+<li>创建触发器可能需要特殊的安全访问权限，但是触发器的执行不需要。</li>
+<li>应该用触发器来保证数据的一致性。</li>
+<li>MYSQL触发器不支持CALL语句。</li>
+</ol>
+<p>学习了什么是触发器，如何创建，如何使用它。</p>
+<h2 id="管理事务处理"><a href="#管理事务处理" class="headerlink" title="管理事务处理"></a>管理事务处理</h2><p>MyISAM不支持事务管理，InnoDB支持事务管理。 事务处理可以用来维护数据库的完整性(原子性)，它保证成批的MySQL操作要么完全执行，要么完全不执行。</p>
+<p>事务(transaction):指一组SQL语句。<br>回退(rollback):指撤销执行SQL语句的过程。<br>提交(commit):指将未存储的SQL语句结果写入数据库表。<br>保留点(savepoint):指事务处理中设置的临时占位符，你可以对它发布回退。</p>
+<h3 id="控制事务处理"><a href="#控制事务处理" class="headerlink" title="控制事务处理"></a>控制事务处理</h3><p>MySQL使用下面的语句来标识事务的开始：<code>START TRANSACTION</code></p>
+<h4 id="使用ROLLBACK"><a href="#使用ROLLBACK" class="headerlink" title="使用ROLLBACK"></a>使用ROLLBACK</h4><p>MySQL的ROLLBACK命令用来撤销MySQL语句<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM odertotals;</span><br><span class="line">START TRANSACTION;</span><br><span class="line">DELETE FROM ordertotals;</span><br><span class="line">SELECT * FROM ordertotals;</span><br><span class="line">ROLLBACK;</span><br><span class="line">SELECT * FROM ordertotals;</span><br></pre></td></tr></table></figure></p>
+<p>ROLLBACK只能在一个事务处理内使用(在执行一条START TRANSACTION命令后)。</p>
+<p><strong>哪些语句可以回退？</strong><br>事务处理用来管理INSERT、UPDATE和DELETE语句，不能回退SELECT语句。也不能回退CREATE或DROP操作。事务处理块中可以使用这两天语句，但如果执行回退，他们不会被撤销。</p>
+<h4 id="使用COMMIT"><a href="#使用COMMIT" class="headerlink" title="使用COMMIT"></a>使用COMMIT</h4><p>一般的MySQL语句都是直接针对数据库表执行和编写的，提交操作是自动进行的。<br>但是，在事务处理块中，提交不会隐含地进行。为进行明确的提交，使用COMMIT语句。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">START TRANSACTION;</span><br><span class="line">DELETE FROM orderitems WHERE order_num = 20010;</span><br><span class="line">DELETE FROM orders WHERE order_num = 20010;</span><br><span class="line">COMMIT;</span><br></pre></td></tr></table></figure></p>
+<p>如果第一条DELETE起作用，但第二条失败，则DELETE不会提交(实际上，它是被自动撤销的)<br><strong>隐含事务关闭：</strong> 当COMMIT或ROLLBACK语句执行后，事务会自动关闭(将来的更改会隐含提交)。</p>
+<h4 id="使用保留点"><a href="#使用保留点" class="headerlink" title="使用保留点"></a>使用保留点</h4><p>简单的ROLLBACK和COMMIT语句就可以写入或撤销整个事务处理。但是，只是对简单的事务处理才能这样做，更复杂的事务处理可能需要部分提交或回退。<br>为了支持回退部分事务处理，必须能在事务处理块中合适的位置放置占位符。如果需要回退，可以回退到某个占位符。<br>占位符称为保留点，为了创建占位符，可以使用SAVEPOINT语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SAVEPOINT delete1;</span><br></pre></td></tr></table></figure></p>
+<p>每个保留点都取标识它的唯一名字，以便在回退时，MySQL知道要回退到何处，为了回退到保留点，可进行：<code>ROLLBACK TO delete1;</code></p>
+<p>保留点在事务完成后释放。</p>
+<h4 id="更改默认的提交行为"><a href="#更改默认的提交行为" class="headerlink" title="更改默认的提交行为"></a>更改默认的提交行为</h4><p>默认的MySQL行为是自动提交所有更改，为指示MySQL不自动提交更改，需要使用以下语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SET autocommit=0;</span><br></pre></td></tr></table></figure></p>
+<p>autocommit标志决定是否自动提交更改，不管有没有COMMIT语句。设置autocommit为0(假)指示MySQL不自动提交更改(直到autocommit被设置为真为止)。<br><strong>标志为连接专用：</strong> autocommit标志是针对 <strong>每个连接</strong> 2而不是服务器的。</p>
+<h2 id="全球化和本地化"><a href="#全球化和本地化" class="headerlink" title="全球化和本地化"></a>全球化和本地化</h2><h3 id="字符集和校对顺序"><a href="#字符集和校对顺序" class="headerlink" title="字符集和校对顺序"></a>字符集和校对顺序</h3><p>数据库表被用来存储和检索数据。不同的语言和字符集需要以不同的方式存储和检索。因此，MySQL需要适应不同的字符集(不同的字母和字符),适应不同的排序和检索数据的方法。</p>
+<p><strong>字符集：</strong> 为字母和符号的集合。<br><strong>编码：</strong> 为某个字符集成员的内部表示。<br><strong>校对：</strong> 为规定字符如何比较的指令。</p>
+<h3 id="使用字符集和校对顺序"><a href="#使用字符集和校对顺序" class="headerlink" title="使用字符集和校对顺序"></a>使用字符集和校对顺序</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW CHARACTER SET;</span><br></pre></td></tr></table></figure>
+<p>显示所有可用的字符集以及每个字符集的描述和默认校对。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW COLLATION;</span><br></pre></td></tr></table></figure></p>
+<p>显示所有的校对，以及他们适用的字符集。<br>例如， latin1 对不同的欧洲<br>语言有几种校对，而且许多校对出现两次，一次区分大小写（由 <code>_cs</code> 表示），一次不区分大小写（由 <code>_ci</code> 表示）。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-6-17/18493105.jpg" alt=""></p>
+<p>为了确定所用的字符集和校对，可使用以下语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SHOW VARIABLES LIKE `character%`;</span><br><span class="line">SHOW VARIABLES LIKE `collation%`;</span><br></pre></td></tr></table></figure></p>
+<h2 id="改善性能"><a href="#改善性能" class="headerlink" title="改善性能"></a>改善性能</h2><ol>
+<li>MySQL是用一系列的默认设置预先配置的，从这些设置开始通常是很好的，但过一段时间后你可能需要调整内存分配、缓冲区大小等。</li>
+<li>MySQL一个多用户多线程的DBMS，它经常同时执行多个任务。如果这些任务中的某个执行缓慢，则所有请求都会执行缓慢。如果性能不良，可使用<code>SHOW PROCESSLIST</code>显示所有活动进程。</li>
+<li>使用EXPLAIN语句让MySQL解释它将如何执行一条SELECT语句。</li>
+<li>使用正确的数据类型。</li>
+<li>绝不要检索比需求还要多的数据。不要使用<code>SELECT *</code></li>
+<li>在导入数据时，应该关闭自动提交。</li>
+<li>索引数据库表以改善数据检索性能。</li>
+<li>SELECT语句有一系列复杂的OR条件，可以使用多条SELECT语句和连接他们的UNION语句，可极大改善性能。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/06/15/MySQL必知必会/第二十五二十六二十七三十章/" data-id="cjiudwu4t0000jcvakz55b5s4" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-MySQL必知必会/第二十二二十三二十四章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/30/MySQL必知必会/第二十二二十三二十四章/" class="article-date">
   <time datetime="2018-05-30T13:38:00.000Z" itemprop="datePublished">2018-05-30</time>
 </a>
     
@@ -79,7 +178,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/30/MySQL必知必会/第二十二二十三章/">MySQL必知必会学习笔记(10)</a>
+      <a class="article-title" href="/2018/05/30/MySQL必知必会/第二十二二十三二十四章/">MySQL必知必会学习笔记(10)</a>
     </h1>
   
 
@@ -158,11 +257,29 @@
 <p>每个参数必须具有指定的类型，这里使用十进制值。关键字 OUT 指出相应的参数用来从存储过程传出一个值（返回给调用者）。MySQL支持 IN （传递给存储过程）、 OUT （从存储过程传出，如这里所用）和 INOUT （对存储过程传入和传出）类型的参数。存储过程的代码位于 BEGIN 和 END 语句内，如前所见，它们是一系列SELECT 语句，用来检索值，然后保存到相应的变量（通过指定 INTO 关键字）。</p>
 <p>执行存储过程语句如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CALL productpricing(@pricelow,</span><br><span class="line">                    @pricehigh,</span><br><span class="line">                    @priceaverage);</span><br></pre></td></tr></table></figure></p>
 <p><strong>变量名</strong>： 所有MySQL变量名都必须以@开始。<br>检索出产品平均价格：<code>SELECT @priceaverage;</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#  ordertotal接受订单号并返回订单号的合计</span><br><span class="line">CREATE PROCEDURE ordertotal(</span><br><span class="line">    IN onnumber INT,</span><br><span class="line">    OUT ototal DECIMAL(8,2)</span><br><span class="line">)</span><br><span class="line">BEGIN</span><br><span class="line">  SELECT Sum(item_price*quantity)</span><br><span class="line">  FROM orderitems</span><br><span class="line">  WHERE order_num = onumber</span><br><span class="line">  INTO ototal;</span><br><span class="line">END;</span><br></pre></td></tr></table></figure>
+<p>onnumber定义为IN，因为订单号要被传入进存储过程。ototal定义为OUT，因为要从存储过程返回合计。INTO使用ototal存储计算出来的合计。<br>调用该存储过程语句如下：<code>CALL ordertotal(20005, @total);</code>然后<code>SELECT @total;</code></p>
+<h3 id="检查存储过程"><a href="#检查存储过程" class="headerlink" title="检查存储过程"></a>检查存储过程</h3><p>显示一个存储过程的CREATE语句，使用SHOW CREATE PROCEDURE语句<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW CREATE PROCEDURE ordertotal;</span><br></pre></td></tr></table></figure></p>
+<p>通过执行该语句，可以获得何时、由谁创建等详细信息的存储过程列表。</p>
+<h2 id="游标"><a href="#游标" class="headerlink" title="游标"></a>游标</h2><p>MySQL5添加了对游标的支持。使用游标的原因：需要在检索出来的行中前进或后退一行或多行。<br>游标，是一个存储在MySQL服务器上的数据库查询，它不是一条SELECT语句，而是被该语句检索出来的结果集。在存储了游标之后，应用程序可以根据需要滚动或浏览其中的数据。（MySQL游标只用于存储过程）</p>
+<h3 id="使用游标"><a href="#使用游标" class="headerlink" title="使用游标"></a>使用游标</h3><ol>
+<li>在能够使用游标前，必须声明(定义)它。这个过程实际上没有检索数据，它只是定义要使用的SELECT语句。</li>
+<li>一旦声明后，必须打开游标以供使用。这个过程用前面定义的SELECT语句把数据实际检索出来。</li>
+<li>对于填有数据的游标，根据需要取出检索各行。</li>
+<li>在结束游标的使用时，必须关闭游标。</li>
+</ol>
+<h3 id="创建游标"><a href="#创建游标" class="headerlink" title="创建游标"></a>创建游标</h3><p>游标用DECLARE语句创建。DECLARE命名游标，并定义相应的SELECT语句，根据需要带WHERE和其他子句。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">--  定义了名为ordernumbers的游标，使用了可以检索所有订单的SELECT语句</span><br><span class="line">CREATE PROCEDURE processorders()</span><br><span class="line">BEGIN</span><br><span class="line">  DECLARE ordernumbers CURSOR</span><br><span class="line">  FOR</span><br><span class="line">  SELECT order_num FROM orders;</span><br><span class="line">END ;</span><br></pre></td></tr></table></figure></p>
+<p>DECLARE 语句用来定义和命名游标，这里为 ordernumbers 。 存储过程处理完成后，游标就消失（因为 <strong>它局限于存储过程</strong> ）。</p>
+<p>游标用OPEN CURSOR语句来打开：<code>OPEN ordernumbers;</code>  (cursor 翻译为 光标)<br>在处理 OPEN 语句时执行查询，存储检索出的数据以供浏览和滚动。<br>游标处理完成后，应当使用如下语句关闭游标：<code>CLOSE ordernumbers;</code><br>CLOSE 释放游标使用的所有内部内存和资源，因此在每个游标不再需要时都应该关闭。<br><strong>隐含关闭：</strong> 如果不明确关闭游标，mysql将会在到达END语句时自动关闭它。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CREATE PROCEDURE processorders()</span><br><span class="line">BEGIN</span><br><span class="line">  -- Declare the cursor</span><br><span class="line">  DECLARE ordernumbers CURSOR</span><br><span class="line">  FOR</span><br><span class="line">  SELECT order_num FROM orders;</span><br><span class="line">  -- OPEN the cursor</span><br><span class="line">  OPEN ordernumbers;</span><br><span class="line">  -- CLOSE the cursor</span><br><span class="line">  CLOSE ordernumbers;</span><br><span class="line">END;</span><br></pre></td></tr></table></figure></p>
+<p>通过使用FETCH语句分别访问它的每一行，FETCH指定检索什么数据(所需的列),检索出来的数据存储在什么地方。它还向前移动游标中的内部行指针，使下一条FETCH语句检索下一行(不重复读取同一行).<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># 从游标中检索单个行（第一行）</span><br><span class="line">CREATE PROCEDURE processorders()</span><br><span class="line">BEGIN</span><br><span class="line">  -- 定义本地变量</span><br><span class="line">  DECLARE o INT;</span><br><span class="line">  -- Declare the cursor</span><br><span class="line">  DECLARE ordernumbers CURSOR</span><br><span class="line">  FOR</span><br><span class="line">  SELECT order_num FROM orders;</span><br><span class="line">  -- OPEN the cursor</span><br><span class="line">  OPEN ordernumbers;</span><br><span class="line">  -- 获取</span><br><span class="line">  FETCH ordernumbers INTO o;</span><br><span class="line">  SELECT o;</span><br><span class="line">  -- CLOSE the cursor</span><br><span class="line">  CLOSE ordernumbers;</span><br><span class="line">END;</span><br></pre></td></tr></table></figure></p>
+<p>下面这个例子，循环检索数据，从第一行到最后一行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">CREATE PRODCEDURE processorders()</span><br><span class="line">BEGIN</span><br><span class="line">  -- 声明本地变量</span><br><span class="line">  DECLARE done TINYINT DEFAULT 0;</span><br><span class="line">  DECLARE o INT;</span><br><span class="line">  -- 声明 游标</span><br><span class="line">  DECLARE ordernumbers CURSOR</span><br><span class="line">  FOR</span><br><span class="line">  SELECT order_num FROM orders;</span><br><span class="line">  -- Declare continue handler</span><br><span class="line">  DECLARE CONTINUE HANDLER FOR SQLSTATE &apos;02000&apos; SET done=1;</span><br><span class="line">  -- Open cursor</span><br><span class="line">  OPEN ordernumbers;</span><br><span class="line">  -- loop through all rows</span><br><span class="line">  REPEAT</span><br><span class="line">    -- Get order number</span><br><span class="line">    FETCH ordernumbers INTO o;</span><br><span class="line">  -- END of loop</span><br><span class="line">  UNTIL done END REPEAT;</span><br><span class="line">  -- Close the cursor</span><br><span class="line">  CLOSE ordernumbers;</span><br><span class="line">END;</span><br></pre></td></tr></table></figure></p>
+<p>最新版<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">CREATE PRODCEDURE processorders()</span><br><span class="line">BEGIN</span><br><span class="line">  -- 声明本地变量</span><br><span class="line">  DECLARE done TINYINT DEFAULT 0;</span><br><span class="line">  DECLARE o INT;</span><br><span class="line">  DECLARE t DECIMAL(8,2);</span><br><span class="line">  -- 声明 游标</span><br><span class="line">  DECLARE ordernumbers CURSOR</span><br><span class="line">  FOR</span><br><span class="line">  SELECT order_num FROM orders;</span><br><span class="line">  -- Declare continue handler</span><br><span class="line">  DECLARE CONTINUE HANDLER FOR SQLSTATE &apos;02000&apos; SET done=1;</span><br><span class="line">  -- 创建一个表用来存储结果</span><br><span class="line">  CREATE TABLE IF NOT EXISTS ordertotals(order_num INT, total DECIMAL(8,2));</span><br><span class="line">  -- Open cursor</span><br><span class="line">  OPEN ordernumbers;</span><br><span class="line">  -- loop through all rows</span><br><span class="line">  REPEAT</span><br><span class="line">    -- Get order number</span><br><span class="line">    FETCH ordernumbers INTO o;</span><br><span class="line">    -- 获取数据</span><br><span class="line">    CALL ordertotal(o, l, t);</span><br><span class="line">    -- 插入数据</span><br><span class="line">    INSERT INTO ordertotals(order_num, total) VALUSE(o, t);</span><br><span class="line">  -- END of loop</span><br><span class="line">  UNTIL done END REPEAT;</span><br><span class="line">  -- Close the cursor</span><br><span class="line">  CLOSE ordernumbers;</span><br><span class="line">END;</span><br></pre></td></tr></table></figure></p>
+<p>查看结果<code>SELECT * FROM ordertotals;</code></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/30/MySQL必知必会/第二十二二十三章/" data-id="cjierr8kn000020vav96ec3rb" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/05/30/MySQL必知必会/第二十二二十三二十四章/" data-id="cjiudwu530002jcvay6tjolnd" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
@@ -772,67 +889,6 @@
 
 
   
-    <article id="post-MySQL必知必会/第一二章" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/04/17/MySQL必知必会/第一二章/" class="article-date">
-  <time datetime="2018-04-17T14:34:33.000Z" itemprop="datePublished">2018-04-17</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/17/MySQL必知必会/第一二章/">MySQL必知必会学习笔记(1)</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="了解SQL"><a href="#了解SQL" class="headerlink" title="了解SQL"></a>了解SQL</h2><p><strong>数据库</strong>：保存有组织的数据的容器(通常是一个文件或一组文件)。</p>
-<p><strong>表</strong>：某种特定类型数据的结构化清单。(数据库中的每个表都有一个名字，用来标识自己。表名唯一)<br>表具有一些特性，这些特性定义了数据在表中如何存储，如可以存储什么样的数据，数据如何分解，各部分信息如何命名。<br>不同数据库可以有相同的表名。</p>
-<p><strong>列</strong>：表中的一个字段。所有表都是由一个或多个列组成的。(可以想象表是一个网格，网格中的每一列都存储着一条特定的信息。例如：顾客表，一列存储顾客编号，另一列存储顾客姓名，还有列存储地址)</p>
-<p>正确将数据分解为多个列极为重要。这样可以对数据进行排序/过滤。</p>
-<p><strong>数据类型</strong>：所容许的数据的类型。每个表列都有相应的数据类型，它限制(或容许)该列中存储的数据。</p>
-<p><strong>行</strong>：表中的一个记录。(表中所保存的每个记录存储在自己的行内)。</p>
-<p><strong>主键</strong>：一列(或一组列)，其值能够唯一区分表中每个行。<br>没有主键，更新或删除表中特定行会很困难，因为没有安全的方法保证只涉及相关的行。</p>
-<p>作为主键需要满足的条件：1.任意两行都不具有相同的主键值 2.每个行都必须具有一个主键值（主键列不允许NULL值）。</p>
-<p>主键需要注意的地方：</p>
-<ol>
-<li>不更新主键列中的值</li>
-<li>不重用主键列的值</li>
-</ol>
-<p>SQL：结构化查询语言(Structured Query Language). 与数据库打交道。</p>
-<p>MySQL数据库是基于客户机-服务器的数据库。服务器负责所有数据访问和处理的一个软件。数据更新、添加、删除都由服务器软件完成(允许在数据库服务器上)。客户机上运行着发起请求的软件。</p>
-<p>服务器软件：MYSQL DBMS。<br>客户机：MYSQL提供的工具，或开发语言。</p>
-<p>例如：如果你请求一个按字母顺序列出的产品表，则客户机软件通过网络提交该请求给服务器软件。服务器软件处理这个请求，根据需要过滤、丢弃和排序数据；然后把结果送回到你的客户机软件。</p>
-<p><strong>mysql命令行程序(MySQL连接)</strong><br><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-18/34722498.jpg" alt="mysql命令行"><br><code>mysql -u ben -p -h myserver -P 9999</code>用户名、主机名、端口和口令<br>注意：</p>
-<ol>
-<li>命令输入在<code>mysql&gt;</code>之后。</li>
-<li>命令用<code>;</code>或<code>\g</code>结束，仅按Enter不执行命令。</li>
-<li>输入help或<code>\h</code>获得帮助。(输入help select获得使用select语句的帮助)</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/04/17/MySQL必知必会/第一二章/" data-id="cjg4i9aad001jwovaqz2pzqzm" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -877,7 +933,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
     </div>
   </div>
 
@@ -890,7 +946,11 @@
       <ul>
         
           <li>
-            <a href="/2018/05/30/MySQL必知必会/第二十二二十三章/">MySQL必知必会学习笔记(10)</a>
+            <a href="/2018/06/15/MySQL必知必会/第二十五二十六二十七三十章/">MySQL必知必会学习笔记(11)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/30/MySQL必知必会/第二十二二十三二十四章/">MySQL必知必会学习笔记(10)</a>
           </li>
         
           <li>
@@ -903,10 +963,6 @@
         
           <li>
             <a href="/2018/04/25/MySQL必知必会/第十五十六章/">MySQL必知必会学习笔记(7)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/25/MySQL必知必会/第十三十四章/">MySQL必知必会学习笔记(6)</a>
           </li>
         
       </ul>
