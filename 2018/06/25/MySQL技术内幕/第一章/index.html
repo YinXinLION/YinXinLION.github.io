@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>第一章 MySQL体系结构和存储引擎 读书笔记 | 努力是为了将对世界的所有渴望都掌握在手上</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="首先，要搞清楚 数据库 和 实例 这两个词。  数据库：物理操作系统文件或其他形式文件类型的集合。数据库只是文件的集合，由文件组成。 实例：MySQL数据库由后台线程以及一个共享内存区域组成。实例是用于操作数据库文件的进程（程序）。一般情况下数据库与实例是一对一的关系。在集群情况下可能存在一个数据库被多个数据库实例使用。  MySQL是单进程多线程架构的数据库。MySQL数据库实例在系统表现就是一">
+<meta name="keywords" content="MySQL技术内幕">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第一章 MySQL体系结构和存储引擎 读书笔记">
+<meta property="og:url" content="http://yoursite.com/2018/06/25/MySQL技术内幕/第一章/index.html">
+<meta property="og:site_name" content="努力是为了将对世界的所有渴望都掌握在手上">
+<meta property="og:description" content="首先，要搞清楚 数据库 和 实例 这两个词。  数据库：物理操作系统文件或其他形式文件类型的集合。数据库只是文件的集合，由文件组成。 实例：MySQL数据库由后台线程以及一个共享内存区域组成。实例是用于操作数据库文件的进程（程序）。一般情况下数据库与实例是一对一的关系。在集群情况下可能存在一个数据库被多个数据库实例使用。  MySQL是单进程多线程架构的数据库。MySQL数据库实例在系统表现就是一">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-6-26/31806869.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-6-26/14853787.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-6-26/42466535.jpg">
+<meta property="og:updated_time" content="2018-06-26T11:22:36.200Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第一章 MySQL体系结构和存储引擎 读书笔记">
+<meta name="twitter:description" content="首先，要搞清楚 数据库 和 实例 这两个词。  数据库：物理操作系统文件或其他形式文件类型的集合。数据库只是文件的集合，由文件组成。 实例：MySQL数据库由后台线程以及一个共享内存区域组成。实例是用于操作数据库文件的进程（程序）。一般情况下数据库与实例是一对一的关系。在集群情况下可能存在一个数据库被多个数据库实例使用。  MySQL是单进程多线程架构的数据库。MySQL数据库实例在系统表现就是一">
+<meta name="twitter:image" content="http://oqp1ywek9.bkt.clouddn.com/18-6-26/31806869.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="努力是为了将对世界的所有渴望都掌握在手上" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">努力是为了将对世界的所有渴望都掌握在手上</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-MySQL技术内幕/第一章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/25/MySQL技术内幕/第一章/" class="article-date">
+  <time datetime="2018-06-25T14:34:33.000Z" itemprop="datePublished">2018-06-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      第一章 MySQL体系结构和存储引擎 读书笔记
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>首先，要搞清楚 <strong>数据库</strong> 和 <strong>实例</strong> 这两个词。</p>
+<ol>
+<li>数据库：物理操作系统文件或其他形式文件类型的集合。数据库只是文件的集合，由文件组成。</li>
+<li>实例：MySQL数据库由后台线程以及一个共享内存区域组成。实例是用于操作数据库文件的进程（程序）。一般情况下数据库与实例是一对一的关系。在集群情况下可能存在一个数据库被多个数据库实例使用。</li>
+</ol>
+<p>MySQL是单进程多线程架构的数据库。MySQL数据库实例在系统表现就是一个进程。</p>
+<p>当启动实例时，MySQL数据库会读取配置文件，根据配置文件的参数来启动数据库实例。MySQL数据库中可以没有配置文件，如果没有，MySQL会按照编译时的默认参数设置启动实例。<br>以下命令会查看当MySQL数据库实例启动时，会在哪些位置查找配置文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql --help | grep my.cnf</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-6-26/31806869.jpg" alt=""><br>MySQL会按读取到的最后一个配置文件中的参数为准。</p>
+<p>###MySQL体系结构<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-6-26/14853787.jpg" alt=""><br>MySQL由以下几个部分组成：连接池组件、管理服务和工具组件、SQL接口组件、查询分析器组件、优化器组件、缓冲(Cache)组件、插件式存储引擎、物理文件。<br>存储引擎是基于表的，而不是数据库的。</p>
+<h4 id="InnoDB存储引擎"><a href="#InnoDB存储引擎" class="headerlink" title="InnoDB存储引擎"></a>InnoDB存储引擎</h4><p>InnoDB存储引擎支持事务，设计目标主要面向在线事务处理(OLTP)的应用。特点是行锁设计、支持外键、并支持类似Oracle的非锁定读，即默认读取操作不会产生锁。<br>InnoDB存储引擎将数据放在一个逻辑的表空间中。从MySQL4.1版本开始，它可以将每个InnoDB存储引擎表存放到一个独立的ibd文件中。此外，InnoDB存储引擎支持用裸设备(row disk)用来建立其表空间。<br>InnoDB通过多版本并发控制(MVCC)来获得高并发性，并实现了4种隔离级别，默认为REPEATABLE可重复度级别。使用next-key locking的策略避免幻读(phantom)现象的产生。此外，还提供插入缓冲(insert buffer)、二次写(double write)、自适应哈希索引(adaptive hash index)、预读(read ahead)等高性能和高可用的功能。<br>采用聚集(clustered)的方式，因此每张表的存储都是按主键的顺序进行存放。如果没有显式地在表定义时指定主键，InnoDB存储引擎会为每一行生成一个6字节的ROWID，作为主键。</p>
+<h4 id="MyISAM存储引擎"><a href="#MyISAM存储引擎" class="headerlink" title="MyISAM存储引擎"></a>MyISAM存储引擎</h4><p>MyISAM存储引擎不支持事务、表锁设计、支持全文索引，主要面向一些OLAP(联机分析技术)数据库应用。适用于查询多，几乎没插入不需要事务的场景。<br>MyISAM存储引擎只缓存(cache)索引文件，而不缓冲数据文件。<br>MyISAM存储引擎表由MYD和MYI组成，MYD主要存放数据文件，MYI用来存放索引文件。可使用myisampack来压缩数据文件。</p>
+<h4 id="NDB存储引擎"><a href="#NDB存储引擎" class="headerlink" title="NDB存储引擎"></a>NDB存储引擎</h4><p>它是一个集群存储引擎。特点是数据全部存放在内存中，NDB数据存储节点可以线性地提高数据库性能，是高可用、高性能的集群系统。<br>NDB存储引擎的连接操作(JOIN)是在MySQL数据库层完成的，而不是存储引擎层，导致查询速度很慢。</p>
+<h4 id="Memory存储引擎"><a href="#Memory存储引擎" class="headerlink" title="Memory存储引擎"></a>Memory存储引擎</h4><p>Memory存储引擎将表中的数据存放在内存中，如果数据库重启或发生崩溃，表中数据都将消失。<br>它适合用于存储临时数据的临时表，以及数据仓库中的维度表。Memroy存储引擎默认使用哈希索引，而不是B+树索引。<br>Memory只支持表锁，并发性能差， 不支持TEXT和BLOB列类型。并且，存储变长字段(varchar)时是按照定长字段(char)的方式进行的，因此会浪费内存。<br>MySQL数据库使用Memory存储引擎作为Memory存储引擎作为临时表来存放查询的中间结果集(intermediate result)。如果中间结果集大于Memory存储引擎表的容量设置，又或者中间结果含有TEXT或BOLB列类型字段，则MySQL数据库会把其转换到MyISAM存储引擎表而存放到磁盘中。之前提到MyISAM不缓存数据文件，因此这时产生的临时表的性能对于查询会有所损失。</p>
+<h4 id="Archive存储引擎"><a href="#Archive存储引擎" class="headerlink" title="Archive存储引擎"></a>Archive存储引擎</h4><p>Archive存储引擎只支持INSERT和SELECT操作。Archive存储引擎使用zlib算法将数据行(row)进行压缩后存储。其非常适合存储归档数据，如日志信息。设计目标是提供高速的插入和压缩功能。</p>
+<h4 id="Federated存储引擎"><a href="#Federated存储引擎" class="headerlink" title="Federated存储引擎"></a>Federated存储引擎</h4><p>Federated存储引擎表不存放数据，只是指向一台远程MySQL数据库服务器上的表。</p>
+<p>我们可以通过SHOW ENGINES语句查看当前使用的MySQL数据库所支持的存储引擎。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-6-26/42466535.jpg" alt=""></p>
+<h3 id="连接MySQL"><a href="#连接MySQL" class="headerlink" title="连接MySQL"></a>连接MySQL</h3><p>连接MySQL操作是一个连接进程和MySQL数据库实例进行通信。</p>
+<ol>
+<li><p>TCP/IP ：建立一个基于网络的连接请求。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">USE mysql;</span><br><span class="line">SELECT * FROM user\G</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>命名管道和共享内存<br>如果使用命名管道，必须在配置文件中启用<code>--enable-named-pipe</code>选项。<br>如果使用共享内存的连接方式，在配置文件中添加<code>--shared-memory</code>实现。</p>
+</li>
+<li>UNIX域套接字<br>其只能在MySQL客户端和数据库实例在一台服务器上的情况下使用。配置文件中要指定套接字文件的路径，如<code>--socket=/tmp.mysql.sock</code></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/06/25/MySQL技术内幕/第一章/" data-id="cjjko8yln0000a8vabofgqoq0" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL技术内幕/">MySQL技术内幕</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/06/26/MySQL技术内幕/第二章/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          第二章 MySQL体系结构和存储引擎 读书笔记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/06/15/MySQL必知必会/第二十五二十六二十七三十章/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">MySQL必知必会学习笔记(11)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java多线程/">Java多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx学习笔记/">Nginx学习笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python基础/">Python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习成长/">学习成长</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/心情/">心情</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL技术内幕/">MySQL技术内幕</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/MySQL必知必会/" style="font-size: 20px;">MySQL必知必会</a> <a href="/tags/MySQL技术内幕/" style="font-size: 10px;">MySQL技术内幕</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/26/MySQL技术内幕/第二章/">第二章 MySQL体系结构和存储引擎 读书笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/25/MySQL技术内幕/第一章/">第一章 MySQL体系结构和存储引擎 读书笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/15/MySQL必知必会/第二十五二十六二十七三十章/">MySQL必知必会学习笔记(11)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/30/MySQL必知必会/第二十二二十三二十四章/">MySQL必知必会学习笔记(10)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/05/MySQL必知必会/第十九二十二十一章/">MySQL必知必会学习笔记(9)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 殷鑫<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

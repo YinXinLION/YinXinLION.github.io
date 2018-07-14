@@ -65,6 +65,115 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-MySQL必知必会/第五六章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/20/MySQL必知必会/第五六章/" class="article-date">
+  <time datetime="2018-04-20T14:27:28.000Z" itemprop="datePublished">2018-04-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/20/MySQL必知必会/第五六章/">MySQL必知必会学习笔记(3)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="排序检索数据"><a href="#排序检索数据" class="headerlink" title="排序检索数据"></a>排序检索数据</h2><p><strong>子句：</strong> SQL语句由子句构成，有些子句是必须的，而有的是可选的。一个子句通常由一个关键字和所提供的数据组成。</p>
+<p>为了明确地排序用SELECT语句检索出的数据，可以使用<code>ORDER BY</code>子句。<code>ORDER BY</code>子句取一个或多个列的名字，据此对输出进行排序。<br><code>SELECT prod_name FROM products ORDER BY prod_name;</code><br>指示MYSQL对prod_name列以字母顺序排序数据。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-20/739887.jpg" alt=""></p>
+<p>通过非选择列进行排序也是合法的。</p>
+<p><strong>多个列排序：</strong> 为了按多个列排序，只要指定列名，列名之间用逗号分开即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_id, prod_price, prod_name</span><br><span class="line">FROM products</span><br><span class="line">ORDER BY prod_price, prod_name;</span><br></pre></td></tr></table></figure></p>
+<p>先按价格排序，然后再按名称排序。</p>
+<p><strong>指定排序方向：</strong> 数据排序不限于升序排序(从A到Z)。这只是默认的排序顺序，可以使用<code>ORDER BY</code>子句降序(从Z到A)顺序排序。为了进行降序排序，必须指定<code>DESC</code>关键字。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_id, prod_price, prod_name</span><br><span class="line">FROM products</span><br><span class="line">ORDER BY prod_price DESC, prod_name;</span><br></pre></td></tr></table></figure></p>
+<p>prod_price列以降序排序，而prod_name列仍按标准的升序排序。</p>
+<p><strong>在多个列上降序排序</strong> 如果想在多个列上进行降序排序，必须对每个列指定DESC关键字。</p>
+<p>在字典排序中，A被视为与a相同，这是MySQL的默认行为。</p>
+<p><code>ORDER BY</code> 子句的位置 在给出 <code>ORDER BY</code> 子句时，应该保证它位于 <code>FROM</code> 子句之后。如果使用<code>LIMIT</code> ，它必须位于 <code>ORDER BY</code>之后。使用子句的次序不对将产生错误消息。</p>
+<h2 id="过滤数据"><a href="#过滤数据" class="headerlink" title="过滤数据"></a>过滤数据</h2><p>在SELECT语句中，数据根据WHERE子句中指定的搜索条件进行过滤。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_name, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_price = 2.50;</span><br></pre></td></tr></table></figure></p>
+<p>数据可以再应用层过滤，但效率不高，数据库对数据过滤进行了优化。</p>
+<p>WHERE子句的位置：在同时使用ORDER BY和WHERE子句时，应该让ORDER BY位于WHERE之后。</p>
+<p>范围检查：使用BETWEEN操作符。匹配范围中所有的值，包括制定的开始值和结束值。</p>
+<p>空值检查：<code>WHERE prod_price IS NULL;</code></p>
+<p>NULL与不匹配问题：未知具有特殊的含义，数据库不知道它们是否匹配，所以在匹配过滤或不匹配过滤时不返回它们。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/20/MySQL必知必会/第五六章/" data-id="cjgefzorr0003n8va3c2p9umm" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-MySQL必知必会/第三四章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/18/MySQL必知必会/第三四章/" class="article-date">
+  <time datetime="2018-04-18T02:27:28.000Z" itemprop="datePublished">2018-04-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/18/MySQL必知必会/第三四章/">MySQL必知必会学习笔记(2)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="使用MySQL"><a href="#使用MySQL" class="headerlink" title="使用MySQL"></a>使用MySQL</h2><p><strong>选择数据库</strong><br>在最初连接到MYSQL时，没有任何数据库打开供你使用。在执行任意数据库时，需要选择一个数据库。可使用关键字<code>USE</code>。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-18/71997722.jpg" alt="use databaes;"><br>一定要使用use打开数据库，才能读取其中的数据。</p>
+<p><strong>了解数据库和表</strong><br>数据库、表、列、用户、权限等的信息被存储在数据库和表中。内部的表一般不直接访问。可通过SHOW命令来显示这些信息<br><code>show databases;</code>返回可用数据库的一个列表。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-18/40899116.jpg" alt=""><br><code>show tables;</code>返回一个数据库内的表的列表<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-18/49940010.jpg" alt=""><br><code>show columns from tablename</code>对每个字段返回一行，行中包括字段名、数据类型、是否允许NULL、键信息、默认值以及其他信息(如字段cust_id的auto_increment)<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-18/30707392.jpg" alt=""></p>
+<blockquote>
+<blockquote>
+<p>自动增量：在每个行添加到表中时，MySQL可以自动地为每个行分配下一个可用编号，不用在添加一行时手动分配唯一值</p>
+<p>DESCRIBE语句：支持用DESRIBE作为SHOW COLUMNS FROM的一张快捷方式。</p>
+</blockquote>
+</blockquote>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-18/23355202.jpg" alt=""></p>
+<p><code>show status;</code> 用于显示广泛的服务器状态信息<br><code>show create database</code>和<code>show create table</code>显示创建特定数据库或表的MySQL语句<br><code>show grants;</code>用于显示授予用户的安全权限<br><code>show errors</code>和<code>show warnings</code>用来显示服务器错误或警告信息</p>
+<h2 id="检索数据"><a href="#检索数据" class="headerlink" title="检索数据"></a>检索数据</h2><p><strong>检索单个列：</strong> <code>SELECT prod_name FROM products;</code> 从products表中检索一个名为prod_name的列。<br>SELECT后的结果是未排序的数据，可能查询出来顺序不一样。</p>
+<p>SQL大小写：关键字使用大写，所有列和表名使用小写。</p>
+<p><strong>检索多个列：</strong> <code>SELECT prod_id, prod_name, prod_price FROM products;</code> 从products中选择数据。指定了3个列，列名之间用都好分隔。</p>
+<p><strong>检索所有列：</strong> <code>SLELCT * FROM products;</code> 如果给定一个通配符<code>*</code>，则返回表中所有列。</p>
+<p>注意：不用明确列出所需列，但检索不需要的列通常会降低检索和应用程序的性能。</p>
+<p>关键字<code>DISTINCT</code>,指示MySQL只返回不同的值。如果使用<code>DISTINCT</code>关键字，它必须直接放在列名的前面。应用于所有列而不仅是前置它的列。<br>不能部分使用 <code>DISTINCT</code>，<code>SELECT DISTINCT vend_id, prod_price</code>，除非指定的两个列都不同，否则所有行都将被检索出来。</p>
+<p><strong>限制结果：</strong> <code>SELECT prod_name FROM products LIMIT 5;</code>  <code>LIMIT 5</code> 指示MySQL返回不多于5行。<br><code>LIMIT 5, 5</code> 指示MySQL返回从行5开始的5行。第一个数为开始位置，第二个数为要检索的行数。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/18/MySQL必知必会/第三四章/" data-id="cjg83p6p20001v0vaf0se8ozo" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-MySQL必知必会/第一二章" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/04/17/MySQL必知必会/第一二章/" class="article-date">
@@ -488,131 +597,6 @@
 
 
   
-    <article id="post-阅读笔记-3月" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/03/01/阅读笔记-3月/" class="article-date">
-  <time datetime="2018-03-01T15:01:10.000Z" itemprop="datePublished">2018-03-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/学习成长/">学习成长</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/01/阅读笔记-3月/">阅读笔记-3月</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="最小生成树算法"><a href="#最小生成树算法" class="headerlink" title="最小生成树算法"></a>最小生成树算法</h3><h4 id="Kruskal算法"><a href="#Kruskal算法" class="headerlink" title="Kruskal算法"></a>Kruskal算法</h4><p>适用范围：要求无向图。<br>思路：运用并查集，先将每个节点作为一个集合，然后以边的权重建立一个最小堆，然后获取最小的边，查看这两个点是否在同一个集合，不在则将这条边保存在result中，并且并查集合并两个点。不断地循环取出最小的边。</p>
-<h5 id="Prim算法"><a href="#Prim算法" class="headerlink" title="Prim算法"></a>Prim算法</h5><p>使用范围：要求无向图。<br>思路：建立一个Hashset查看点是否在set中。从某一个点出发，找到边最小的，看这个点是否在set中不在则加入result，并把这个点相邻的边都加上。总之就是不断地找最小的边，并且不能产生回路。</p>
-<h3 id="递归和动态规划-2018-3-4"><a href="#递归和动态规划-2018-3-4" class="headerlink" title="递归和动态规划 2018-3-4"></a>递归和动态规划 2018-3-4</h3><p>暴力递归：</p>
-<ol>
-<li>把问题转化为规模缩小了的同类问题的子问题。</li>
-<li>有明确的不需要继续进行的递归的条件。</li>
-<li>有当得到了子问题的结果之后的决策过程。</li>
-<li>不记录每一个子问题的解。</li>
-</ol>
-<p>动态规划：</p>
-<ol>
-<li>从暴力递归中来。</li>
-<li>将每一个子问题的解记录下来，避免重复计算。</li>
-<li>将暴力递归的过程，抽象成了状态表达。</li>
-<li>存在化简状态表达。</li>
-</ol>
-<h3 id="MySQL索引原则-2018-3-7"><a href="#MySQL索引原则-2018-3-7" class="headerlink" title="MySQL索引原则 2018-3-7"></a>MySQL索引原则 2018-3-7</h3><p>1.最左前缀匹配原则。mysql会一直向右匹配直到遇到范围查询(&gt;,&lt;,between,like)就停止匹配，如果建立(a,b,c,d)索引,abcd的顺序可以任意调整。<br>2.=和in可以乱序,mysql优化器会优化，a=1 b=2 c=3建立(a,b,c)索引可以任意顺序。<br>3.尽量选择区分度高的列作为索引<br>4.索引列不能参与计算(检索时元素应用函数才能比较，成本太大)<br>5.尽量扩展索引，不要新建索引。</p>
-<h3 id="基于内存管理方案-2018-3-8"><a href="#基于内存管理方案-2018-3-8" class="headerlink" title="基于内存管理方案 2018-3-8"></a>基于内存管理方案 2018-3-8</h3><ol>
-<li>单一连续区：每次只运行一个程序，用户程序独占内存。</li>
-<li>固定分区：系统把内存空间分割成若干个连续区域，每个分区只能装一个进程。</li>
-<li>可变分区：根据进程需求，把可分配的内存空间分割出一个分区，分配给进程。</li>
-<li>页式存储管理方案<br>(1)用户进程地址空间被划分成大小相等的部分，成为页或页面<br>(2)内存空间按照同样大小进行划分，称为页框。<br>(3)以页为单位进行内存分配，按进程需求来分配页。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-8/64888252.jpg" alt=""><br>一个进程一个页表，通过查页表项来实现。</li>
-<li>段式存储管理方案<br>(1)用户进程地址空间按照程序自身逻辑关系划分成若干个程序段，每个程序段都有一个段名。<br>(2)内存空间被动态分成若干长度不同的区域，称为物理段。<br>(3)内存分配规则：以段为单位进行分配，每段在内存占据连续空间，各段之间可以不相同。<br>(4)逻辑地址为段号+段内地址。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-8/29113555.jpg" alt=""></li>
-<li>段页式存储管理方案<br>(1)用户进程地址空间先按段进行划分，每一段再按页面进行划分。</li>
-</ol>
-<h3 id="虚拟内存技术"><a href="#虚拟内存技术" class="headerlink" title="虚拟内存技术"></a>虚拟内存技术</h3><p>基本思想：每个程序拥有自己的地址空间，这个空间被分割成很多个块，每一个块称为页面。<br>每一页都有连续的地址范围。这些页被映射到物理内存，但并不是所有页都必须在内存中才能运行程序。<br>当程序引用到一部分在物理内存中的地址空间时，由硬件立刻执行必要的映射。<br>当程序引用到一部分不再物理内存中的地址空间时，由操作系统（缺页异常）负责将缺失的部分装入物理内存并重新执行失败的指令。</p>
-<h3 id="TCP三次握手与四次挥手"><a href="#TCP三次握手与四次挥手" class="headerlink" title="TCP三次握手与四次挥手"></a>TCP三次握手与四次挥手</h3><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-8/7765990.jpg" alt=""><br>第一次握手：建立连接，SYN为1;客户端进入SYN_SEND状态。<br>第二次握手：服务器收到SYN报文，对SYN报文确认ACK=seq+1，SYN置1；服务器进入SYN_RECV状态。<br>第三次握手：客户端收到服务器SYN+ACK，向服务器发送ACK；发送完毕，服务器客户端进入ESTABLISHED。</p>
-<p>第一次挥手：主机1向主机2发送FIN报文段；此时，主机1进入FIN_WAIT1.<br>第二次挥手：主机2接收到FIN后，进入CLOSE_WAIT状态，发送ACK，主机1接收到ACK后，进入FIN_WAIT2状态<br>第三次挥手：主机2向主机1发送FIN报文段，主机2进入LAST_ACK状态，<br>第四次挥手：主机1向主机2发送ACK，主机1进入TIME_WAIT状态。</p>
-<h3 id="简易实现LRU-HashMap-链表"><a href="#简易实现LRU-HashMap-链表" class="headerlink" title="简易实现LRU HashMap + 链表"></a>简易实现LRU HashMap + 链表</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">public class LRUCache&lt;K,V&gt; &#123;</span><br><span class="line">    private int MAX_CACHE_SIZE;//map的容量</span><br><span class="line">    private Entry first;//最前面</span><br><span class="line">    private Entry last;//最后面</span><br><span class="line">    //hashmap + 链表</span><br><span class="line">    private HashMap&lt;K, Entry&lt;K, V&gt;&gt; hashMap;</span><br><span class="line"></span><br><span class="line">    public void put(K key, V value) &#123;</span><br><span class="line">        Entry entry = getEntry(key);//从hashmap中get</span><br><span class="line">        if (entry == null) &#123;</span><br><span class="line">            //如果没有找到元素，判断size大小</span><br><span class="line">            if (hashMap.size() &gt;= MAX_CACHE_SIZE) &#123;</span><br><span class="line">                //如果大的话，移除last指的元素</span><br><span class="line">                hashMap.remove(last.key);</span><br><span class="line">                removeLast();</span><br><span class="line">            &#125;</span><br><span class="line">            enrty = new Entry();</span><br><span class="line">            moveToFirst(entry);</span><br><span class="line">            hashMap.put(key, entry);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;  </span><br><span class="line">    public void moveToFirst(Entry entry) &#123;</span><br><span class="line">        if (fisrt == null || last == null) &#123;</span><br><span class="line">            first = last = entry;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        entry.next = first;</span><br><span class="line">        first.pre = entry;</span><br><span class="line">        first = entry;</span><br><span class="line">        entry.pre = null;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    public void removeLast() &#123;</span><br><span class="line">        if (last != null)&#123;</span><br><span class="line">            last = last.pre;</span><br><span class="line">            if (last == null)</span><br><span class="line">                first = null;</span><br><span class="line">            else</span><br><span class="line">                last.next = null;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="JAVA消息中间件-MQ"><a href="#JAVA消息中间件-MQ" class="headerlink" title="JAVA消息中间件 MQ"></a>JAVA消息中间件 MQ</h3><h4 id="MQ的几种消息传递方式"><a href="#MQ的几种消息传递方式" class="headerlink" title="MQ的几种消息传递方式"></a>MQ的几种消息传递方式</h4><p><strong>发布-订阅模式</strong><br>发布订阅模式有点类似于我们日常生活中订阅报纸。每一种日报代表一个topic，例如北京日报是一个topic，华商报是另一个topic。<br>对于一份报纸发行方来说，他和所有的订阅者就构成了<strong>一对多</strong>的关系。</p>
-<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-8/82709308.jpg" alt="发布订阅模式"></p>
-<p><strong>点对点模式</strong><br>点对点模式就相当于打电话，由两端的双方独享这一通信链路。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-8/83479861.jpg" alt="点对点模式"></p>
-<p><strong>扩展的对点模式</strong><br>request-response的通信方式很常见，但是不是默认提供的一种模式。在前面的两种模式中都是一方负责发送消息而另外一方负责处理。而我们实际中的很多应用相当于一种一应一答的过程，需要双方都能给对方发送消息。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-8/8544323.jpg" alt=""></p>
-<p><strong>在项目中的理解</strong><br>MQ是一个消息存储/消息中转站。不仅实现简单的消息中转站功能，还实现了消息生产者和消息消费者的认证功能。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-8/52122054.jpg" alt="MQ集群"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/01/阅读笔记-3月/" data-id="cjg4i9a9r000xwovag01mryt5" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-阅读笔记-2月" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/02/01/阅读笔记-2月/" class="article-date">
-  <time datetime="2018-02-01T15:25:05.000Z" itemprop="datePublished">2018-02-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/学习成长/">学习成长</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/01/阅读笔记-2月/">阅读笔记-2月</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="日常学习-2018-2-1"><a href="#日常学习-2018-2-1" class="headerlink" title="日常学习 2018-2-1"></a>日常学习 2018-2-1</h3><p>ClassCastException:当试图将对象强制转换为不是实例的子类时，抛出该异常。</p>
-<p>内部类分为4种：</p>
-<ol>
-<li>成员内部类：外部类的成员。</li>
-<li>局部内部类</li>
-<li>静态内部类：类似于静态成员。</li>
-<li>匿名内部类：实现一个接口或者继承一个抽象类。<br>外部类不能任意访问访问内部类的成员，外部类必须创建其内部类的对象(静态内部类除外)。内部类可以访问所有外部类的成员，因为内部类就像是一个类的成员。
-        
-          <p class="article-more-link">
-            <a href="/2018/02/01/阅读笔记-2月/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/02/01/阅读笔记-2月/" data-id="cjg4i9a9u0010wovann2iryd5" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -638,7 +622,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL技术内幕/">MySQL技术内幕</a></li></ul>
     </div>
   </div>
 
@@ -648,7 +632,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/MySQL必知必会/" style="font-size: 10px;">MySQL必知必会</a>
+      <a href="/tags/MySQL必知必会/" style="font-size: 20px;">MySQL必知必会</a> <a href="/tags/MySQL技术内幕/" style="font-size: 10px;">MySQL技术内幕</a>
     </div>
   </div>
 
@@ -670,6 +654,14 @@
       <ul>
         
           <li>
+            <a href="/2018/06/26/MySQL技术内幕/第二章/">第二章 MySQL体系结构和存储引擎 读书笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/25/MySQL技术内幕/第一章/">第一章 MySQL体系结构和存储引擎 读书笔记</a>
+          </li>
+        
+          <li>
             <a href="/2018/06/15/MySQL必知必会/第二十五二十六二十七三十章/">MySQL必知必会学习笔记(11)</a>
           </li>
         
@@ -679,14 +671,6 @@
         
           <li>
             <a href="/2018/05/05/MySQL必知必会/第十九二十二十一章/">MySQL必知必会学习笔记(9)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/27/MySQL必知必会/第十七十八章/">MySQL必知必会学习笔记(8)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/25/MySQL必知必会/第十五十六章/">MySQL必知必会学习笔记(7)</a>
           </li>
         
       </ul>

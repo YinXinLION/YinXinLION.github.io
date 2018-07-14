@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>第二章 MySQL体系结构和存储引擎 读书笔记 | 努力是为了将对世界的所有渴望都掌握在手上</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="InooDB存储引擎是第一个完整支持ACID事务的MySQL存储引擎，特点是：行锁设计、支持MVCC、支持外键、提供一致性非锁定读，并设计用来最有效地利用以及使用内存和CPU 。一致性非锁定读的情况下即使记录因为UPDATE而被加了X锁，其他事务仍然能够读取记录，不会阻塞。，是通过innodb的行多版本实现的，行多版本并不是实际存储多个版本记录而是通过undo实现。 InnoDB存储引擎的版本My">
+<meta name="keywords" content="MySQL技术内幕">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第二章 MySQL体系结构和存储引擎 读书笔记">
+<meta property="og:url" content="http://yoursite.com/2018/06/26/MySQL技术内幕/第二章/index.html">
+<meta property="og:site_name" content="努力是为了将对世界的所有渴望都掌握在手上">
+<meta property="og:description" content="InooDB存储引擎是第一个完整支持ACID事务的MySQL存储引擎，特点是：行锁设计、支持MVCC、支持外键、提供一致性非锁定读，并设计用来最有效地利用以及使用内存和CPU 。一致性非锁定读的情况下即使记录因为UPDATE而被加了X锁，其他事务仍然能够读取记录，不会阻塞。，是通过innodb的行多版本实现的，行多版本并不是实际存储多个版本记录而是通过undo实现。 InnoDB存储引擎的版本My">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-6-27/34128853.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-6-27/31355917.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-6-27/47213816.jpg">
+<meta property="og:updated_time" content="2018-06-27T04:41:02.795Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第二章 MySQL体系结构和存储引擎 读书笔记">
+<meta name="twitter:description" content="InooDB存储引擎是第一个完整支持ACID事务的MySQL存储引擎，特点是：行锁设计、支持MVCC、支持外键、提供一致性非锁定读，并设计用来最有效地利用以及使用内存和CPU 。一致性非锁定读的情况下即使记录因为UPDATE而被加了X锁，其他事务仍然能够读取记录，不会阻塞。，是通过innodb的行多版本实现的，行多版本并不是实际存储多个版本记录而是通过undo实现。 InnoDB存储引擎的版本My">
+<meta name="twitter:image" content="http://oqp1ywek9.bkt.clouddn.com/18-6-27/34128853.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="努力是为了将对世界的所有渴望都掌握在手上" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">努力是为了将对世界的所有渴望都掌握在手上</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-MySQL技术内幕/第二章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/26/MySQL技术内幕/第二章/" class="article-date">
+  <time datetime="2018-06-26T14:34:33.000Z" itemprop="datePublished">2018-06-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      第二章 MySQL体系结构和存储引擎 读书笔记
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>InooDB存储引擎是第一个完整支持ACID事务的MySQL存储引擎，特点是：行锁设计、支持MVCC、支持外键、提供一致性非锁定读，并设计用来最有效地利用以及使用内存和CPU 。<br>一致性非锁定读的情况下即使记录因为UPDATE而被加了X锁，其他事务仍然能够读取记录，不会阻塞。，是通过innodb的行多版本实现的，行多版本并不是实际存储多个版本记录而是通过undo实现。</p>
+<h3 id="InnoDB存储引擎的版本"><a href="#InnoDB存储引擎的版本" class="headerlink" title="InnoDB存储引擎的版本"></a>InnoDB存储引擎的版本</h3><p>MySQL5.1中支持两个版本的InnoDB，一个是静态编译的InnoDB版本，另一个是动态加载的InnoDB版本。<br>| 版本 | 功能 |<br>| - | :-: |<br>| 静态编译InnoDB版本 | 支持ACID、行锁设计、MVCC |<br>| InnoDB 1.0.x | 继承上述版本所有功能，增加了compress和dynamic页格式 |<br>| InnoDB 1.1.x | 继承上述版本所有功能，增加了Linux AIO、多回滚段 |<br>| InnoDB 1.2.x| 继承上述版本所有功能，增加了全文索引支持、在线索引添加|</p>
+<h3 id="InnoDB体系架构"><a href="#InnoDB体系架构" class="headerlink" title="InnoDB体系架构"></a>InnoDB体系架构</h3><p>InnoDB存储引擎由多个内存块，可以认为这些内存块组成了一个大的内存池，负责如下的工作：</p>
+<ol>
+<li>维护所有进程/线程需要访问的多个内部数据结构。</li>
+<li>缓存磁盘上的数据，方便快速地读取，同时在对磁盘文件的数据修改之前在这里缓存。</li>
+<li>重做日志(redo log)缓冲。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-6-27/34128853.jpg" alt="InnoDB存储引擎体系架构"><br>后台线程主要作用是负责刷新内存池中的数据，保证缓冲池中的内存缓存的是最近的数据。此外将已修改的数据文件刷新到磁盘文件，同时保证在数据库发生异常的情况下InnoDB能恢复到正常运行状态。</li>
+</ol>
+<h4 id="后台线程"><a href="#后台线程" class="headerlink" title="后台线程"></a>后台线程</h4><p>Innodb存储引擎是多线程的模型，因此其后台有多个不同的后台线程，负责处理不同的任务。</p>
+<ol>
+<li>Master Thread<br>Master Thread是一个非常核心的后台线程，主要负责将缓存池中的数据异步刷新到磁盘，保证数据一致性，包括脏页的刷新、合并插入缓冲(INSERT BUFFER)、UNDO页的回收等。</li>
+<li>IO Thread<br>在Innodb存储引擎中大量使用了AIO(Async IO)来处理写IO请求，大大提高数据库性能。IO Thread的工作主要是负责这些IO请求的回调(Callback)处理。Innodb1.0之前有4中IO Thread，分别是write、read、insert buffer、log IO thread。Linux下无法对IO Thread数量进行调整，Windows下可以修改innodb_file_io_threads。从InnoDB1.0.x开始，read thread和write thread分别增大到了4个，并不使用innodb_file_io_threads，分别使用innodb_read_io_threads和innodb_wirte_io_threads参数进行设置。<br>查看innodb版本：<code>SHOW VARIABLES LIKE &#39;innodb_version&#39;\G</code><br><img src="http://oqp1ywek9.bkt.clouddn.com/18-6-27/31355917.jpg" alt="查看innodb版本"><br>查看read/write线程数:<code>SHOW VARIABLES LIKE &#39;innodb_%io_threads&#39;\G</code><br><img src="http://oqp1ywek9.bkt.clouddn.com/18-6-27/47213816.jpg" alt="查看read/write线程数"><br>观察InnoDB中的IO Thread：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW ENGINE INNODB STATUS\G</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">  Type: InnoDB</span><br><span class="line">  Name:</span><br><span class="line">Status:</span><br><span class="line">=====================================</span><br><span class="line">2018-06-27 11:33:04 0x3020 INNODB MONITOR OUTPUT</span><br><span class="line">=====================================</span><br><span class="line">Per second averages calculated from the last 28 seconds</span><br><span class="line">-----------------</span><br><span class="line">BACKGROUND THREAD</span><br><span class="line">-----------------</span><br><span class="line">srv_master_thread loops: 6 srv_active, 0 srv_shutdown, 327120 srv_idle</span><br><span class="line">srv_master_thread log flush and writes: 327126</span><br><span class="line">----------</span><br><span class="line">SEMAPHORES</span><br><span class="line">----------</span><br><span class="line">OS WAIT ARRAY INFO: reservation count 21</span><br><span class="line">OS WAIT ARRAY INFO: signal count 14</span><br><span class="line">RW-shared spins 0, rounds 29, OS waits 11</span><br><span class="line">RW-excl spins 0, rounds 44, OS waits 0</span><br><span class="line">RW-sx spins 0, rounds 0, OS waits 0</span><br><span class="line">Spin rounds per wait: 29.00 RW-shared, 44.00 RW-excl, 0.00 RW-sx</span><br><span class="line">------------</span><br><span class="line">TRANSACTIONS</span><br><span class="line">------------</span><br><span class="line">Trx id counter 246788</span><br><span class="line">Purge done for trx&apos;s n:o &lt; 244811 undo n:o &lt; 0 state: running but idle</span><br><span class="line">History list length 3376</span><br><span class="line">LIST OF TRANSACTIONS FOR EACH SESSION:</span><br><span class="line">---TRANSACTION 283520093906736, not started</span><br><span class="line">0 lock struct(s), heap size 1136, 0 row lock(s)</span><br><span class="line">--------</span><br><span class="line">FILE I/O</span><br><span class="line">--------</span><br><span class="line">I/O thread 0 state: wait Windows aio (insert buffer thread)</span><br><span class="line">I/O thread 1 state: wait Windows aio (log thread)</span><br><span class="line">I/O thread 2 state: wait Windows aio (read thread)</span><br><span class="line">I/O thread 3 state: wait Windows aio (read thread)</span><br><span class="line">I/O thread 4 state: wait Windows aio (read thread)</span><br><span class="line">I/O thread 5 state: wait Windows aio (read thread)</span><br><span class="line">I/O thread 6 state: wait Windows aio (write thread)</span><br><span class="line">I/O thread 7 state: wait Windows aio (write thread)</span><br><span class="line">I/O thread 8 state: wait Windows aio (write thread)</span><br><span class="line">I/O thread 9 state: wait Windows aio (write thread)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>可以看到I/O thread0 是insert buffer thread。读线程的ID总是小于写线程。</p>
+<ol>
+<li>Purge Thread<br>事务被提交后，其所使用的undolog可能不再需要，因此需要Purge Thread来回收已经使用并分配的undo页。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/06/26/MySQL技术内幕/第二章/" data-id="cjjko8yls0001a8va3diefdri" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL技术内幕/">MySQL技术内幕</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/06/25/MySQL技术内幕/第一章/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">第一章 MySQL体系结构和存储引擎 读书笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java多线程/">Java多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx学习笔记/">Nginx学习笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python基础/">Python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习成长/">学习成长</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/心情/">心情</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL技术内幕/">MySQL技术内幕</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/MySQL必知必会/" style="font-size: 20px;">MySQL必知必会</a> <a href="/tags/MySQL技术内幕/" style="font-size: 10px;">MySQL技术内幕</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/26/MySQL技术内幕/第二章/">第二章 MySQL体系结构和存储引擎 读书笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/25/MySQL技术内幕/第一章/">第一章 MySQL体系结构和存储引擎 读书笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/15/MySQL必知必会/第二十五二十六二十七三十章/">MySQL必知必会学习笔记(11)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/30/MySQL必知必会/第二十二二十三二十四章/">MySQL必知必会学习笔记(10)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/05/MySQL必知必会/第十九二十二十一章/">MySQL必知必会学习笔记(9)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 殷鑫<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

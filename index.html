@@ -65,6 +65,125 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-MySQL技术内幕/第二章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/26/MySQL技术内幕/第二章/" class="article-date">
+  <time datetime="2018-06-26T14:34:33.000Z" itemprop="datePublished">2018-06-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/26/MySQL技术内幕/第二章/">第二章 MySQL体系结构和存储引擎 读书笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>InooDB存储引擎是第一个完整支持ACID事务的MySQL存储引擎，特点是：行锁设计、支持MVCC、支持外键、提供一致性非锁定读，并设计用来最有效地利用以及使用内存和CPU 。<br>一致性非锁定读的情况下即使记录因为UPDATE而被加了X锁，其他事务仍然能够读取记录，不会阻塞。，是通过innodb的行多版本实现的，行多版本并不是实际存储多个版本记录而是通过undo实现。</p>
+<h3 id="InnoDB存储引擎的版本"><a href="#InnoDB存储引擎的版本" class="headerlink" title="InnoDB存储引擎的版本"></a>InnoDB存储引擎的版本</h3><p>MySQL5.1中支持两个版本的InnoDB，一个是静态编译的InnoDB版本，另一个是动态加载的InnoDB版本。<br>| 版本 | 功能 |<br>| - | :-: |<br>| 静态编译InnoDB版本 | 支持ACID、行锁设计、MVCC |<br>| InnoDB 1.0.x | 继承上述版本所有功能，增加了compress和dynamic页格式 |<br>| InnoDB 1.1.x | 继承上述版本所有功能，增加了Linux AIO、多回滚段 |<br>| InnoDB 1.2.x| 继承上述版本所有功能，增加了全文索引支持、在线索引添加|</p>
+<h3 id="InnoDB体系架构"><a href="#InnoDB体系架构" class="headerlink" title="InnoDB体系架构"></a>InnoDB体系架构</h3><p>InnoDB存储引擎由多个内存块，可以认为这些内存块组成了一个大的内存池，负责如下的工作：</p>
+<ol>
+<li>维护所有进程/线程需要访问的多个内部数据结构。</li>
+<li>缓存磁盘上的数据，方便快速地读取，同时在对磁盘文件的数据修改之前在这里缓存。</li>
+<li>重做日志(redo log)缓冲。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-6-27/34128853.jpg" alt="InnoDB存储引擎体系架构"><br>后台线程主要作用是负责刷新内存池中的数据，保证缓冲池中的内存缓存的是最近的数据。此外将已修改的数据文件刷新到磁盘文件，同时保证在数据库发生异常的情况下InnoDB能恢复到正常运行状态。</li>
+</ol>
+<h4 id="后台线程"><a href="#后台线程" class="headerlink" title="后台线程"></a>后台线程</h4><p>Innodb存储引擎是多线程的模型，因此其后台有多个不同的后台线程，负责处理不同的任务。</p>
+<ol>
+<li>Master Thread<br>Master Thread是一个非常核心的后台线程，主要负责将缓存池中的数据异步刷新到磁盘，保证数据一致性，包括脏页的刷新、合并插入缓冲(INSERT BUFFER)、UNDO页的回收等。</li>
+<li>IO Thread<br>在Innodb存储引擎中大量使用了AIO(Async IO)来处理写IO请求，大大提高数据库性能。IO Thread的工作主要是负责这些IO请求的回调(Callback)处理。Innodb1.0之前有4中IO Thread，分别是write、read、insert buffer、log IO thread。Linux下无法对IO Thread数量进行调整，Windows下可以修改innodb_file_io_threads。从InnoDB1.0.x开始，read thread和write thread分别增大到了4个，并不使用innodb_file_io_threads，分别使用innodb_read_io_threads和innodb_wirte_io_threads参数进行设置。<br>查看innodb版本：<code>SHOW VARIABLES LIKE &#39;innodb_version&#39;\G</code><br><img src="http://oqp1ywek9.bkt.clouddn.com/18-6-27/31355917.jpg" alt="查看innodb版本"><br>查看read/write线程数:<code>SHOW VARIABLES LIKE &#39;innodb_%io_threads&#39;\G</code><br><img src="http://oqp1ywek9.bkt.clouddn.com/18-6-27/47213816.jpg" alt="查看read/write线程数"><br>观察InnoDB中的IO Thread：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW ENGINE INNODB STATUS\G</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">  Type: InnoDB</span><br><span class="line">  Name:</span><br><span class="line">Status:</span><br><span class="line">=====================================</span><br><span class="line">2018-06-27 11:33:04 0x3020 INNODB MONITOR OUTPUT</span><br><span class="line">=====================================</span><br><span class="line">Per second averages calculated from the last 28 seconds</span><br><span class="line">-----------------</span><br><span class="line">BACKGROUND THREAD</span><br><span class="line">-----------------</span><br><span class="line">srv_master_thread loops: 6 srv_active, 0 srv_shutdown, 327120 srv_idle</span><br><span class="line">srv_master_thread log flush and writes: 327126</span><br><span class="line">----------</span><br><span class="line">SEMAPHORES</span><br><span class="line">----------</span><br><span class="line">OS WAIT ARRAY INFO: reservation count 21</span><br><span class="line">OS WAIT ARRAY INFO: signal count 14</span><br><span class="line">RW-shared spins 0, rounds 29, OS waits 11</span><br><span class="line">RW-excl spins 0, rounds 44, OS waits 0</span><br><span class="line">RW-sx spins 0, rounds 0, OS waits 0</span><br><span class="line">Spin rounds per wait: 29.00 RW-shared, 44.00 RW-excl, 0.00 RW-sx</span><br><span class="line">------------</span><br><span class="line">TRANSACTIONS</span><br><span class="line">------------</span><br><span class="line">Trx id counter 246788</span><br><span class="line">Purge done for trx&apos;s n:o &lt; 244811 undo n:o &lt; 0 state: running but idle</span><br><span class="line">History list length 3376</span><br><span class="line">LIST OF TRANSACTIONS FOR EACH SESSION:</span><br><span class="line">---TRANSACTION 283520093906736, not started</span><br><span class="line">0 lock struct(s), heap size 1136, 0 row lock(s)</span><br><span class="line">--------</span><br><span class="line">FILE I/O</span><br><span class="line">--------</span><br><span class="line">I/O thread 0 state: wait Windows aio (insert buffer thread)</span><br><span class="line">I/O thread 1 state: wait Windows aio (log thread)</span><br><span class="line">I/O thread 2 state: wait Windows aio (read thread)</span><br><span class="line">I/O thread 3 state: wait Windows aio (read thread)</span><br><span class="line">I/O thread 4 state: wait Windows aio (read thread)</span><br><span class="line">I/O thread 5 state: wait Windows aio (read thread)</span><br><span class="line">I/O thread 6 state: wait Windows aio (write thread)</span><br><span class="line">I/O thread 7 state: wait Windows aio (write thread)</span><br><span class="line">I/O thread 8 state: wait Windows aio (write thread)</span><br><span class="line">I/O thread 9 state: wait Windows aio (write thread)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>可以看到I/O thread0 是insert buffer thread。读线程的ID总是小于写线程。</p>
+<ol>
+<li>Purge Thread<br>事务被提交后，其所使用的undolog可能不再需要，因此需要Purge Thread来回收已经使用并分配的undo页。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/06/26/MySQL技术内幕/第二章/" data-id="cjjko8yls0001a8va3diefdri" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL技术内幕/">MySQL技术内幕</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-MySQL技术内幕/第一章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/25/MySQL技术内幕/第一章/" class="article-date">
+  <time datetime="2018-06-25T14:34:33.000Z" itemprop="datePublished">2018-06-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/25/MySQL技术内幕/第一章/">第一章 MySQL体系结构和存储引擎 读书笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>首先，要搞清楚 <strong>数据库</strong> 和 <strong>实例</strong> 这两个词。</p>
+<ol>
+<li>数据库：物理操作系统文件或其他形式文件类型的集合。数据库只是文件的集合，由文件组成。</li>
+<li>实例：MySQL数据库由后台线程以及一个共享内存区域组成。实例是用于操作数据库文件的进程（程序）。一般情况下数据库与实例是一对一的关系。在集群情况下可能存在一个数据库被多个数据库实例使用。</li>
+</ol>
+<p>MySQL是单进程多线程架构的数据库。MySQL数据库实例在系统表现就是一个进程。</p>
+<p>当启动实例时，MySQL数据库会读取配置文件，根据配置文件的参数来启动数据库实例。MySQL数据库中可以没有配置文件，如果没有，MySQL会按照编译时的默认参数设置启动实例。<br>以下命令会查看当MySQL数据库实例启动时，会在哪些位置查找配置文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql --help | grep my.cnf</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-6-26/31806869.jpg" alt=""><br>MySQL会按读取到的最后一个配置文件中的参数为准。</p>
+<p>###MySQL体系结构<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-6-26/14853787.jpg" alt=""><br>MySQL由以下几个部分组成：连接池组件、管理服务和工具组件、SQL接口组件、查询分析器组件、优化器组件、缓冲(Cache)组件、插件式存储引擎、物理文件。<br>存储引擎是基于表的，而不是数据库的。</p>
+<h4 id="InnoDB存储引擎"><a href="#InnoDB存储引擎" class="headerlink" title="InnoDB存储引擎"></a>InnoDB存储引擎</h4><p>InnoDB存储引擎支持事务，设计目标主要面向在线事务处理(OLTP)的应用。特点是行锁设计、支持外键、并支持类似Oracle的非锁定读，即默认读取操作不会产生锁。<br>InnoDB存储引擎将数据放在一个逻辑的表空间中。从MySQL4.1版本开始，它可以将每个InnoDB存储引擎表存放到一个独立的ibd文件中。此外，InnoDB存储引擎支持用裸设备(row disk)用来建立其表空间。<br>InnoDB通过多版本并发控制(MVCC)来获得高并发性，并实现了4种隔离级别，默认为REPEATABLE可重复度级别。使用next-key locking的策略避免幻读(phantom)现象的产生。此外，还提供插入缓冲(insert buffer)、二次写(double write)、自适应哈希索引(adaptive hash index)、预读(read ahead)等高性能和高可用的功能。<br>采用聚集(clustered)的方式，因此每张表的存储都是按主键的顺序进行存放。如果没有显式地在表定义时指定主键，InnoDB存储引擎会为每一行生成一个6字节的ROWID，作为主键。</p>
+<h4 id="MyISAM存储引擎"><a href="#MyISAM存储引擎" class="headerlink" title="MyISAM存储引擎"></a>MyISAM存储引擎</h4><p>MyISAM存储引擎不支持事务、表锁设计、支持全文索引，主要面向一些OLAP(联机分析技术)数据库应用。适用于查询多，几乎没插入不需要事务的场景。<br>MyISAM存储引擎只缓存(cache)索引文件，而不缓冲数据文件。<br>MyISAM存储引擎表由MYD和MYI组成，MYD主要存放数据文件，MYI用来存放索引文件。可使用myisampack来压缩数据文件。</p>
+<h4 id="NDB存储引擎"><a href="#NDB存储引擎" class="headerlink" title="NDB存储引擎"></a>NDB存储引擎</h4><p>它是一个集群存储引擎。特点是数据全部存放在内存中，NDB数据存储节点可以线性地提高数据库性能，是高可用、高性能的集群系统。<br>NDB存储引擎的连接操作(JOIN)是在MySQL数据库层完成的，而不是存储引擎层，导致查询速度很慢。</p>
+<h4 id="Memory存储引擎"><a href="#Memory存储引擎" class="headerlink" title="Memory存储引擎"></a>Memory存储引擎</h4><p>Memory存储引擎将表中的数据存放在内存中，如果数据库重启或发生崩溃，表中数据都将消失。<br>它适合用于存储临时数据的临时表，以及数据仓库中的维度表。Memroy存储引擎默认使用哈希索引，而不是B+树索引。<br>Memory只支持表锁，并发性能差， 不支持TEXT和BLOB列类型。并且，存储变长字段(varchar)时是按照定长字段(char)的方式进行的，因此会浪费内存。<br>MySQL数据库使用Memory存储引擎作为Memory存储引擎作为临时表来存放查询的中间结果集(intermediate result)。如果中间结果集大于Memory存储引擎表的容量设置，又或者中间结果含有TEXT或BOLB列类型字段，则MySQL数据库会把其转换到MyISAM存储引擎表而存放到磁盘中。之前提到MyISAM不缓存数据文件，因此这时产生的临时表的性能对于查询会有所损失。</p>
+<h4 id="Archive存储引擎"><a href="#Archive存储引擎" class="headerlink" title="Archive存储引擎"></a>Archive存储引擎</h4><p>Archive存储引擎只支持INSERT和SELECT操作。Archive存储引擎使用zlib算法将数据行(row)进行压缩后存储。其非常适合存储归档数据，如日志信息。设计目标是提供高速的插入和压缩功能。</p>
+<h4 id="Federated存储引擎"><a href="#Federated存储引擎" class="headerlink" title="Federated存储引擎"></a>Federated存储引擎</h4><p>Federated存储引擎表不存放数据，只是指向一台远程MySQL数据库服务器上的表。</p>
+<p>我们可以通过SHOW ENGINES语句查看当前使用的MySQL数据库所支持的存储引擎。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-6-26/42466535.jpg" alt=""></p>
+<h3 id="连接MySQL"><a href="#连接MySQL" class="headerlink" title="连接MySQL"></a>连接MySQL</h3><p>连接MySQL操作是一个连接进程和MySQL数据库实例进行通信。</p>
+<ol>
+<li><p>TCP/IP ：建立一个基于网络的连接请求。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">USE mysql;</span><br><span class="line">SELECT * FROM user\G</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>命名管道和共享内存<br>如果使用命名管道，必须在配置文件中启用<code>--enable-named-pipe</code>选项。<br>如果使用共享内存的连接方式，在配置文件中添加<code>--shared-memory</code>实现。</p>
+</li>
+<li>UNIX域套接字<br>其只能在MySQL客户端和数据库实例在一台服务器上的情况下使用。配置文件中要指定套接字文件的路径，如<code>--socket=/tmp.mysql.sock</code></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/06/25/MySQL技术内幕/第一章/" data-id="cjjko8yln0000a8vabofgqoq0" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL技术内幕/">MySQL技术内幕</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-MySQL必知必会/第二十五二十六二十七三十章" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/06/15/MySQL必知必会/第二十五二十六二十七三十章/" class="article-date">
@@ -780,115 +899,6 @@
 
 
   
-    <article id="post-MySQL必知必会/第五六章" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/04/20/MySQL必知必会/第五六章/" class="article-date">
-  <time datetime="2018-04-20T14:27:28.000Z" itemprop="datePublished">2018-04-20</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/20/MySQL必知必会/第五六章/">MySQL必知必会学习笔记(3)</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="排序检索数据"><a href="#排序检索数据" class="headerlink" title="排序检索数据"></a>排序检索数据</h2><p><strong>子句：</strong> SQL语句由子句构成，有些子句是必须的，而有的是可选的。一个子句通常由一个关键字和所提供的数据组成。</p>
-<p>为了明确地排序用SELECT语句检索出的数据，可以使用<code>ORDER BY</code>子句。<code>ORDER BY</code>子句取一个或多个列的名字，据此对输出进行排序。<br><code>SELECT prod_name FROM products ORDER BY prod_name;</code><br>指示MYSQL对prod_name列以字母顺序排序数据。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-20/739887.jpg" alt=""></p>
-<p>通过非选择列进行排序也是合法的。</p>
-<p><strong>多个列排序：</strong> 为了按多个列排序，只要指定列名，列名之间用逗号分开即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_id, prod_price, prod_name</span><br><span class="line">FROM products</span><br><span class="line">ORDER BY prod_price, prod_name;</span><br></pre></td></tr></table></figure></p>
-<p>先按价格排序，然后再按名称排序。</p>
-<p><strong>指定排序方向：</strong> 数据排序不限于升序排序(从A到Z)。这只是默认的排序顺序，可以使用<code>ORDER BY</code>子句降序(从Z到A)顺序排序。为了进行降序排序，必须指定<code>DESC</code>关键字。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_id, prod_price, prod_name</span><br><span class="line">FROM products</span><br><span class="line">ORDER BY prod_price DESC, prod_name;</span><br></pre></td></tr></table></figure></p>
-<p>prod_price列以降序排序，而prod_name列仍按标准的升序排序。</p>
-<p><strong>在多个列上降序排序</strong> 如果想在多个列上进行降序排序，必须对每个列指定DESC关键字。</p>
-<p>在字典排序中，A被视为与a相同，这是MySQL的默认行为。</p>
-<p><code>ORDER BY</code> 子句的位置 在给出 <code>ORDER BY</code> 子句时，应该保证它位于 <code>FROM</code> 子句之后。如果使用<code>LIMIT</code> ，它必须位于 <code>ORDER BY</code>之后。使用子句的次序不对将产生错误消息。</p>
-<h2 id="过滤数据"><a href="#过滤数据" class="headerlink" title="过滤数据"></a>过滤数据</h2><p>在SELECT语句中，数据根据WHERE子句中指定的搜索条件进行过滤。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_name, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_price = 2.50;</span><br></pre></td></tr></table></figure></p>
-<p>数据可以再应用层过滤，但效率不高，数据库对数据过滤进行了优化。</p>
-<p>WHERE子句的位置：在同时使用ORDER BY和WHERE子句时，应该让ORDER BY位于WHERE之后。</p>
-<p>范围检查：使用BETWEEN操作符。匹配范围中所有的值，包括制定的开始值和结束值。</p>
-<p>空值检查：<code>WHERE prod_price IS NULL;</code></p>
-<p>NULL与不匹配问题：未知具有特殊的含义，数据库不知道它们是否匹配，所以在匹配过滤或不匹配过滤时不返回它们。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/04/20/MySQL必知必会/第五六章/" data-id="cjgefzorr0003n8va3c2p9umm" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-MySQL必知必会/第三四章" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/04/18/MySQL必知必会/第三四章/" class="article-date">
-  <time datetime="2018-04-18T02:27:28.000Z" itemprop="datePublished">2018-04-18</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/18/MySQL必知必会/第三四章/">MySQL必知必会学习笔记(2)</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="使用MySQL"><a href="#使用MySQL" class="headerlink" title="使用MySQL"></a>使用MySQL</h2><p><strong>选择数据库</strong><br>在最初连接到MYSQL时，没有任何数据库打开供你使用。在执行任意数据库时，需要选择一个数据库。可使用关键字<code>USE</code>。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-18/71997722.jpg" alt="use databaes;"><br>一定要使用use打开数据库，才能读取其中的数据。</p>
-<p><strong>了解数据库和表</strong><br>数据库、表、列、用户、权限等的信息被存储在数据库和表中。内部的表一般不直接访问。可通过SHOW命令来显示这些信息<br><code>show databases;</code>返回可用数据库的一个列表。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-18/40899116.jpg" alt=""><br><code>show tables;</code>返回一个数据库内的表的列表<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-18/49940010.jpg" alt=""><br><code>show columns from tablename</code>对每个字段返回一行，行中包括字段名、数据类型、是否允许NULL、键信息、默认值以及其他信息(如字段cust_id的auto_increment)<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-18/30707392.jpg" alt=""></p>
-<blockquote>
-<blockquote>
-<p>自动增量：在每个行添加到表中时，MySQL可以自动地为每个行分配下一个可用编号，不用在添加一行时手动分配唯一值</p>
-<p>DESCRIBE语句：支持用DESRIBE作为SHOW COLUMNS FROM的一张快捷方式。</p>
-</blockquote>
-</blockquote>
-<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-18/23355202.jpg" alt=""></p>
-<p><code>show status;</code> 用于显示广泛的服务器状态信息<br><code>show create database</code>和<code>show create table</code>显示创建特定数据库或表的MySQL语句<br><code>show grants;</code>用于显示授予用户的安全权限<br><code>show errors</code>和<code>show warnings</code>用来显示服务器错误或警告信息</p>
-<h2 id="检索数据"><a href="#检索数据" class="headerlink" title="检索数据"></a>检索数据</h2><p><strong>检索单个列：</strong> <code>SELECT prod_name FROM products;</code> 从products表中检索一个名为prod_name的列。<br>SELECT后的结果是未排序的数据，可能查询出来顺序不一样。</p>
-<p>SQL大小写：关键字使用大写，所有列和表名使用小写。</p>
-<p><strong>检索多个列：</strong> <code>SELECT prod_id, prod_name, prod_price FROM products;</code> 从products中选择数据。指定了3个列，列名之间用都好分隔。</p>
-<p><strong>检索所有列：</strong> <code>SLELCT * FROM products;</code> 如果给定一个通配符<code>*</code>，则返回表中所有列。</p>
-<p>注意：不用明确列出所需列，但检索不需要的列通常会降低检索和应用程序的性能。</p>
-<p>关键字<code>DISTINCT</code>,指示MySQL只返回不同的值。如果使用<code>DISTINCT</code>关键字，它必须直接放在列名的前面。应用于所有列而不仅是前置它的列。<br>不能部分使用 <code>DISTINCT</code>，<code>SELECT DISTINCT vend_id, prod_price</code>，除非指定的两个列都不同，否则所有行都将被检索出来。</p>
-<p><strong>限制结果：</strong> <code>SELECT prod_name FROM products LIMIT 5;</code>  <code>LIMIT 5</code> 指示MySQL返回不多于5行。<br><code>LIMIT 5, 5</code> 指示MySQL返回从行5开始的5行。第一个数为开始位置，第二个数为要检索的行数。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/04/18/MySQL必知必会/第三四章/" data-id="cjg83p6p20001v0vaf0se8ozo" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -914,7 +924,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL技术内幕/">MySQL技术内幕</a></li></ul>
     </div>
   </div>
 
@@ -924,7 +934,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/MySQL必知必会/" style="font-size: 10px;">MySQL必知必会</a>
+      <a href="/tags/MySQL必知必会/" style="font-size: 20px;">MySQL必知必会</a> <a href="/tags/MySQL技术内幕/" style="font-size: 10px;">MySQL技术内幕</a>
     </div>
   </div>
 
@@ -946,6 +956,14 @@
       <ul>
         
           <li>
+            <a href="/2018/06/26/MySQL技术内幕/第二章/">第二章 MySQL体系结构和存储引擎 读书笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/25/MySQL技术内幕/第一章/">第一章 MySQL体系结构和存储引擎 读书笔记</a>
+          </li>
+        
+          <li>
             <a href="/2018/06/15/MySQL必知必会/第二十五二十六二十七三十章/">MySQL必知必会学习笔记(11)</a>
           </li>
         
@@ -955,14 +973,6 @@
         
           <li>
             <a href="/2018/05/05/MySQL必知必会/第十九二十二十一章/">MySQL必知必会学习笔记(9)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/27/MySQL必知必会/第十七十八章/">MySQL必知必会学习笔记(8)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/25/MySQL必知必会/第十五十六章/">MySQL必知必会学习笔记(7)</a>
           </li>
         
       </ul>
