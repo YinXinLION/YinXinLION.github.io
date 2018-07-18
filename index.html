@@ -103,8 +103,23 @@
 </ol>
 <p>可以看到I/O thread0 是insert buffer thread。读线程的ID总是小于写线程。</p>
 <ol>
-<li>Purge Thread<br>事务被提交后，其所使用的undolog可能不再需要，因此需要Purge Thread来回收已经使用并分配的undo页。</li>
+<li><p>Purge Thread<br>事务被提交后，其所使用的undolog可能不再需要，因此需要Purge Thread来回收已经使用并分配的undo页。</p>
+</li>
+<li><p>Page Cleaner Thread<br>作用是将之前版本中脏页的刷新操作都放入到单独的线程中来完成。</p>
+</li>
 </ol>
+<h4 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h4><ol>
+<li>缓冲池<br>InnoDB存储引擎是基于磁盘存储的，并将其中的记录按照页的方式进行管理。<br>缓冲池中缓存的数据页类型有：索引页、数据页、undo页、插入缓冲(insert buffer)、自适应哈希索引、InnoDB存储的锁信息、数据字典信息等。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-7-18/4276288.jpg" alt=""></li>
+</ol>
+<p>2.LRU List、Free List和Flush List<br>数据库缓冲池采用LRU算法来管理，不过LRU列表加入了midpoin(t(new midpoint old)，最新访问的页加入到midpoint位置(innodb_old_blocks_pct控制)。然而某些操作会将缓存中的页刷新出。如，索引或数据的扫描操作。导致，下一次读取页时，需要再次访问磁盘。innodb_old_blocks_time用于页读取到midpoint位置后需要等待多久才会被加入到LRU热端(new)。当进行数据或索引扫描时，需要设置这些数值。<br>数据库启动时，LRU列表是空的，此时页都存放在Free List中，当需要时从Free列表中移除加入进LRU列表。<br>page made young:old部分加入到new部分。<br>压缩页功能：原本16KB的页压缩为1KB、2KB、4KB和8KB。LRU中的页包含了unzip_LRU列表的页。<br>unzip_LRU通过伙伴算法进行内存分配，对压缩大小不同的页进行分别管理。<br>从缓冲池中申请页为4KB的大小：</p>
+<ol>
+<li>检查4KB的unzip_LRU列表，检查是否有可用的空闲页。</li>
+<li>若有，则直接使用。</li>
+<li>否则，检查8KB的unzip_LRU列表。</li>
+<li>若能够得到空闲页，将页分成2个4KB页，存放到4KB的unzip_LRU列表。</li>
+<li>若不能得到空闲页,从LRU列表申请16KB页，分为1个8KB，2个4KB，放到unzip_LRU列表中。</li>
+</ol>
+<p>LRU列表用来管理缓冲池中页的可用性，Flush列表用于管理将页刷新回磁盘。</p>
 
       
     </div>
