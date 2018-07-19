@@ -19,7 +19,7 @@
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-6-27/31355917.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-6-27/47213816.jpg">
 <meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-7-18/4276288.jpg">
-<meta property="og:updated_time" content="2018-07-18T15:05:56.729Z">
+<meta property="og:updated_time" content="2018-07-19T13:54:25.210Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="第二章 MySQL体系结构和存储引擎 读书笔记">
 <meta name="twitter:description" content="InooDB存储引擎是第一个完整支持ACID事务的MySQL存储引擎，特点是：行锁设计、支持MVCC、支持外键、提供一致性非锁定读，并设计用来最有效地利用以及使用内存和CPU 。一致性非锁定读的情况下即使记录因为UPDATE而被加了X锁，其他事务仍然能够读取记录，不会阻塞。，是通过innodb的行多版本实现的，行多版本并不是实际存储多个版本记录而是通过undo实现。 InnoDB存储引擎的版本My">
@@ -113,9 +113,7 @@
 <li><p>Page Cleaner Thread<br>作用是将之前版本中脏页的刷新操作都放入到单独的线程中来完成。</p>
 </li>
 </ol>
-<h4 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h4><ol>
-<li>缓冲池<br>InnoDB存储引擎是基于磁盘存储的，并将其中的记录按照页的方式进行管理。<br>缓冲池中缓存的数据页类型有：索引页、数据页、undo页、插入缓冲(insert buffer)、自适应哈希索引、InnoDB存储的锁信息、数据字典信息等。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-7-18/4276288.jpg" alt=""></li>
-</ol>
+<h4 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h4><p>1.缓冲池<br>InnoDB存储引擎是基于磁盘存储的，并将其中的记录按照页的方式进行管理。<br>缓冲池中缓存的数据页类型有：索引页、数据页、undo页、插入缓冲(insert buffer)、自适应哈希索引、InnoDB存储的锁信息、数据字典信息等。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-7-18/4276288.jpg" alt=""></p>
 <p>2.LRU List、Free List和Flush List<br>数据库缓冲池采用LRU算法来管理，不过LRU列表加入了midpoin(t(new midpoint old)，最新访问的页加入到midpoint位置(innodb_old_blocks_pct控制)。然而某些操作会将缓存中的页刷新出。如，索引或数据的扫描操作。导致，下一次读取页时，需要再次访问磁盘。innodb_old_blocks_time用于页读取到midpoint位置后需要等待多久才会被加入到LRU热端(new)。当进行数据或索引扫描时，需要设置这些数值。<br>数据库启动时，LRU列表是空的，此时页都存放在Free List中，当需要时从Free列表中移除加入进LRU列表。<br>page made young:old部分加入到new部分。<br>压缩页功能：原本16KB的页压缩为1KB、2KB、4KB和8KB。LRU中的页包含了unzip_LRU列表的页。<br>unzip_LRU通过伙伴算法进行内存分配，对压缩大小不同的页进行分别管理。<br>从缓冲池中申请页为4KB的大小：</p>
 <ol>
 <li>检查4KB的unzip_LRU列表，检查是否有可用的空闲页。</li>
@@ -125,6 +123,28 @@
 <li>若不能得到空闲页,从LRU列表申请16KB页，分为1个8KB，2个4KB，放到unzip_LRU列表中。</li>
 </ol>
 <p>LRU列表用来管理缓冲池中页的可用性，Flush列表用于管理将页刷新回磁盘。</p>
+<p>3.重做日志缓冲(redo log buffer)<br>InnoDB存储引擎首先将重做日志信息放入到这个缓冲区中，然后按照一定频率将其刷新到重做日志文件。一般情况下每一秒都会刷新到日志文件。<br>重做日志在下列三种情况下会将重做日志缓冲中的内容刷新到外部磁盘中：</p>
+<ol>
+<li>Master Thread每一秒将重做日志缓冲刷新到重做日志文件中；</li>
+<li>每个事务提交时会将重做日志缓冲刷新到重做日志文件；</li>
+<li>当重做日志缓冲池剩余空间小于1/2时，重做日志缓冲刷新到重做日志文件中。</li>
+</ol>
+<p>4.额外的内存池<br>在对一些数据结构本身的内存进行分配时(LRU、锁、等待等信息)，需要从这个额外的内存池中进行申请，当该区域的内存不够时，会从缓冲池中进行申请。</p>
+<h4 id="Checkpoint技术"><a href="#Checkpoint技术" class="headerlink" title="Checkpoint技术"></a>Checkpoint技术</h4><p>该技术解决的问题有：1.缩短数据库的恢复时间(日志大小不会非常大) 2.缓冲池不够时，将脏页刷新到磁盘 3.重做日志不可用时，刷新脏页。</p>
+<p>redo log：记录事务将要变更后的状态。<br>undo log：记录事务变更前的状态。</p>
+<h4 id="Master-Thread工作方式"><a href="#Master-Thread工作方式" class="headerlink" title="Master Thread工作方式"></a>Master Thread工作方式</h4><p>每一秒，都要将日志缓冲刷新到磁盘(即使事务还没提交),当IO次数少时进行合并插入缓冲(insert buffer写入磁盘),根据脏页比例(buf_get_pages_oct)进行脏页刷新。</p>
+<h4 id="插入缓冲"><a href="#插入缓冲" class="headerlink" title="插入缓冲"></a>插入缓冲</h4><p>1.insert buffer-提高性能<br>Inoodb只有一个聚集索引，剩下的都是非聚集索引，插入不再是顺序的，需要离散地访问非聚集索引页，由于随机读取的存在导致插入操作性能下降。(跟图书馆还书一样，管理员要看是否是唯一的，然后再放入，产生多余的IO操作)<br>Insert Buffer使用需要满足下面两个条件：1.索引是辅助索引 2.索引不是唯一的。<br>Insert Buffer的数据结构是一颗B+树。<br>2.两次写-提高数据页的可靠性<br>在对缓冲池的脏页进行刷新时，并不直接写磁盘，而是会通过memcpy函数将脏页先复制到内存中的doublewrite buffer，之后通过doublewrite buffer再分两次，每次1MB顺序地写入共享表空间的物理磁盘，完成后，再将doublewrite buffer中的页写入各个表空间文件中，写入是离散的。<br>保证了数据库宕机时，可能Innodb正在写入某个页到表中，该页只写入了一部分，可以得到恢复。(部分写失效)<br>3.自适应哈希索引<br>AHI是通过缓冲池的B+树页构造而来，Innodb会自动根据访问的频率和模式来自动的为某些热点页建立哈希索引。<br>要求：</p>
+<ol>
+<li>对这个页的连续访问模式必须是一样的.</li>
+</ol>
+<ul>
+<li>WHERE a=XXX</li>
+<li>WHRER a=XXX and b=XXX<br>上面查询交替进行查询，不会对该页构造AHI。</li>
+</ul>
+<ol>
+<li>以该模式访问了100次。</li>
+<li>页通过该模式访问了N次，其中N = 页中记录*1/16<br>哈希索引只能用来搜索等值查询，不适合范围查询。<br>4.异步IO<br>(1)全部IO请求都发出去，然后再等待IO操作完成的响应。<br>(2)IO Merge.可将多个IO进行合并。<br>例如:访问(8,6),(8,7),(8,8),每页16KB，可以从(8,6)开始读，读取48KB的页就好了。</li>
+</ol>
 
       
     </div>
@@ -139,6 +159,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2018/07/19/MySQL技术内幕/第三章/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
   
   
     <a href="/2018/06/25/MySQL技术内幕/第一章/" id="article-nav-older" class="article-nav-link-wrap">
@@ -188,7 +217,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
     </div>
   </div>
 
@@ -199,6 +228,10 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2018/07/19/MySQL技术内幕/第三章/">(no title)</a>
+          </li>
         
           <li>
             <a href="/2018/06/26/MySQL技术内幕/第二章/">第二章 MySQL体系结构和存储引擎 读书笔记</a>
@@ -214,10 +247,6 @@
         
           <li>
             <a href="/2018/05/30/MySQL必知必会/第二十二二十三二十四章/">MySQL必知必会学习笔记(10)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/05/MySQL必知必会/第十九二十二十一章/">MySQL必知必会学习笔记(9)</a>
           </li>
         
       </ul>

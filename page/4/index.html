@@ -65,6 +65,53 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Lock的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/28/Lock的使用/" class="article-date">
+  <time datetime="2017-12-28T03:45:11.000Z" itemprop="datePublished">2017-12-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java多线程/">Java多线程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/28/Lock的使用/">Lock的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="使用ReentrantLock"><a href="#使用ReentrantLock" class="headerlink" title="使用ReentrantLock"></a>使用ReentrantLock</h3><p><code>synchronized</code>使用<code>wait/notify</code>实现等待/通知模式.<code>ReentrantLock</code>同样可以实现，他需要借助<code>Condition</code>。<br><code>notify/notifyAll</code>进行通知时，被通知的线程是由JVM随机选择的。<code>Condition</code>具有准确选择性通知。<br><code>synchronized</code>相当于只有一个<code>Condition</code>对象，当线程调用<code>wait</code>时，线程进入同一个等待队列。<br><code>Condition</code>的出现,可以让线程进入多个不同的等待队列。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pirvate Lock lock = new ReentrantLock();</span><br><span class="line"></span><br><span class="line">lock.lock(); //上锁</span><br><span class="line">lock.unlock(); //释放锁</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">private Condition condition = lock.newCondition();</span><br><span class="line">condition.await();// 等待 线程进入WAITING状态</span><br><span class="line">condition.singal();// 唤醒</span><br></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2017/12/28/Lock的使用/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/12/28/Lock的使用/" data-id="cjg4i9a8p0004wovaczwxtoo8" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Python入门学习(二)-组" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/12/27/Python入门学习(二)-组/" class="article-date">
@@ -341,7 +388,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
     </div>
   </div>
 
@@ -352,6 +399,10 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2018/07/19/MySQL技术内幕/第三章/">(no title)</a>
+          </li>
         
           <li>
             <a href="/2018/06/26/MySQL技术内幕/第二章/">第二章 MySQL体系结构和存储引擎 读书笔记</a>
@@ -367,10 +418,6 @@
         
           <li>
             <a href="/2018/05/30/MySQL必知必会/第二十二二十三二十四章/">MySQL必知必会学习笔记(10)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/05/MySQL必知必会/第十九二十二十一章/">MySQL必知必会学习笔记(9)</a>
           </li>
         
       </ul>

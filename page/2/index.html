@@ -65,6 +65,81 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-MySQL必知必会/第七八九章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/24/MySQL必知必会/第七八九章/" class="article-date">
+  <time datetime="2018-04-24T01:21:28.000Z" itemprop="datePublished">2018-04-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/24/MySQL必知必会/第七八九章/">MySQL必知必会学习笔记(4)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="数据过滤"><a href="#数据过滤" class="headerlink" title="数据过滤"></a>数据过滤</h2><h3 id="组合WHERE子句"><a href="#组合WHERE子句" class="headerlink" title="组合WHERE子句"></a>组合WHERE子句</h3><p><strong>AND 操作符：</strong> 用在WHERE子句中的关键字，用来指示检索满足所有给定条件的行。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_id, prod_price, prod_name</span><br><span class="line">FROM products</span><br><span class="line">WHERE vend_id = 1003 AND prod_price &lt;= 10;</span><br></pre></td></tr></table></figure></p>
+<p>此SQL语句检索由供应商 1003 制造且价格小于等于10美元的所有产品的名称和价格。<br>AND 指示DBMS只返回满足所有给定条件的行。还可以添加多个过滤条件，每添加一条就要使用一个 AND 。</p>
+<p><strong>OR 操作符：</strong> WHERE子句中使用的关键字，用来表示检索任一给定条件的行。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_name, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE vend_id =1002 OR vend_id = 1003;</span><br></pre></td></tr></table></figure></p>
+<p>此SQL语句检索由任一个指定供应商制造的所有产品的产品名和价格。<br>OR 操作符告诉DBMS匹配任一条件而不是同时匹配两个条件。</p>
+<p><strong>计算次序问题：</strong> AND和OR计算次序会有些问题(解决方法:使用圆括号)<br>SQL语句在处理OR操作符前，优先处理AND操作符。所以，要使用圆括号明确地分组相应的操作符。</p>
+<p><strong>IN操作符：</strong> 用来指定条件范围，范围中的每个条件都可以进行匹配。<br>IN 取合法值的由逗号分隔的清单，全都括在圆括号中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_name, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE vend_id IN (1002,1003)</span><br><span class="line">ORDER BY prod_name;</span><br></pre></td></tr></table></figure></p>
+<p>此 SELECT 语句检索供应商 1002 和 1003 制造的所有产品.</p>
+<p>为什么要使用IN操作符?</p>
+<ol>
+<li>在使用长的合法选项清单时，IN操作符语法更清晰直观。</li>
+<li>使用IN时，计算的次序更容易管理(使用的操作符更少)。</li>
+<li>IN操作符一般比OR操作符清单执行的更快。</li>
+<li>IN最大的优点是可以包含其他SELECT语句，使得能够更动态地建立 WHERE 子句。</li>
+</ol>
+<p><strong>NOT操作符：</strong> 否定它之后所跟的任何条件。<br>列出除 1002和1003 之外的所有供应商制造的产品.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_name, prod_price</span><br><span class="line">FROM products</span><br><span class="line">WHERE vend_id NOT IN (1002,1003)</span><br><span class="line">ORDER BY prod_name;</span><br></pre></td></tr></table></figure></p>
+<p>MySQL支持使用 NOT 对 IN 、 BETWEEN 和EXISTS子句取反，这与多数其他 DBMS允许使用 NOT 对各种条件取反有很大的差别。</p>
+<h2 id="用通配符进行过滤"><a href="#用通配符进行过滤" class="headerlink" title="用通配符进行过滤"></a>用通配符进行过滤</h2><p>如果过滤值已知，可以使用前面所提到的方法。<br>如果想找产品名包含某个单词的所有产品，那么必须使用通配符。利用通配符可创建比较特定数据的搜索模式。<br><strong>通配符：</strong> 用来匹配值的一部分的特殊字符。它是极重要和有用的搜索工具。<br><strong>搜索模式：</strong> 由字面值、通配符或两者组合构成的搜索条件。<br>为在搜索子句中使用通配符，必须使用 LIKE 操作符。 LIKE 告诉MySQL，后跟的搜索模式利用通配符匹配而不用直接相等匹配，进行比较。</p>
+<p>百分号(%)通配符：%表示任何字符出现任意次数。<br>根据MySQL的配置方式，搜索是可以区分大小写的。(我的MySQL模式是不区分)</p>
+<p>注意NULL，虽然似乎%通配符可以匹配任何东西，但有一个例外，即NULL。 即使是<code>WHERE prod_name LIKE &#39;%&#39;</code>也不能匹配用值NULL作为产品名的行。</p>
+<p>下划线(<code>_</code>)通配符：只能匹配单个字符。</p>
+<p>使用通配符的技巧：</p>
+<ol>
+<li>不要过度使用通配符。能用其他操作符，尽量用其他操作符。</li>
+<li>尽可能不要放在搜索模式开始处。不然搜索起来是最慢的。</li>
+</ol>
+<h2 id="用正则表达式进行搜索"><a href="#用正则表达式进行搜索" class="headerlink" title="用正则表达式进行搜索"></a>用正则表达式进行搜索</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_name</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_name REGEXP &apos;1000&apos;</span><br><span class="line">ORDER BY prod_name;</span><br></pre></td></tr></table></figure>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-24/89430836.jpg" alt=""><br>除关键字 LIKE 被 REGEXP 替代外，这条语句看上去非常像使用LIKE 的语句.它告诉MySQL： REGEXP 后所跟的东西作<br>为正则表达式（与文字正文 1000 匹配的一个正则表达式）处理。</p>
+<p>LIKE和REGEXP的差别：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_name</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_name LIKE &apos;1000&apos;</span><br><span class="line">ORDER BY prod_name;</span><br><span class="line"></span><br><span class="line">SELECT prod_name</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_name REGEXP &apos;1000&apos;</span><br><span class="line">ORDER BY prod_name;</span><br></pre></td></tr></table></figure></p>
+<p> LIKE 匹配 <strong>整个</strong> 列。如果被匹配的文本在列值中出现， LIKE 将不会找到它，相应的行也不被返回.而 REGEXP 在列值内进行匹配，如果被匹配的文本在列值中出现， REGEXP 将会找到它，相应的行将被返回。</p>
+<p>进行OR匹配<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_name</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_name REGEXP &apos;1000|2000&apos;</span><br><span class="line">ORDER BY prod_name;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-24/93656752.jpg" alt=""></p>
+<p>匹配几个字符之一<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_name</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_name REGEXP &apos;[123] Ton&apos;</span><br><span class="line">ORDER BY prod_name;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-24/10212670.jpg" alt=""><br>[123] 定义一组字符，它的意思是匹配 1 或 2 或 3 ，因此， 1 ton 和 2 ton 都匹配且返回.</p>
+<p>匹配范围<br>集合可定义要匹配的一个或多个字符。[0123456789]简化可以为[0-9]<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_name</span><br><span class="line">FROM products</span><br><span class="line">WHERE prod_name REGEXP &apos;[1-5] Ton&apos;</span><br><span class="line">ORDER BY prod_name;</span><br></pre></td></tr></table></figure></p>
+<p>这里使用正则表达式 [1-5] Ton 。 [1-5] 定义了一个范围，这个表达式意思是匹配 1 到 5 .</p>
+<p><code>*</code> 0个或多个匹配<br><code>+</code> 1个或多个匹配(等于{1,})<br><code>?</code> 0个或1个匹配(等于{0,1})<br><code>{n}</code> 指定数目的匹配<br><code>{n,}</code> 不少于n个数目的匹配<br><code>{n,m}</code> 匹配数目的范围</p>
+<p>定位符：<br><code>^</code> 文本的开始<br><code>$</code> 文本的结尾<br><code>[[:&lt;:]]</code> 词的开始<br><code>[[:&gt;:]]</code> 词的结尾</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/24/MySQL必知必会/第七八九章/" data-id="cjgefzorj0000n8vaguwkie61" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-MySQL必知必会/第五六章" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/04/20/MySQL必知必会/第五六章/" class="article-date">
@@ -552,51 +627,6 @@
 
 
   
-    <article id="post-排序算法学习" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/03/15/排序算法学习/" class="article-date">
-  <time datetime="2018-03-15T02:38:14.000Z" itemprop="datePublished">2018-03-15</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/算法/">算法</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/15/排序算法学习/">排序算法学习</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h3><p>思想：把最大的推到最后[length-1]位置，然后第二轮把次大的推到[length-2]位置，直到无法再推。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">for (int i = 0; i &lt; s.length - 1; i++) &#123;   //控制次数</span><br><span class="line">      for (int j = 0; j &lt; s.length - i - 1; j++) &#123;</span><br><span class="line">          if (s[j] &gt; s[j+1])&#123;</span><br><span class="line">              int temp = s[j];</span><br><span class="line">              s[j] = s[j+1];</span><br><span class="line">              s[j+1] = temp;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
-        
-          <p class="article-more-link">
-            <a href="/2018/03/15/排序算法学习/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/15/排序算法学习/" data-id="cjg4i9a9g000nwova59gh5z9u" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -641,7 +671,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
     </div>
   </div>
 
@@ -652,6 +682,10 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2018/07/19/MySQL技术内幕/第三章/">(no title)</a>
+          </li>
         
           <li>
             <a href="/2018/06/26/MySQL技术内幕/第二章/">第二章 MySQL体系结构和存储引擎 读书笔记</a>
@@ -667,10 +701,6 @@
         
           <li>
             <a href="/2018/05/30/MySQL必知必会/第二十二二十三二十四章/">MySQL必知必会学习笔记(10)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/05/MySQL必知必会/第十九二十二十一章/">MySQL必知必会学习笔记(9)</a>
           </li>
         
       </ul>
