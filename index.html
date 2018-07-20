@@ -68,12 +68,22 @@
     <article id="post-MySQL技术内幕/第三章" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/07/19/MySQL技术内幕/第三章/" class="article-date">
-  <time datetime="2018-07-19T14:33:40.482Z" itemprop="datePublished">2018-07-19</time>
+  <time datetime="2018-07-19T14:34:33.000Z" itemprop="datePublished">2018-07-19</time>
 </a>
     
   </div>
   <div class="article-inner">
     
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/19/MySQL技术内幕/第三章/">第三章 文件 读书笔记</a>
+    </h1>
+  
+
+      </header>
     
     <div class="article-entry" itemprop="articleBody">
       
@@ -87,7 +97,7 @@
 </ol>
 <h4 id="错误日志"><a href="#错误日志" class="headerlink" title="错误日志"></a>错误日志</h4><p>错误日志文件对MySQL的启动、运行、关闭过程进行了记录。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-7-19/67344062.jpg" alt="错误日志文件名和路径"><br>数据库不能重启时，我们可以通过查错误日志文件来得到相关内容，让我们更好的去修复它。一些警告可以让我们更好的去优化它。（可能告诉我们需要增大InnoDB存储引擎的redo logo等）</p>
 <h4 id="慢查询日志"><a href="#慢查询日志" class="headerlink" title="慢查询日志"></a>慢查询日志</h4><p>错误日志可得到数据库优化信息，慢查询日志(slow log)可帮助我们定位可能存在问题的SQL语句，从而对SQL语句进行优化。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-7-19/81445115.jpg" alt=""><br>long_query_time:设置SQL查询时间，超过改时间，记录日志。<br>log_slow_queries:设置是否启动慢查询日志，默认为OFF。(为啥我这查不出来。。)<br>log_queries_not_using_indexes:开关，如果SQL语句没使用索引，会被记录。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-7-19/39440375.jpg" alt=""><br>log_throttle_queries_not_using_indexes：若没使用索引，导致日志会不断增加，该参数表示每分钟可以记录未使用索引SQL语句次数。</p>
-<p><code>mysqldumpslow -s al -n 10 david.log</code>用户可得到执行时间最长的10条SQL语句。</p>
+<p><code>mysqldumpslow -s al -n 10 david.log</code>用户可得到执行时间最长的10条SQL语句。<br>MySQL5.1开始将慢查询日志记录在一张表(mysql.slow_log)中。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-7-20/3900645.jpg" alt=""><br>慢查询默认是FILE格式，我们可以设置为TABLE格式，然后使用SELECT查询。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-7-20/84933067.jpg" alt=""><br>InnoSQL(杭研开发维护的MySQL分支)加强了SQL语句的捕获方式，在原版MySQL基础上增加逻辑读取和物理读取的统计。<br>物理读取：从磁盘进行IO读取的次数。逻辑读取：包含所有的读取，不管是磁盘还是缓冲池。</p>
 
       
     </div>
@@ -95,6 +105,8 @@
       <a data-url="http://yoursite.com/2018/07/19/MySQL技术内幕/第三章/" data-id="cjjsoz5d00000rsval00yggy0" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL技术内幕/">MySQL技术内幕</a></li></ul>
+
     </footer>
   </div>
   
@@ -116,7 +128,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/26/MySQL技术内幕/第二章/">第二章 MySQL体系结构和存储引擎 读书笔记</a>
+      <a class="article-title" href="/2018/06/26/MySQL技术内幕/第二章/">第二章 Innodb存储引擎 读书笔记</a>
     </h1>
   
 
@@ -953,11 +965,11 @@
       <ul>
         
           <li>
-            <a href="/2018/07/19/MySQL技术内幕/第三章/">(no title)</a>
+            <a href="/2018/07/19/MySQL技术内幕/第三章/">第三章 文件 读书笔记</a>
           </li>
         
           <li>
-            <a href="/2018/06/26/MySQL技术内幕/第二章/">第二章 MySQL体系结构和存储引擎 读书笔记</a>
+            <a href="/2018/06/26/MySQL技术内幕/第二章/">第二章 Innodb存储引擎 读书笔记</a>
           </li>
         
           <li>
