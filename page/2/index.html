@@ -65,6 +65,140 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-MySQL必知必会/第十三十四章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/25/MySQL必知必会/第十三十四章/" class="article-date">
+  <time datetime="2018-04-25T02:08:00.000Z" itemprop="datePublished">2018-04-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/25/MySQL必知必会/第十三十四章/">MySQL必知必会学习笔记(6)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="分组数据"><a href="#分组数据" class="headerlink" title="分组数据"></a>分组数据</h2><p><strong>创建分组：</strong> 分组是在SELECT语句的GROUP BY子句中建立的。<br>让我们理解一下分组<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT vend_id, COUNT(*) AS num_prods</span><br><span class="line">FROM products</span><br><span class="line">GROUP BY vend_id;</span><br></pre></td></tr></table></figure></p>
+<p>GROUP BY 子句指示MySQL按 vend_id 排序并分组数据。这导致对每个 vend_id 而不是整个表计算 num_prods 一次。如果在 SELECT 中使用表达式，则必须在<br>GROUP BY 子句中指定相同的表达式。不能使用别名。<br>GROUP BY 子句指示MySQL分组数据，然后对每个组而不是整个结果集进行聚集。</p>
+<p>使用GROUP BY子句前，需要知道的规定：</p>
+<ol>
+<li>GROUP BY 子句可以包含任意数目的列。这使得能对分组进行嵌套，为数据分组提供更细致的控制。</li>
+<li>在建立分组时，指定的所有列都一起计算</li>
+<li>GROUP BY子句列出的每个列都必须是检索列或有效的表达式(不能是聚集函数)。如果在 SELECT 中使用表达式，则必须在GROUP BY 子句中指定相同的表达式。不能使用别名。</li>
+<li>除聚集计算语句外， SELECT 语句中的每个列都必须在 GROUP BY 子句中给出。</li>
+<li>如果分组列中具有 NULL 值，则 NULL 将作为一个分组返回。如果列中有多行 NULL 值，它们将分为一组。</li>
+<li>GROUP BY 子句必须出现在 WHERE 子句之后， ORDER BY 子句之前。</li>
+</ol>
+<p>使用ROLLUP：使用WITH ROLLUP关键字，可以得到每个分组以及每个分组汇总级别的值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT vend_id, COUNT(*) AS num_prods</span><br><span class="line">FROM products</span><br><span class="line">GROUP BY vend_id WITH ROLLUP;</span><br></pre></td></tr></table></figure></p>
+<p><a href="http://blog.itpub.net/29773961/viewspace-1255419/" target="_blank" rel="noopener">http://blog.itpub.net/29773961/viewspace-1255419/</a></p>
+<h2 id="过滤分组"><a href="#过滤分组" class="headerlink" title="过滤分组"></a>过滤分组</h2><p>WHERE子句过滤的是行而不是分组。要想过滤分组，要使用HAVING子句。HAVING支持的操作符和WHERE一样。<br>示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT cust_id, COUNT(*) AS orders</span><br><span class="line">FROM orders</span><br><span class="line">GROUP BY cust_id</span><br><span class="line">HAVING COUNT(*) &gt;= 2;</span><br><span class="line"># 最后一行增加了HAVING 子句，它过滤 COUNT(*) &gt;=2 （两个以上的订单）的那些分组。</span><br></pre></td></tr></table></figure></p>
+<p><strong>WHERE和HAVING的差别</strong><br>WHERE在数据分组前进行过滤，HAVING在数据分组后进行过滤。</p>
+<p><strong>ORDER BY和GROUP BY的差别</strong></p>
+<ol>
+<li>ORDER BY：排序产生的输出。GROUP BY：分组行，但输出可能不是分组的顺序。</li>
+<li>ORDER BY：任意列都可以使用(非选择的列也可以使用)。 GROUP BY：只可能使用选择列或表达式列，而且必须使用每个选择列表达式。</li>
+<li>ORDER BY：不一定需要。 GROUP BY：如果和聚集函数一起使用列(或表达式),则必须使用。</li>
+</ol>
+<p>不要忘记ORDER BY：一般在使用GROUP BY子句时，应该也给出ORDER BY子句。这是保证数据正确排序的唯一方法。</p>
+<p><strong>SELECT子句顺序</strong><br>SELECT：要返回的列或表达式。<br>FROM：从中检索数据的表。<br>WHERE：行级过滤。<br>GROUP BY：分组说明。<br>HAVING：组级过滤。<br>ORDER BY：输出排序顺序。<br>LIMIT：要检索的行数。</p>
+<h2 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h2><p>SQL允许创建子查询，即嵌套在其他查询中的查询。</p>
+<p>示例：需要列出订购物品TNT2的所有客户。<br>(1)检索包含物品TNT2的所有订单的编号。<br>(2)检索具有前一步骤列出的订单编号的所有客户的ID。<br>(3)检索前一步骤返回的所有客户ID的客户信息。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">SELECT order_num</span><br><span class="line">FROM orderitems</span><br><span class="line">WHERE prod_id = &apos;TNT2&apos;;</span><br><span class="line"></span><br><span class="line">SELECT cust_id</span><br><span class="line">FROM orders</span><br><span class="line">WHERE order_num IN (20005, 20007);</span><br><span class="line"></span><br><span class="line">SELECT cust_id</span><br><span class="line">FROM orders</span><br><span class="line">WHERE order_num IN (SELECT ord4dser_num</span><br><span class="line">                    FROM orderitems</span><br><span class="line">                    WHERE prod_id = &apos;TNT2&apos;);</span><br><span class="line"></span><br><span class="line">SELECT cust_name, cust_contact</span><br><span class="line">FROM customer</span><br><span class="line">WHERE cust_id IN (SELECT cust_id</span><br><span class="line">                  FROM orders</span><br><span class="line">                  WHERE order_num IN (SELECT ord4dser_num</span><br><span class="line">                                      FROM orderitems</span><br><span class="line">                                      WHERE prod_id = &apos;TNT2&apos;));</span><br></pre></td></tr></table></figure></p>
+<p>子查询并不总是执行这种类型的数据检索的最有效的方法。</p>
+<p>示例：显示 customers表中每个客户的订单总数。<br>(1)从 customers 表中检索客户列表。<br>(2)对于检索出的每个客户，统计其在 orders 表中的订单数目。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 对客户10001的订单进行计数</span><br><span class="line">SELECT COUNT(*) AS orders</span><br><span class="line">FROM orders</span><br><span class="line">WHERE cust_id = 10001;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT cust_name, cust_state, (SELECT COUNT(*)</span><br><span class="line">                               FROM orders</span><br><span class="line">                               WHERE orders.cust_id = customers.cust_id) AS orders</span><br><span class="line">FROM customers</span><br><span class="line">ORDER BY cust_name;</span><br></pre></td></tr></table></figure>
+<p>该子查询对检索出的每个客户执行一次。子查询执行了5次，因此检索除了5个客户。</p>
+<p><strong>相关子查询：</strong> 涉及外部查询的子查询。(上面这个示例称为相关子查询)</p>
+<p>逐渐增加子查询来建立查询：首先，建立和测试最内层的查询。然后，用硬编码数据建立和测试外层查询，并且仅在确认它正常后才嵌入子查询。这时，再次测试它，对于要增加的每个查询，重复这些步骤。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/25/MySQL必知必会/第十三十四章/" data-id="cjgryx1yh0001dovaazwd47sx" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-MySQL必知必会/第十十一十二章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/24/MySQL必知必会/第十十一十二章/" class="article-date">
+  <time datetime="2018-04-24T14:00:00.000Z" itemprop="datePublished">2018-04-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/24/MySQL必知必会/第十十一十二章/">MySQL必知必会学习笔记(5)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="计算字段"><a href="#计算字段" class="headerlink" title="计算字段"></a>计算字段</h2><p>存储在表中的数据都不是程序所需要的，我们需要从数据库中检索并加以转换从而得到我们想要的数据样子。</p>
+<p><strong>拼接字段：</strong> 将值联结到一起构成单个值。<code>Concat()</code>函数。<br><code>Concat()</code> 拼接串，即把多个串连接起来形成一个较长的串。<br><code>Concat()</code> 需要一个或多个指定的串，各个串之间用逗号分隔。</p>
+<p><code>Rtrim()</code>: 删除数据右侧多余的空格</p>
+<p><strong>使用别名：</strong> 别名是一个字段或值得替换名。别名用<code>AS</code>关键字赋予。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT Concat(RTrim(vend_name), &apos;(&apos;, RTrim(vend_country),&apos;)&apos;) AS vend_title</span><br><span class="line">FROM vendors</span><br><span class="line">ORDER BY vend_name;</span><br></pre></td></tr></table></figure></p>
+<p>它指示SQL创建一个包含指定计算的名为 vend_title 的计算字段。任何客户机应用都可以按名引用这个列，就像它是一个实际的表列一样。</p>
+<p>别名的其他用途：在实际表名中列名不符合规范例如(列名中有空格)，此时需要重新命名。</p>
+<p><strong>执行算术计算：</strong> 另一种常见用途为对检索出的数据进行算术计算。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_id, quantity, item_price , quantity * item_price AS expanded_price</span><br><span class="line">FROM orderitems</span><br><span class="line">WHERE order_num = 20005;</span><br></pre></td></tr></table></figure></p>
+<p>操作符除了有乘，还有 加，减，除。</p>
+<h2 id="使用函数"><a href="#使用函数" class="headerlink" title="使用函数"></a>使用函数</h2><p><strong>常见的文本处理函数</strong><br><code>Left()</code>:返回串左边的字符。<br><code>Length()</code>:返回串的长度。<br><code>Locate()</code>:找出串的第一个子串。<br><code>Lower()</code>:将串转换为小写。<br><code>LTrim()</code>:去掉串左边的空格。<br><code>Right()</code>:返回串右边的字符。<br><code>RTrim()</code>:去掉串右边的空格。<br><code>Soundex()</code>:返回串的SOUNDEX值。<br><code>SubString()</code>:返回子串的字符。<br><code>Upper()</code>:将串转换为大写。</p>
+<p><strong>常见日期和时间处理函数</strong><br><code>AddDate()</code>  增加一个日期（天、周等）<br><code>AddTime()</code>  增加一个时间（时、分等）<br><code>CurDate()</code>  返回当前日期<br><code>CurTime()</code>  返回当前时间<br><code>Date()</code>  返回日期时间的日期部分<br><code>Time()</code>  返回一个日期时间的时间部分<br><code>Date_Format()</code>  返回一个格式化的日期或时间串<br><code>Now()</code>  返回当前日期和时间</p>
+<p>datetime数据类型：有年月日和时分秒<br>如果datetime要和’2015-06-01’比较 如果刚好有’2015-06-01 00:00:00’则会匹配成功返回结果。<br>但如果不是则需要<code>Date(date) = &#39;2015-06-01&#39;</code></p>
+<p><strong>数值处理函数</strong><br><code>Abs()</code>  返回一个数的绝对值<br><code>Sqrt()</code>  返回一个数的平方根</p>
+<h2 id="汇总数据"><a href="#汇总数据" class="headerlink" title="汇总数据"></a>汇总数据</h2><p>我们经常要汇总数据而不是把它们实际检索出来。</p>
+<ol>
+<li>确定表中的行数。</li>
+<li>获得表中行组的和。</li>
+<li>找出表列的最大值、最小值、平均值。</li>
+</ol>
+<p><strong>聚集函数：</strong> 运行在行组上的，计算和返回单个值得函数。<br><code>AVG()</code>:返回某列的平均值 只用于单列，并且忽略值为NULL的行<br><code>COUNT()</code>:返回某列的行数<br><code>MAX()</code>:返回某列的最大值<br><code>MIN()</code>:返回某列的最小值<br><code>SUM()</code>:返回某列值之和</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT AVG(prod_price) AS avg_price</span><br><span class="line">FROM products;</span><br></pre></td></tr></table></figure>
+<p>此 SELECT 语句返回值 avg_Price ，它包含 products 表中所有产品的平均价格。</p>
+<p><code>COUNT()</code>函数有两种使用方式</p>
+<ol>
+<li>使用<code>COUNT(*)</code>对表中行的数目进行计数，不管表列中包含的是空值(NULL)还是非空值。</li>
+<li>使用COUNT(column)对特定列中具有值得行进行计数，忽略NULL值。</li>
+</ol>
+<p>在指定别名以包含某个聚集函数的结果时，不应该使用表中实际的列名。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/04/24/MySQL必知必会/第十十一十二章/" data-id="cjgryx1yk0003dovadi3pyud8" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-MySQL必知必会/第七八九章" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/04/24/MySQL必知必会/第七八九章/" class="article-date">
@@ -537,96 +671,6 @@
 
 
   
-    <article id="post-Zookeeper学习笔记2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/03/27/Zookeeper学习笔记2/" class="article-date">
-  <time datetime="2018-03-27T01:27:14.000Z" itemprop="datePublished">2018-03-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/27/Zookeeper学习笔记2/">Zookeeper学习-一致性协议</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="一致性协议"><a href="#一致性协议" class="headerlink" title="一致性协议"></a>一致性协议</h3><h4 id="二阶段提交"><a href="#二阶段提交" class="headerlink" title="二阶段提交"></a>二阶段提交</h4><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-27/66567191.jpg" alt="二阶段提交"><br>1.提交事务请求 2.执行事务提交<br>如果任何一个参与者返回No，或者等待超时时间后，协调者无法接收所有的反馈，那么执行事务中断。</p>
-<p>优点：原理简单、实现方便。<br>缺点：<br>1.同步阻塞：各个参与者在等待其他参与者响应的过程中，将无法进行其他任何操作。<br>2.单点问题：一旦协调者出现问题，那么整个二阶段提交流程将无法运转。参与者会一直处于锁定事务资源的状态中。<br>3.数据不一致性：由于网络的原因或者协调者自身宕机，导致只有部门参与者收到Commit请求，于是整个分布式出现数据不一致现象。<br>4.太过保守：任意一点失败都会导致事务的失败。</p>
-<p>二阶段提交协议解决了分布式事务的原子性问题</p>
-<h4 id="三阶段提交"><a href="#三阶段提交" class="headerlink" title="三阶段提交"></a>三阶段提交</h4><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-2/74225968.jpg" alt="三阶段提交"><br>1.选票收集CanCommit 2.提交授权PreCommit 3.确定提交DoCommit</p>
-<p>优点：降低参与者的阻塞范围，能够在出现单点故障后继续达成一致。<br>缺点：参与者接收到PreCommit消息后，如果网络出现分区，协调者所在的节点和参与者无法正常通信，参与者依然会进行事务提交，导致数据不一致。</p>
-<p>三阶段提交避免了二阶段提交中无限等待问题。</p>
-<h4 id="Paxos算法"><a href="#Paxos算法" class="headerlink" title="Paxos算法"></a>Paxos算法</h4><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-3/11731777.jpg" alt="Paxos算法"><br>然后通知Leaner集合的一部分，然后通知剩余Leaner。保证可靠性，防止通知1个Leaner导致单点故障。</p>
-<p>P1：提出编号为M1的提案，完成阶段1.<br>P2:提出编号为M2的提案（M2&gt;M1），完成阶段1.此时不批准小于M2的提案。<br>P1：进入阶段二，发出的Accept请求会被忽略。于是P1重新生成编号M3的提案(M3&gt;M2),完成阶段1。<br>然后无限循环。为了避免这一现象，必须采用一个主Proposer。这样整套Paxos算法流程能够保持活性。</p>
-<p>Paxos算法解决了无限等待问题，解决了”脑裂”问题。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/27/Zookeeper学习笔记2/" data-id="cjg4i9a92000fwova4b70k3yg" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Zookeeper学习笔记1" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/03/23/Zookeeper学习笔记1/" class="article-date">
-  <time datetime="2018-03-23T03:22:42.000Z" itemprop="datePublished">2018-03-23</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/23/Zookeeper学习笔记1/">Zookeeper学习笔记(1)</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="分布式架构"><a href="#分布式架构" class="headerlink" title="分布式架构"></a>分布式架构</h2><h3 id="从集中式到分布式"><a href="#从集中式到分布式" class="headerlink" title="从集中式到分布式"></a>从集中式到分布式</h3><p>由于集中式系统规模大，运维人员难以维护，加上容易出现单点故障，PC机性能的不断提升，导致慢慢走向分布式系统时代。</p>
-<h4 id="集中式特点"><a href="#集中式特点" class="headerlink" title="集中式特点"></a>集中式特点</h4><p>集中式系统就是指由一台或多台主计算机组成中心节点，数据集中存储于这个中心节点，所有业务单元也都部署在中心节点上。<br>特点：部署结构简单。需要有性能卓越的主机。</p>
-<h4 id="分布式特点"><a href="#分布式特点" class="headerlink" title="分布式特点"></a>分布式特点</h4><p>定义：通过消息传递进行通信和协调工作的。<br>特征：1.分布性 2.对等性 3.并发性 4.缺乏全局时钟 5.故障总是会发生。</p>
-<h4 id="分布式环境的会遇到的问题"><a href="#分布式环境的会遇到的问题" class="headerlink" title="分布式环境的会遇到的问题"></a>分布式环境的会遇到的问题</h4><p>1.通信异常：引入网络因素，网络本身是不可靠的，可能导致分布式无法顺利完成一次网络通信。<br>2.网络分区：分布式系统中部分节点之间的网络延时不断增大，最终导致分布式系统中只有部分节点能够正常通信，另一些节点不能。我们将这个现象称为网络分区，或者叫”脑裂”。<br>3.三态：网络会出现各种各样的问题，每一次请求或响应，可能会存在成功、失败、超时。<br>4.节点故障：每个节点都会出现故障，服务器节点可能会出现宕机或”僵死”。</p>
-<h3 id="ACID到CAP-BASE"><a href="#ACID到CAP-BASE" class="headerlink" title="ACID到CAP/BASE"></a>ACID到CAP/BASE</h3><h4 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h4><p>事务：由一系列对系统中数据进行访问与更新的操作所组成的一个程序执行逻辑单元。<br>事务的4个特征：1.原子性 2.一致性 3.隔离性(读取未提交、读取已提交、可重复度、序列化) 4.持久性。</p>
-<h4 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h4><p>分布式事务：是指事务的参与者、支持事务的服务器、资源服务器以及事务管理器分别位于分布式系统的不同节点之上。通常一个分布式事务中会涉及对多个数据源或业务系统的操作。</p>
-<h5 id="CAP和BASE"><a href="#CAP和BASE" class="headerlink" title="CAP和BASE"></a>CAP和BASE</h5><p>CAP定理：一个分布式系统不可能同时满足一致性、可用性、分区容错性。最多只能满足其中两项。<br>一致性：多个副本之间是否能够保持一致的特性。<br>可用性：指系统提供的服务必须一致处于高可用状态，对于用户的每一个操作请求总是能够在有限的时间内返回结果。系统必须存在一个合理的响应时间，且返回一个正常的响应结果（要么成功，要么失败）。<br>分区容错性：故障发生时，仍能够保证对外提供满足一致性和可用性的服务，除非整个网络环境都发生了故障。</p>
-<p>BASE定理：即使无法做到强一致性，但每个应用都可以根据自身的业务特点，采用适当的方式来使系统达到最终一致性。</p>
-<p>最终一致性的五类主要变种：<br>1.因果一致性：A更新完数据后通知B，B能够访问A的最新值，如果B要进行更新，必须基于A更新后的值。同时，与A无因果关系的C没有此限制。<br>2.读己之所写：A更新数据后，自己总能访问到更新过得最新值，不会看到旧值。<br>3.会话一致性：执行更新操作后，客户端能够在统一个会话中始终读取到该数据项的最新值。<br>4.单调读一致性：如果一个进程从系统中读取出一个数据项的某个值后，那么系统对于该进程后续的任何数据访问都不应该返回更旧的值。<br>5.单调写一致性：一个系统需要能够保证来自同一个进程的写操作被顺序的执行。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/23/Zookeeper学习笔记1/" data-id="cjg4i9a9e000kwova4jqvceb4" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -684,6 +728,10 @@
       <ul>
         
           <li>
+            <a href="/2018/07/19/MySQL技术内幕/第四章/">第三章 表 读书笔记</a>
+          </li>
+        
+          <li>
             <a href="/2018/07/19/MySQL技术内幕/第三章/">第三章 文件 读书笔记</a>
           </li>
         
@@ -692,15 +740,11 @@
           </li>
         
           <li>
+            <a href="/2018/06/26/MySQL技术内幕/第五章/">第五章 索引与算法 读书笔记</a>
+          </li>
+        
+          <li>
             <a href="/2018/06/25/MySQL技术内幕/第一章/">第一章 MySQL体系结构和存储引擎 读书笔记</a>
-          </li>
-        
-          <li>
-            <a href="/2018/06/15/MySQL必知必会/第二十五二十六二十七三十章/">MySQL必知必会学习笔记(11)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/30/MySQL必知必会/第二十二二十三二十四章/">MySQL必知必会学习笔记(10)</a>
           </li>
         
       </ul>

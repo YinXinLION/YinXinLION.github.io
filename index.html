@@ -65,10 +65,77 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-MySQL技术内幕/第四章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/19/MySQL技术内幕/第四章/" class="article-date">
+  <time datetime="2018-07-19T12:34:33.000Z" itemprop="datePublished">2018-07-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/19/MySQL技术内幕/第四章/">第三章 表 读书笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>表示关于特定实体的数据集合，这是关系型数据库模型的核心。</p>
+<h3 id="索引组织表"><a href="#索引组织表" class="headerlink" title="索引组织表"></a>索引组织表</h3><p>在InnoDB存储引擎中，表都是根据主键顺序组织存放的，这种存储方式的表成为索引组织表(index organized table)。每张表都有个主键(Primary Key),如果在创建表时没有显示地定义主键，则InnoDB存储引擎会按一下方式选择或创建主键：</p>
+<ol>
+<li>首先判断表中是否有非空的唯一索引(Unique NOT NULL)，如果有，该列即为主键。</li>
+<li>如果不符合上述条件，InnoDB存储引擎自动创建一个6字节大小的指针。<br>当表有多个非空索引时，InnoDB存储引擎会选择建表时第一个定义的非空唯一索引为主键。</li>
+</ol>
+<p><code>_rowid</code>可以显示表的主键，它只能用于查看单个列为主键的情况。</p>
+<hr>
+<h3 id="InnoDB逻辑存储结构"><a href="#InnoDB逻辑存储结构" class="headerlink" title="InnoDB逻辑存储结构"></a>InnoDB逻辑存储结构</h3><p>从InnoDB存储引擎的逻辑结构看，所有数据都被逻辑地存放在一个空间中，称它为表空间(tablespace)。表空间又由段(segment)、区(extent)、页(page)组成。页在一些文档中有时也称为块(block),InnoDB存储引擎的逻辑存储结构如图所示。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-8-3/32144704.jpg" alt="InnoDB逻辑存储结构"></p>
+<h4 id="表空间"><a href="#表空间" class="headerlink" title="表空间"></a>表空间</h4><p>表空间是InnoDB存储引擎逻辑结构的最高层，<strong>所有的数据都存放在表空间中</strong>,在默认情况下，InnoDB存储引擎有一个共享表空间ibdata1,即所有数据都存放在这个表空间内。如果用户启用参数<code>innodb_file_per_table</code>,则每张表内的数据都会单独放到一个表空间内。每个表空间存放的只是数据、索引和插入缓冲Bitmap页，其他类的数据，如回滚(undo)信息，插入缓冲索引页，系统事务信息，二次写缓冲(Double write buffer)等还放在原来共享表空间内。共享表空间还是会不断增大的。<br>用户显示的提交事务，会产生大量的undo操作语句，使得共享表空间增大。即使使用rollback，也不会回收增长的这些空间，如果这些undo信息不需要，那么这些空间会标记为可用空间。</p>
+<h4 id="段"><a href="#段" class="headerlink" title="段"></a>段</h4><p>表空间由各个段组成，常见的段有数据段、索引段、回滚段等。数据是存储在B+树的叶子节点上的。</p>
+<h4 id="区"><a href="#区" class="headerlink" title="区"></a>区</h4><p>区是由连续页组成的表空间，在任何情况下每个区的大小都为1MB。InnoDB存储引擎一次从磁盘申请4~5个区。InnoDB存储引擎页的大小为16KB，即一个区中一共有64个连续的页。<br><strong>启动innodb_file_per_table，创建的表怎么默认是96KB？</strong><br>区中是64个连续的页，但在每个段开始时，会先用32个页大小的碎片页(fragment page)来存放数据，使用完这些页之后才是64个连续页的申请。<br>这样做的目的是，对于一些小表或者undo这类的段，可以在开始时申请较少的空间，节省磁盘容量的开销。</p>
+<h4 id="页"><a href="#页" class="headerlink" title="页"></a>页</h4><p>页是InnoDB磁盘管理的最小单位。在InnoDB存储引擎中，默认每个页的大小为16KB。可以通过参数<code>innodb_page_size</code>将页的大小设置为4K、8K、16K。若设置完成后，不可对其再次修改。可通过mysqldump导入导出产生新的库。<br>常见页类型：1.数据页 2.undo页 3.系统页 4.事务数据页 5.插入缓冲位图页 6.插入缓冲空闲列表页 7.未压缩的二进制大对象页 8.压缩的二进制大对象页。</p>
+<h4 id="行"><a href="#行" class="headerlink" title="行"></a>行</h4><p>InnoDB存储引擎是面向列的，也就是数据按行存储。当然还有面向行的数据库，MySQL infobright存储引擎按列来存放数据，对于数据仓库下的分析类SQL语句的执行及数据压缩非常有帮助。</p>
+<h3 id="InnoDB行记录格式"><a href="#InnoDB行记录格式" class="headerlink" title="InnoDB行记录格式"></a>InnoDB行记录格式</h3><p>InnoDB1.0.x之前存储引擎提供了Compact和Redundant两种格式来存放行记录数据。通过<code>SHOW TABLE STATUS LIKE &#39;table_name&#39;</code>来查看当前表使用的行格式，<code>row_format</code>属性表示当前使用的行记录结构类型。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-8-5/12361845.jpg" alt=""><br>这里行格式为Dynamic格式。</p>
+<h4 id="行溢出数据"><a href="#行溢出数据" class="headerlink" title="行溢出数据"></a>行溢出数据</h4><p>InnoDB存储引擎可以将一条路中某些数据存储在真正的数据页面之外。BLOB可以不将数据放在溢出页面，VARCHAR列数据也可能存放为行溢出数据。<br>VARCHAR并不是真正能存放65535字节，因为还有别的开销，当然字符类型也是问题GBK和UTF-8存储字符个数是不同的，文档中VARCHAR最大支持65535 <strong>字节</strong>。<br>如果页中只能存放下一条记录，那么InnoDB存储引擎会自动将行数据存放到溢出页中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># a长度为9000，一个页只能存一条数据</span><br><span class="line">CREATE TABLE t (</span><br><span class="line">  a VARCHAR(9000)</span><br><span class="line">  )ENGINE=InnoDB;</span><br></pre></td></tr></table></figure></p>
+<h4 id="Compressed和Dynamic行记录格式"><a href="#Compressed和Dynamic行记录格式" class="headerlink" title="Compressed和Dynamic行记录格式"></a>Compressed和Dynamic行记录格式</h4><p>这两种记录格式对于存放在BLOB中的数据采用了完全的行溢出的方式，在数据页只存放20个字节的指针，实际的数据都存放在Off Page中，而之前的Compact和Redundant两种格式会存放768个前缀字节。</p>
+<p>Compressed行记录格式另一个功能是，存储在其中的行数据会以zlib的算法进行压缩，因此对于BLOB、TEXT、VARCHAR这类大长度类型的数据能够进行非常有效的存储。</p>
+<h4 id="CHAR的行结构存储"><a href="#CHAR的行结构存储" class="headerlink" title="CHAR的行结构存储"></a>CHAR的行结构存储</h4><p>通常我们认为VARCHAR是存储变长长度的字符类型，CHAR是存储固定长度的字符类型。从MySQL4.1版本开始，CHAR(N)中的N指的是字符长度，而不是之前版本的字节长度。也就是说在不同的字符集下，CHAR类型列内部存储的可能不是定长的数据。因此，对于多字节字符编码的CHAR数据类型的存储，InnoDB存储引擎在内部 将其视为变长字符类型。(多字符集情况下CHAR和VARCHAR存储没区别的)。</p>
+<h3 id="InnoDB数据页结构-未阅读"><a href="#InnoDB数据页结构-未阅读" class="headerlink" title="InnoDB数据页结构(未阅读)"></a>InnoDB数据页结构(未阅读)</h3><h3 id="Named-File-Formats机制-未阅读"><a href="#Named-File-Formats机制-未阅读" class="headerlink" title="Named File Formats机制(未阅读)"></a>Named File Formats机制(未阅读)</h3><p>###约束<br>关系数据库本身能保证存储数据的完整性，不需要应用程序去控制，然而文件系统一般需要在程序端控制。<br>数据完整性：1.实体完整性保证表中有一个主键 2.用户可以通过定义主键和唯一性约束来保证实体的完整性。3.用户可以编写触发器保证数据完整性。</p>
+<p>域完整性保证数据每列的值满足特定的条件。在InnoDB存储引擎表中，域完整性体现：1.选择合适的数据类型确保一个数据值满足特定条件。<br>2.外键约束 3.编写触发器 4.DEFAULT约束</p>
+<p>InnoDB提供以下几种约束：1.Primary Key 2.Unique Key 3.Foreign Key 4.Default 5.NOT NULL</p>
+<h4 id="约束的创建和查找"><a href="#约束的创建和查找" class="headerlink" title="约束的创建和查找"></a>约束的创建和查找</h4><p>我们可以在创建表时进行约束定义，也可以使用ALTER TABLE命令创建约束。<br>对于唯一索引约束，我们可以通过<code>CREATE UNIQUE INDEX</code>来简历。主键约束名默认是PRIMARY，对于Unique Key约束而言，默认约束名和列名一样。</p>
+<h4 id="约束和索引的区别"><a href="#约束和索引的区别" class="headerlink" title="约束和索引的区别"></a>约束和索引的区别</h4><p>约束是一个逻辑概念，是用来保证数据完整性的，而索引是一个数据结构，即有逻辑上的概念，在数据库中还代表着物理存储的方式。</p>
+<h4 id="对错误数据的约束"><a href="#对错误数据的约束" class="headerlink" title="对错误数据的约束"></a>对错误数据的约束</h4><p>默认情况下，MySQL数据库不允许非法的或不正确的数据的插入或更新，又或者可以在数据库内部将其转化为一个合法的值，如向NOT NULL的字段插入一个NULL值，会报错，当然修改配置，可以让MySQL将其改为0再插入。</p>
+<h4 id="ENUM和SET约束"><a href="#ENUM和SET约束" class="headerlink" title="ENUM和SET约束"></a>ENUM和SET约束</h4><p>MySQL数据库不支持传统的CHECK约束，但通过ENUM和SET类型可以解决部分这样的约束需求。例如，表上有一个性别类型，规定域的范围只能是male或female，这种情况可以通过ENUM类型进行约束。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE a &#123;</span><br><span class="line">  id INT,</span><br><span class="line">  sex ENUM(&apos;male&apos;,&apos;female&apos;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="触发器与约束"><a href="#触发器与约束" class="headerlink" title="触发器与约束"></a>触发器与约束</h4><p>触发器作用是执行INSERT、DELETE和UPDATE命令之前或之后自动调用。<br>创建触发器命令是<code>CREATE TRIGGER</code><br>通过触发器，用户可以实现MySQL本身不支持的物化视图、高级复制、审计等特性。</p>
+<h3 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h3><p>视图是一个命名的虚表，它由一个SQL查询来定义，可以当做表使用。视图中的数据没有实际的物理存储。</p>
+<h4 id="视图的作用"><a href="#视图的作用" class="headerlink" title="视图的作用"></a>视图的作用</h4><p>一些程序不需要关心基表的结构，只需要按照视图定义来取数据或更新数据，视图在一定程度上起到一个安全层的作用。<br>用户可以对某些视图进行更新操作。视图定义中的<code>WITH CHECK OPTION</code>就是针对可更新的视图，更新的值是否需要检查。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ALTER VIEW v_t</span><br><span class="line">AS</span><br><span class="line">SELECT * FROM t WHERE id&lt;10</span><br><span class="line">WITH CHECK OPTION;</span><br></pre></td></tr></table></figure></p>
+<h3 id="分区表-暂时不想写-没用过"><a href="#分区表-暂时不想写-没用过" class="headerlink" title="分区表(暂时不想写 没用过)"></a>分区表(暂时不想写 没用过)</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/07/19/MySQL技术内幕/第四章/" data-id="cjko6d3pg000030va1xo5kkfe" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL技术内幕/">MySQL技术内幕</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-MySQL技术内幕/第三章" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/07/19/MySQL技术内幕/第三章/" class="article-date">
-  <time datetime="2018-07-19T14:34:33.000Z" itemprop="datePublished">2018-07-19</time>
+  <time datetime="2018-07-19T12:34:33.000Z" itemprop="datePublished">2018-07-19</time>
 </a>
     
   </div>
@@ -194,6 +261,63 @@
     </div>
     <footer class="article-footer">
       <a data-url="http://yoursite.com/2018/06/26/MySQL技术内幕/第二章/" data-id="cjjko8yls0001a8va3diefdri" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL技术内幕/">MySQL技术内幕</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-MySQL技术内幕/第五章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/26/MySQL技术内幕/第五章/" class="article-date">
+  <time datetime="2018-06-26T14:34:33.000Z" itemprop="datePublished">2018-06-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/26/MySQL技术内幕/第五章/">第五章 索引与算法 读书笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>索引太多，应用程序性能可能会收到影响。索引太少，对查询性能会产生影响。</p>
+<h3 id="InnoDB存储引擎索引概述"><a href="#InnoDB存储引擎索引概述" class="headerlink" title="InnoDB存储引擎索引概述"></a>InnoDB存储引擎索引概述</h3><p>InnoDB存储引擎支持以下几种常见索引：1.B+树索引 2.全文索引 3.哈希索引<br>哈希索引是自适应的，会根据表的使用情况自动为表生成哈希索引，不能人为干预。<br>B+树索引的构造类似于二叉树，根据键值快速找到数据。(B表示平衡balance)<br><strong>注意</strong>：B+树索引并不能找到一个给定键值的具体行，它能找到的只是被查找数据行所在的页。然后数据库通过把页读入到内存，再在内存中进行查找，最后得到要查找的数据。</p>
+<p>二叉查找树：左子树的键值总小于根的键值，右子树的键值总是大于根的键值。<br>平衡二叉树：符合二叉查找树的定义，其次满足任何节点的两个子树的高度最大差为1.</p>
+<h3 id="B-树索引"><a href="#B-树索引" class="headerlink" title="B+树索引"></a>B+树索引</h3><p>B+树在数据库中有一个特点是高扇出性，因此B+树高度一般在2~4层，查找某一键值的行记录最多需要2~4次。<br>B+树索引分聚集索引和辅助索引，这两索引都使用B+树，高度平衡，叶子存放所有数据。聚集索引叶子节点存放整行数据信息，而辅助索引叶子节点存放的是主键值。</p>
+<h4 id="聚集索引"><a href="#聚集索引" class="headerlink" title="聚集索引"></a>聚集索引</h4><p>InnoDB存储引擎表是索引组织表，即表中数据按照主键顺序存放。而聚集索引(clustered index)是按照每张表的主键构造一颗B+树，同时叶子节点存放的是整张表的行记录数据，它的叶子节点也称为数据页。同时每个数据页间通过双向链表来进行链接，便于范围查找。</p>
+<p>聚集索引的存储并不是物理上连续的，而是逻辑上连续的。若按照特定顺序存放，维护成本高。</p>
+<p>执行EXPLAIN得到MySQL数据库执行计划，并在rows列中给出一个查询结果的预估返回行数。row只是表示预估值。</p>
+<h4 id="辅助索引"><a href="#辅助索引" class="headerlink" title="辅助索引"></a>辅助索引</h4><p>辅助索引也称非聚集索引，辅助索引的叶子节点存放你相应行数据的聚集索引键。辅助索引不影响聚集索引中的组织，因此可以有多个。如果通过辅助索引搜索，那么获取到主键值后，还需再一次在聚集索引中查找一次。</p>
+<h4 id="索引管理"><a href="#索引管理" class="headerlink" title="索引管理"></a>索引管理</h4><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-8-9/29648564.jpg" alt=""><br>Table：索引所在的表名<br>Non_unique：非唯一的索引。<br>Key_name：索引名字，用户通过这个名字执行DROP INDEX;<br>Seq_in_index：索引中该列的位置。<br>Column_name：索引名称。<br>Collation：列以什么方式存储在索引中。A-》B+树，NULL-》Hash索引<br>Cardinality：表示索引中唯一值的数目的估计值。接近1最好，非常小可以考虑删除索引。<br>Sub_part：是否是列的部分索引<br>Packed：关键字如何被压缩。没有被压缩，则为NULL。<br>NULL：是否索引的列还有NULL值。<br>Index_type：索引类型。<br>Comment：注释</p>
+<p>Cardinality值非常关键，优化器会根据此值判断是否使用这个索引，Cardinality不是实时更新的，即并非每次索引的更新都会更新该值。这个值不是准确的，如果需要更新索引Cardinality的信息，可以使用命令<code>ANALYZE TABLE</code>命令。<br>有时，Cardinality会出现为NULL的情况，最好的解决办法是在非高峰期，对核心表做<code>ANALYZE TABLE</code>操作。</p>
+<p>在MySQL5.5版本之前，MySQL对于索引添加或删除的操作流程是这样的：</p>
+<ol>
+<li>创建一张新的临时表，表结构通过命令<code>ALTER TABLE</code>来重新定义。</li>
+<li>把原表中的数据导入到临时表。</li>
+<li>删除原来的表。</li>
+<li>把临时表重名为原来的表名。</li>
+</ol>
+<p>对于一张大表来说进行索引的添加和删除操作，需要很长时间。若有大量事务需要访问正在被修改的表，这意味着数据库服务不可用。</p>
+<p>InnoDB存储引擎从InnoDB1.0.x版本开始支持一种称为Fast Index Creation(快速索引创建方式,FIC)。(只适用于辅助索引)<br>对于辅助索引的创建，InooDB会对创建索引的表加上一个S锁。删除索引，InnoDB只需更新内部视图，并将辅助索引的空间标记为可用，同时删除MySQL数据库内部视图上对该表的索引定义即可。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/06/26/MySQL技术内幕/第五章/" data-id="cjko6d3pp000230va0mypjjb0" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL技术内幕/">MySQL技术内幕</a></li></ul>
@@ -774,140 +898,6 @@
 
 
   
-    <article id="post-MySQL必知必会/第十三十四章" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/04/25/MySQL必知必会/第十三十四章/" class="article-date">
-  <time datetime="2018-04-25T02:08:00.000Z" itemprop="datePublished">2018-04-25</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/25/MySQL必知必会/第十三十四章/">MySQL必知必会学习笔记(6)</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="分组数据"><a href="#分组数据" class="headerlink" title="分组数据"></a>分组数据</h2><p><strong>创建分组：</strong> 分组是在SELECT语句的GROUP BY子句中建立的。<br>让我们理解一下分组<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT vend_id, COUNT(*) AS num_prods</span><br><span class="line">FROM products</span><br><span class="line">GROUP BY vend_id;</span><br></pre></td></tr></table></figure></p>
-<p>GROUP BY 子句指示MySQL按 vend_id 排序并分组数据。这导致对每个 vend_id 而不是整个表计算 num_prods 一次。如果在 SELECT 中使用表达式，则必须在<br>GROUP BY 子句中指定相同的表达式。不能使用别名。<br>GROUP BY 子句指示MySQL分组数据，然后对每个组而不是整个结果集进行聚集。</p>
-<p>使用GROUP BY子句前，需要知道的规定：</p>
-<ol>
-<li>GROUP BY 子句可以包含任意数目的列。这使得能对分组进行嵌套，为数据分组提供更细致的控制。</li>
-<li>在建立分组时，指定的所有列都一起计算</li>
-<li>GROUP BY子句列出的每个列都必须是检索列或有效的表达式(不能是聚集函数)。如果在 SELECT 中使用表达式，则必须在GROUP BY 子句中指定相同的表达式。不能使用别名。</li>
-<li>除聚集计算语句外， SELECT 语句中的每个列都必须在 GROUP BY 子句中给出。</li>
-<li>如果分组列中具有 NULL 值，则 NULL 将作为一个分组返回。如果列中有多行 NULL 值，它们将分为一组。</li>
-<li>GROUP BY 子句必须出现在 WHERE 子句之后， ORDER BY 子句之前。</li>
-</ol>
-<p>使用ROLLUP：使用WITH ROLLUP关键字，可以得到每个分组以及每个分组汇总级别的值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT vend_id, COUNT(*) AS num_prods</span><br><span class="line">FROM products</span><br><span class="line">GROUP BY vend_id WITH ROLLUP;</span><br></pre></td></tr></table></figure></p>
-<p><a href="http://blog.itpub.net/29773961/viewspace-1255419/" target="_blank" rel="noopener">http://blog.itpub.net/29773961/viewspace-1255419/</a></p>
-<h2 id="过滤分组"><a href="#过滤分组" class="headerlink" title="过滤分组"></a>过滤分组</h2><p>WHERE子句过滤的是行而不是分组。要想过滤分组，要使用HAVING子句。HAVING支持的操作符和WHERE一样。<br>示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT cust_id, COUNT(*) AS orders</span><br><span class="line">FROM orders</span><br><span class="line">GROUP BY cust_id</span><br><span class="line">HAVING COUNT(*) &gt;= 2;</span><br><span class="line"># 最后一行增加了HAVING 子句，它过滤 COUNT(*) &gt;=2 （两个以上的订单）的那些分组。</span><br></pre></td></tr></table></figure></p>
-<p><strong>WHERE和HAVING的差别</strong><br>WHERE在数据分组前进行过滤，HAVING在数据分组后进行过滤。</p>
-<p><strong>ORDER BY和GROUP BY的差别</strong></p>
-<ol>
-<li>ORDER BY：排序产生的输出。GROUP BY：分组行，但输出可能不是分组的顺序。</li>
-<li>ORDER BY：任意列都可以使用(非选择的列也可以使用)。 GROUP BY：只可能使用选择列或表达式列，而且必须使用每个选择列表达式。</li>
-<li>ORDER BY：不一定需要。 GROUP BY：如果和聚集函数一起使用列(或表达式),则必须使用。</li>
-</ol>
-<p>不要忘记ORDER BY：一般在使用GROUP BY子句时，应该也给出ORDER BY子句。这是保证数据正确排序的唯一方法。</p>
-<p><strong>SELECT子句顺序</strong><br>SELECT：要返回的列或表达式。<br>FROM：从中检索数据的表。<br>WHERE：行级过滤。<br>GROUP BY：分组说明。<br>HAVING：组级过滤。<br>ORDER BY：输出排序顺序。<br>LIMIT：要检索的行数。</p>
-<h2 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h2><p>SQL允许创建子查询，即嵌套在其他查询中的查询。</p>
-<p>示例：需要列出订购物品TNT2的所有客户。<br>(1)检索包含物品TNT2的所有订单的编号。<br>(2)检索具有前一步骤列出的订单编号的所有客户的ID。<br>(3)检索前一步骤返回的所有客户ID的客户信息。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">SELECT order_num</span><br><span class="line">FROM orderitems</span><br><span class="line">WHERE prod_id = &apos;TNT2&apos;;</span><br><span class="line"></span><br><span class="line">SELECT cust_id</span><br><span class="line">FROM orders</span><br><span class="line">WHERE order_num IN (20005, 20007);</span><br><span class="line"></span><br><span class="line">SELECT cust_id</span><br><span class="line">FROM orders</span><br><span class="line">WHERE order_num IN (SELECT ord4dser_num</span><br><span class="line">                    FROM orderitems</span><br><span class="line">                    WHERE prod_id = &apos;TNT2&apos;);</span><br><span class="line"></span><br><span class="line">SELECT cust_name, cust_contact</span><br><span class="line">FROM customer</span><br><span class="line">WHERE cust_id IN (SELECT cust_id</span><br><span class="line">                  FROM orders</span><br><span class="line">                  WHERE order_num IN (SELECT ord4dser_num</span><br><span class="line">                                      FROM orderitems</span><br><span class="line">                                      WHERE prod_id = &apos;TNT2&apos;));</span><br></pre></td></tr></table></figure></p>
-<p>子查询并不总是执行这种类型的数据检索的最有效的方法。</p>
-<p>示例：显示 customers表中每个客户的订单总数。<br>(1)从 customers 表中检索客户列表。<br>(2)对于检索出的每个客户，统计其在 orders 表中的订单数目。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 对客户10001的订单进行计数</span><br><span class="line">SELECT COUNT(*) AS orders</span><br><span class="line">FROM orders</span><br><span class="line">WHERE cust_id = 10001;</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT cust_name, cust_state, (SELECT COUNT(*)</span><br><span class="line">                               FROM orders</span><br><span class="line">                               WHERE orders.cust_id = customers.cust_id) AS orders</span><br><span class="line">FROM customers</span><br><span class="line">ORDER BY cust_name;</span><br></pre></td></tr></table></figure>
-<p>该子查询对检索出的每个客户执行一次。子查询执行了5次，因此检索除了5个客户。</p>
-<p><strong>相关子查询：</strong> 涉及外部查询的子查询。(上面这个示例称为相关子查询)</p>
-<p>逐渐增加子查询来建立查询：首先，建立和测试最内层的查询。然后，用硬编码数据建立和测试外层查询，并且仅在确认它正常后才嵌入子查询。这时，再次测试它，对于要增加的每个查询，重复这些步骤。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/04/25/MySQL必知必会/第十三十四章/" data-id="cjgryx1yh0001dovaazwd47sx" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-MySQL必知必会/第十十一十二章" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/04/24/MySQL必知必会/第十十一十二章/" class="article-date">
-  <time datetime="2018-04-24T14:00:00.000Z" itemprop="datePublished">2018-04-24</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/24/MySQL必知必会/第十十一十二章/">MySQL必知必会学习笔记(5)</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="计算字段"><a href="#计算字段" class="headerlink" title="计算字段"></a>计算字段</h2><p>存储在表中的数据都不是程序所需要的，我们需要从数据库中检索并加以转换从而得到我们想要的数据样子。</p>
-<p><strong>拼接字段：</strong> 将值联结到一起构成单个值。<code>Concat()</code>函数。<br><code>Concat()</code> 拼接串，即把多个串连接起来形成一个较长的串。<br><code>Concat()</code> 需要一个或多个指定的串，各个串之间用逗号分隔。</p>
-<p><code>Rtrim()</code>: 删除数据右侧多余的空格</p>
-<p><strong>使用别名：</strong> 别名是一个字段或值得替换名。别名用<code>AS</code>关键字赋予。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT Concat(RTrim(vend_name), &apos;(&apos;, RTrim(vend_country),&apos;)&apos;) AS vend_title</span><br><span class="line">FROM vendors</span><br><span class="line">ORDER BY vend_name;</span><br></pre></td></tr></table></figure></p>
-<p>它指示SQL创建一个包含指定计算的名为 vend_title 的计算字段。任何客户机应用都可以按名引用这个列，就像它是一个实际的表列一样。</p>
-<p>别名的其他用途：在实际表名中列名不符合规范例如(列名中有空格)，此时需要重新命名。</p>
-<p><strong>执行算术计算：</strong> 另一种常见用途为对检索出的数据进行算术计算。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT prod_id, quantity, item_price , quantity * item_price AS expanded_price</span><br><span class="line">FROM orderitems</span><br><span class="line">WHERE order_num = 20005;</span><br></pre></td></tr></table></figure></p>
-<p>操作符除了有乘，还有 加，减，除。</p>
-<h2 id="使用函数"><a href="#使用函数" class="headerlink" title="使用函数"></a>使用函数</h2><p><strong>常见的文本处理函数</strong><br><code>Left()</code>:返回串左边的字符。<br><code>Length()</code>:返回串的长度。<br><code>Locate()</code>:找出串的第一个子串。<br><code>Lower()</code>:将串转换为小写。<br><code>LTrim()</code>:去掉串左边的空格。<br><code>Right()</code>:返回串右边的字符。<br><code>RTrim()</code>:去掉串右边的空格。<br><code>Soundex()</code>:返回串的SOUNDEX值。<br><code>SubString()</code>:返回子串的字符。<br><code>Upper()</code>:将串转换为大写。</p>
-<p><strong>常见日期和时间处理函数</strong><br><code>AddDate()</code>  增加一个日期（天、周等）<br><code>AddTime()</code>  增加一个时间（时、分等）<br><code>CurDate()</code>  返回当前日期<br><code>CurTime()</code>  返回当前时间<br><code>Date()</code>  返回日期时间的日期部分<br><code>Time()</code>  返回一个日期时间的时间部分<br><code>Date_Format()</code>  返回一个格式化的日期或时间串<br><code>Now()</code>  返回当前日期和时间</p>
-<p>datetime数据类型：有年月日和时分秒<br>如果datetime要和’2015-06-01’比较 如果刚好有’2015-06-01 00:00:00’则会匹配成功返回结果。<br>但如果不是则需要<code>Date(date) = &#39;2015-06-01&#39;</code></p>
-<p><strong>数值处理函数</strong><br><code>Abs()</code>  返回一个数的绝对值<br><code>Sqrt()</code>  返回一个数的平方根</p>
-<h2 id="汇总数据"><a href="#汇总数据" class="headerlink" title="汇总数据"></a>汇总数据</h2><p>我们经常要汇总数据而不是把它们实际检索出来。</p>
-<ol>
-<li>确定表中的行数。</li>
-<li>获得表中行组的和。</li>
-<li>找出表列的最大值、最小值、平均值。</li>
-</ol>
-<p><strong>聚集函数：</strong> 运行在行组上的，计算和返回单个值得函数。<br><code>AVG()</code>:返回某列的平均值 只用于单列，并且忽略值为NULL的行<br><code>COUNT()</code>:返回某列的行数<br><code>MAX()</code>:返回某列的最大值<br><code>MIN()</code>:返回某列的最小值<br><code>SUM()</code>:返回某列值之和</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT AVG(prod_price) AS avg_price</span><br><span class="line">FROM products;</span><br></pre></td></tr></table></figure>
-<p>此 SELECT 语句返回值 avg_Price ，它包含 products 表中所有产品的平均价格。</p>
-<p><code>COUNT()</code>函数有两种使用方式</p>
-<ol>
-<li>使用<code>COUNT(*)</code>对表中行的数目进行计数，不管表列中包含的是空值(NULL)还是非空值。</li>
-<li>使用COUNT(column)对特定列中具有值得行进行计数，忽略NULL值。</li>
-</ol>
-<p>在指定别名以包含某个聚集函数的结果时，不应该使用表中实际的列名。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/04/24/MySQL必知必会/第十十一十二章/" data-id="cjgryx1yk0003dovadi3pyud8" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -965,6 +955,10 @@
       <ul>
         
           <li>
+            <a href="/2018/07/19/MySQL技术内幕/第四章/">第三章 表 读书笔记</a>
+          </li>
+        
+          <li>
             <a href="/2018/07/19/MySQL技术内幕/第三章/">第三章 文件 读书笔记</a>
           </li>
         
@@ -973,15 +967,11 @@
           </li>
         
           <li>
+            <a href="/2018/06/26/MySQL技术内幕/第五章/">第五章 索引与算法 读书笔记</a>
+          </li>
+        
+          <li>
             <a href="/2018/06/25/MySQL技术内幕/第一章/">第一章 MySQL体系结构和存储引擎 读书笔记</a>
-          </li>
-        
-          <li>
-            <a href="/2018/06/15/MySQL必知必会/第二十五二十六二十七三十章/">MySQL必知必会学习笔记(11)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/30/MySQL必知必会/第二十二二十三二十四章/">MySQL必知必会学习笔记(10)</a>
           </li>
         
       </ul>

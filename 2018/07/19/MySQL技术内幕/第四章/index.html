@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>第三章 表 读书笔记 | 努力是为了将对世界的所有渴望都掌握在手上</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="表示关于特定实体的数据集合，这是关系型数据库模型的核心。 索引组织表在InnoDB存储引擎中，表都是根据主键顺序组织存放的，这种存储方式的表成为索引组织表(index organized table)。每张表都有个主键(Primary Key),如果在创建表时没有显示地定义主键，则InnoDB存储引擎会按一下方式选择或创建主键：  首先判断表中是否有非空的唯一索引(Unique NOT NULL)">
+<meta name="keywords" content="MySQL技术内幕">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第三章 表 读书笔记">
+<meta property="og:url" content="http://yoursite.com/2018/07/19/MySQL技术内幕/第四章/index.html">
+<meta property="og:site_name" content="努力是为了将对世界的所有渴望都掌握在手上">
+<meta property="og:description" content="表示关于特定实体的数据集合，这是关系型数据库模型的核心。 索引组织表在InnoDB存储引擎中，表都是根据主键顺序组织存放的，这种存储方式的表成为索引组织表(index organized table)。每张表都有个主键(Primary Key),如果在创建表时没有显示地定义主键，则InnoDB存储引擎会按一下方式选择或创建主键：  首先判断表中是否有非空的唯一索引(Unique NOT NULL)">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-8-3/32144704.jpg">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-8-5/12361845.jpg">
+<meta property="og:updated_time" content="2018-08-09T15:15:21.858Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第三章 表 读书笔记">
+<meta name="twitter:description" content="表示关于特定实体的数据集合，这是关系型数据库模型的核心。 索引组织表在InnoDB存储引擎中，表都是根据主键顺序组织存放的，这种存储方式的表成为索引组织表(index organized table)。每张表都有个主键(Primary Key),如果在创建表时没有显示地定义主键，则InnoDB存储引擎会按一下方式选择或创建主键：  首先判断表中是否有非空的唯一索引(Unique NOT NULL)">
+<meta name="twitter:image" content="http://oqp1ywek9.bkt.clouddn.com/18-8-3/32144704.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="努力是为了将对世界的所有渴望都掌握在手上" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">努力是为了将对世界的所有渴望都掌握在手上</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-MySQL技术内幕/第四章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/19/MySQL技术内幕/第四章/" class="article-date">
+  <time datetime="2018-07-19T12:34:33.000Z" itemprop="datePublished">2018-07-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      第三章 表 读书笔记
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>表示关于特定实体的数据集合，这是关系型数据库模型的核心。</p>
+<h3 id="索引组织表"><a href="#索引组织表" class="headerlink" title="索引组织表"></a>索引组织表</h3><p>在InnoDB存储引擎中，表都是根据主键顺序组织存放的，这种存储方式的表成为索引组织表(index organized table)。每张表都有个主键(Primary Key),如果在创建表时没有显示地定义主键，则InnoDB存储引擎会按一下方式选择或创建主键：</p>
+<ol>
+<li>首先判断表中是否有非空的唯一索引(Unique NOT NULL)，如果有，该列即为主键。</li>
+<li>如果不符合上述条件，InnoDB存储引擎自动创建一个6字节大小的指针。<br>当表有多个非空索引时，InnoDB存储引擎会选择建表时第一个定义的非空唯一索引为主键。</li>
+</ol>
+<p><code>_rowid</code>可以显示表的主键，它只能用于查看单个列为主键的情况。</p>
+<hr>
+<h3 id="InnoDB逻辑存储结构"><a href="#InnoDB逻辑存储结构" class="headerlink" title="InnoDB逻辑存储结构"></a>InnoDB逻辑存储结构</h3><p>从InnoDB存储引擎的逻辑结构看，所有数据都被逻辑地存放在一个空间中，称它为表空间(tablespace)。表空间又由段(segment)、区(extent)、页(page)组成。页在一些文档中有时也称为块(block),InnoDB存储引擎的逻辑存储结构如图所示。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-8-3/32144704.jpg" alt="InnoDB逻辑存储结构"></p>
+<h4 id="表空间"><a href="#表空间" class="headerlink" title="表空间"></a>表空间</h4><p>表空间是InnoDB存储引擎逻辑结构的最高层，<strong>所有的数据都存放在表空间中</strong>,在默认情况下，InnoDB存储引擎有一个共享表空间ibdata1,即所有数据都存放在这个表空间内。如果用户启用参数<code>innodb_file_per_table</code>,则每张表内的数据都会单独放到一个表空间内。每个表空间存放的只是数据、索引和插入缓冲Bitmap页，其他类的数据，如回滚(undo)信息，插入缓冲索引页，系统事务信息，二次写缓冲(Double write buffer)等还放在原来共享表空间内。共享表空间还是会不断增大的。<br>用户显示的提交事务，会产生大量的undo操作语句，使得共享表空间增大。即使使用rollback，也不会回收增长的这些空间，如果这些undo信息不需要，那么这些空间会标记为可用空间。</p>
+<h4 id="段"><a href="#段" class="headerlink" title="段"></a>段</h4><p>表空间由各个段组成，常见的段有数据段、索引段、回滚段等。数据是存储在B+树的叶子节点上的。</p>
+<h4 id="区"><a href="#区" class="headerlink" title="区"></a>区</h4><p>区是由连续页组成的表空间，在任何情况下每个区的大小都为1MB。InnoDB存储引擎一次从磁盘申请4~5个区。InnoDB存储引擎页的大小为16KB，即一个区中一共有64个连续的页。<br><strong>启动innodb_file_per_table，创建的表怎么默认是96KB？</strong><br>区中是64个连续的页，但在每个段开始时，会先用32个页大小的碎片页(fragment page)来存放数据，使用完这些页之后才是64个连续页的申请。<br>这样做的目的是，对于一些小表或者undo这类的段，可以在开始时申请较少的空间，节省磁盘容量的开销。</p>
+<h4 id="页"><a href="#页" class="headerlink" title="页"></a>页</h4><p>页是InnoDB磁盘管理的最小单位。在InnoDB存储引擎中，默认每个页的大小为16KB。可以通过参数<code>innodb_page_size</code>将页的大小设置为4K、8K、16K。若设置完成后，不可对其再次修改。可通过mysqldump导入导出产生新的库。<br>常见页类型：1.数据页 2.undo页 3.系统页 4.事务数据页 5.插入缓冲位图页 6.插入缓冲空闲列表页 7.未压缩的二进制大对象页 8.压缩的二进制大对象页。</p>
+<h4 id="行"><a href="#行" class="headerlink" title="行"></a>行</h4><p>InnoDB存储引擎是面向列的，也就是数据按行存储。当然还有面向行的数据库，MySQL infobright存储引擎按列来存放数据，对于数据仓库下的分析类SQL语句的执行及数据压缩非常有帮助。</p>
+<h3 id="InnoDB行记录格式"><a href="#InnoDB行记录格式" class="headerlink" title="InnoDB行记录格式"></a>InnoDB行记录格式</h3><p>InnoDB1.0.x之前存储引擎提供了Compact和Redundant两种格式来存放行记录数据。通过<code>SHOW TABLE STATUS LIKE &#39;table_name&#39;</code>来查看当前表使用的行格式，<code>row_format</code>属性表示当前使用的行记录结构类型。<br><img src="http://oqp1ywek9.bkt.clouddn.com/18-8-5/12361845.jpg" alt=""><br>这里行格式为Dynamic格式。</p>
+<h4 id="行溢出数据"><a href="#行溢出数据" class="headerlink" title="行溢出数据"></a>行溢出数据</h4><p>InnoDB存储引擎可以将一条路中某些数据存储在真正的数据页面之外。BLOB可以不将数据放在溢出页面，VARCHAR列数据也可能存放为行溢出数据。<br>VARCHAR并不是真正能存放65535字节，因为还有别的开销，当然字符类型也是问题GBK和UTF-8存储字符个数是不同的，文档中VARCHAR最大支持65535 <strong>字节</strong>。<br>如果页中只能存放下一条记录，那么InnoDB存储引擎会自动将行数据存放到溢出页中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># a长度为9000，一个页只能存一条数据</span><br><span class="line">CREATE TABLE t (</span><br><span class="line">  a VARCHAR(9000)</span><br><span class="line">  )ENGINE=InnoDB;</span><br></pre></td></tr></table></figure></p>
+<h4 id="Compressed和Dynamic行记录格式"><a href="#Compressed和Dynamic行记录格式" class="headerlink" title="Compressed和Dynamic行记录格式"></a>Compressed和Dynamic行记录格式</h4><p>这两种记录格式对于存放在BLOB中的数据采用了完全的行溢出的方式，在数据页只存放20个字节的指针，实际的数据都存放在Off Page中，而之前的Compact和Redundant两种格式会存放768个前缀字节。</p>
+<p>Compressed行记录格式另一个功能是，存储在其中的行数据会以zlib的算法进行压缩，因此对于BLOB、TEXT、VARCHAR这类大长度类型的数据能够进行非常有效的存储。</p>
+<h4 id="CHAR的行结构存储"><a href="#CHAR的行结构存储" class="headerlink" title="CHAR的行结构存储"></a>CHAR的行结构存储</h4><p>通常我们认为VARCHAR是存储变长长度的字符类型，CHAR是存储固定长度的字符类型。从MySQL4.1版本开始，CHAR(N)中的N指的是字符长度，而不是之前版本的字节长度。也就是说在不同的字符集下，CHAR类型列内部存储的可能不是定长的数据。因此，对于多字节字符编码的CHAR数据类型的存储，InnoDB存储引擎在内部 将其视为变长字符类型。(多字符集情况下CHAR和VARCHAR存储没区别的)。</p>
+<h3 id="InnoDB数据页结构-未阅读"><a href="#InnoDB数据页结构-未阅读" class="headerlink" title="InnoDB数据页结构(未阅读)"></a>InnoDB数据页结构(未阅读)</h3><h3 id="Named-File-Formats机制-未阅读"><a href="#Named-File-Formats机制-未阅读" class="headerlink" title="Named File Formats机制(未阅读)"></a>Named File Formats机制(未阅读)</h3><p>###约束<br>关系数据库本身能保证存储数据的完整性，不需要应用程序去控制，然而文件系统一般需要在程序端控制。<br>数据完整性：1.实体完整性保证表中有一个主键 2.用户可以通过定义主键和唯一性约束来保证实体的完整性。3.用户可以编写触发器保证数据完整性。</p>
+<p>域完整性保证数据每列的值满足特定的条件。在InnoDB存储引擎表中，域完整性体现：1.选择合适的数据类型确保一个数据值满足特定条件。<br>2.外键约束 3.编写触发器 4.DEFAULT约束</p>
+<p>InnoDB提供以下几种约束：1.Primary Key 2.Unique Key 3.Foreign Key 4.Default 5.NOT NULL</p>
+<h4 id="约束的创建和查找"><a href="#约束的创建和查找" class="headerlink" title="约束的创建和查找"></a>约束的创建和查找</h4><p>我们可以在创建表时进行约束定义，也可以使用ALTER TABLE命令创建约束。<br>对于唯一索引约束，我们可以通过<code>CREATE UNIQUE INDEX</code>来简历。主键约束名默认是PRIMARY，对于Unique Key约束而言，默认约束名和列名一样。</p>
+<h4 id="约束和索引的区别"><a href="#约束和索引的区别" class="headerlink" title="约束和索引的区别"></a>约束和索引的区别</h4><p>约束是一个逻辑概念，是用来保证数据完整性的，而索引是一个数据结构，即有逻辑上的概念，在数据库中还代表着物理存储的方式。</p>
+<h4 id="对错误数据的约束"><a href="#对错误数据的约束" class="headerlink" title="对错误数据的约束"></a>对错误数据的约束</h4><p>默认情况下，MySQL数据库不允许非法的或不正确的数据的插入或更新，又或者可以在数据库内部将其转化为一个合法的值，如向NOT NULL的字段插入一个NULL值，会报错，当然修改配置，可以让MySQL将其改为0再插入。</p>
+<h4 id="ENUM和SET约束"><a href="#ENUM和SET约束" class="headerlink" title="ENUM和SET约束"></a>ENUM和SET约束</h4><p>MySQL数据库不支持传统的CHECK约束，但通过ENUM和SET类型可以解决部分这样的约束需求。例如，表上有一个性别类型，规定域的范围只能是male或female，这种情况可以通过ENUM类型进行约束。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE a &#123;</span><br><span class="line">  id INT,</span><br><span class="line">  sex ENUM(&apos;male&apos;,&apos;female&apos;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="触发器与约束"><a href="#触发器与约束" class="headerlink" title="触发器与约束"></a>触发器与约束</h4><p>触发器作用是执行INSERT、DELETE和UPDATE命令之前或之后自动调用。<br>创建触发器命令是<code>CREATE TRIGGER</code><br>通过触发器，用户可以实现MySQL本身不支持的物化视图、高级复制、审计等特性。</p>
+<h3 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h3><p>视图是一个命名的虚表，它由一个SQL查询来定义，可以当做表使用。视图中的数据没有实际的物理存储。</p>
+<h4 id="视图的作用"><a href="#视图的作用" class="headerlink" title="视图的作用"></a>视图的作用</h4><p>一些程序不需要关心基表的结构，只需要按照视图定义来取数据或更新数据，视图在一定程度上起到一个安全层的作用。<br>用户可以对某些视图进行更新操作。视图定义中的<code>WITH CHECK OPTION</code>就是针对可更新的视图，更新的值是否需要检查。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ALTER VIEW v_t</span><br><span class="line">AS</span><br><span class="line">SELECT * FROM t WHERE id&lt;10</span><br><span class="line">WITH CHECK OPTION;</span><br></pre></td></tr></table></figure></p>
+<h3 id="分区表-暂时不想写-没用过"><a href="#分区表-暂时不想写-没用过" class="headerlink" title="分区表(暂时不想写 没用过)"></a>分区表(暂时不想写 没用过)</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/07/19/MySQL技术内幕/第四章/" data-id="cjko6d3pg000030va1xo5kkfe" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL技术内幕/">MySQL技术内幕</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/07/19/MySQL技术内幕/第三章/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">第三章 文件 读书笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java多线程/">Java多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx学习笔记/">Nginx学习笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python基础/">Python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习成长/">学习成长</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/心情/">心情</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL技术内幕/">MySQL技术内幕</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/MySQL必知必会/" style="font-size: 20px;">MySQL必知必会</a> <a href="/tags/MySQL技术内幕/" style="font-size: 10px;">MySQL技术内幕</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/07/19/MySQL技术内幕/第四章/">第三章 表 读书笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/19/MySQL技术内幕/第三章/">第三章 文件 读书笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/26/MySQL技术内幕/第二章/">第二章 Innodb存储引擎 读书笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/26/MySQL技术内幕/第五章/">第五章 索引与算法 读书笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/25/MySQL技术内幕/第一章/">第一章 MySQL体系结构和存储引擎 读书笔记</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 殷鑫<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

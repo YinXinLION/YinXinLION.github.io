@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>第五章 索引与算法 读书笔记 | 努力是为了将对世界的所有渴望都掌握在手上</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言索引太多，应用程序性能可能会收到影响。索引太少，对查询性能会产生影响。 InnoDB存储引擎索引概述InnoDB存储引擎支持以下几种常见索引：1.B+树索引 2.全文索引 3.哈希索引哈希索引是自适应的，会根据表的使用情况自动为表生成哈希索引，不能人为干预。B+树索引的构造类似于二叉树，根据键值快速找到数据。(B表示平衡balance)注意：B+树索引并不能找到一个给定键值的具体行，它能找到的">
+<meta name="keywords" content="MySQL技术内幕">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第五章 索引与算法 读书笔记">
+<meta property="og:url" content="http://yoursite.com/2018/06/26/MySQL技术内幕/第五章/index.html">
+<meta property="og:site_name" content="努力是为了将对世界的所有渴望都掌握在手上">
+<meta property="og:description" content="前言索引太多，应用程序性能可能会收到影响。索引太少，对查询性能会产生影响。 InnoDB存储引擎索引概述InnoDB存储引擎支持以下几种常见索引：1.B+树索引 2.全文索引 3.哈希索引哈希索引是自适应的，会根据表的使用情况自动为表生成哈希索引，不能人为干预。B+树索引的构造类似于二叉树，根据键值快速找到数据。(B表示平衡balance)注意：B+树索引并不能找到一个给定键值的具体行，它能找到的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://oqp1ywek9.bkt.clouddn.com/18-8-9/29648564.jpg">
+<meta property="og:updated_time" content="2018-08-10T15:56:57.569Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第五章 索引与算法 读书笔记">
+<meta name="twitter:description" content="前言索引太多，应用程序性能可能会收到影响。索引太少，对查询性能会产生影响。 InnoDB存储引擎索引概述InnoDB存储引擎支持以下几种常见索引：1.B+树索引 2.全文索引 3.哈希索引哈希索引是自适应的，会根据表的使用情况自动为表生成哈希索引，不能人为干预。B+树索引的构造类似于二叉树，根据键值快速找到数据。(B表示平衡balance)注意：B+树索引并不能找到一个给定键值的具体行，它能找到的">
+<meta name="twitter:image" content="http://oqp1ywek9.bkt.clouddn.com/18-8-9/29648564.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="努力是为了将对世界的所有渴望都掌握在手上" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">努力是为了将对世界的所有渴望都掌握在手上</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-MySQL技术内幕/第五章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/26/MySQL技术内幕/第五章/" class="article-date">
+  <time datetime="2018-06-26T14:34:33.000Z" itemprop="datePublished">2018-06-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      第五章 索引与算法 读书笔记
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>索引太多，应用程序性能可能会收到影响。索引太少，对查询性能会产生影响。</p>
+<h3 id="InnoDB存储引擎索引概述"><a href="#InnoDB存储引擎索引概述" class="headerlink" title="InnoDB存储引擎索引概述"></a>InnoDB存储引擎索引概述</h3><p>InnoDB存储引擎支持以下几种常见索引：1.B+树索引 2.全文索引 3.哈希索引<br>哈希索引是自适应的，会根据表的使用情况自动为表生成哈希索引，不能人为干预。<br>B+树索引的构造类似于二叉树，根据键值快速找到数据。(B表示平衡balance)<br><strong>注意</strong>：B+树索引并不能找到一个给定键值的具体行，它能找到的只是被查找数据行所在的页。然后数据库通过把页读入到内存，再在内存中进行查找，最后得到要查找的数据。</p>
+<p>二叉查找树：左子树的键值总小于根的键值，右子树的键值总是大于根的键值。<br>平衡二叉树：符合二叉查找树的定义，其次满足任何节点的两个子树的高度最大差为1.</p>
+<h3 id="B-树索引"><a href="#B-树索引" class="headerlink" title="B+树索引"></a>B+树索引</h3><p>B+树在数据库中有一个特点是高扇出性，因此B+树高度一般在2~4层，查找某一键值的行记录最多需要2~4次。<br>B+树索引分聚集索引和辅助索引，这两索引都使用B+树，高度平衡，叶子存放所有数据。聚集索引叶子节点存放整行数据信息，而辅助索引叶子节点存放的是主键值。</p>
+<h4 id="聚集索引"><a href="#聚集索引" class="headerlink" title="聚集索引"></a>聚集索引</h4><p>InnoDB存储引擎表是索引组织表，即表中数据按照主键顺序存放。而聚集索引(clustered index)是按照每张表的主键构造一颗B+树，同时叶子节点存放的是整张表的行记录数据，它的叶子节点也称为数据页。同时每个数据页间通过双向链表来进行链接，便于范围查找。</p>
+<p>聚集索引的存储并不是物理上连续的，而是逻辑上连续的。若按照特定顺序存放，维护成本高。</p>
+<p>执行EXPLAIN得到MySQL数据库执行计划，并在rows列中给出一个查询结果的预估返回行数。row只是表示预估值。</p>
+<h4 id="辅助索引"><a href="#辅助索引" class="headerlink" title="辅助索引"></a>辅助索引</h4><p>辅助索引也称非聚集索引，辅助索引的叶子节点存放你相应行数据的聚集索引键。辅助索引不影响聚集索引中的组织，因此可以有多个。如果通过辅助索引搜索，那么获取到主键值后，还需再一次在聚集索引中查找一次。</p>
+<h4 id="索引管理"><a href="#索引管理" class="headerlink" title="索引管理"></a>索引管理</h4><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-8-9/29648564.jpg" alt=""><br>Table：索引所在的表名<br>Non_unique：非唯一的索引。<br>Key_name：索引名字，用户通过这个名字执行DROP INDEX;<br>Seq_in_index：索引中该列的位置。<br>Column_name：索引名称。<br>Collation：列以什么方式存储在索引中。A-》B+树，NULL-》Hash索引<br>Cardinality：表示索引中唯一值的数目的估计值。接近1最好，非常小可以考虑删除索引。<br>Sub_part：是否是列的部分索引<br>Packed：关键字如何被压缩。没有被压缩，则为NULL。<br>NULL：是否索引的列还有NULL值。<br>Index_type：索引类型。<br>Comment：注释</p>
+<p>Cardinality值非常关键，优化器会根据此值判断是否使用这个索引，Cardinality不是实时更新的，即并非每次索引的更新都会更新该值。这个值不是准确的，如果需要更新索引Cardinality的信息，可以使用命令<code>ANALYZE TABLE</code>命令。<br>有时，Cardinality会出现为NULL的情况，最好的解决办法是在非高峰期，对核心表做<code>ANALYZE TABLE</code>操作。</p>
+<p>在MySQL5.5版本之前，MySQL对于索引添加或删除的操作流程是这样的：</p>
+<ol>
+<li>创建一张新的临时表，表结构通过命令<code>ALTER TABLE</code>来重新定义。</li>
+<li>把原表中的数据导入到临时表。</li>
+<li>删除原来的表。</li>
+<li>把临时表重名为原来的表名。</li>
+</ol>
+<p>对于一张大表来说进行索引的添加和删除操作，需要很长时间。若有大量事务需要访问正在被修改的表，这意味着数据库服务不可用。</p>
+<p>InnoDB存储引擎从InnoDB1.0.x版本开始支持一种称为Fast Index Creation(快速索引创建方式,FIC)。(只适用于辅助索引)<br>对于辅助索引的创建，InooDB会对创建索引的表加上一个S锁。删除索引，InnoDB只需更新内部视图，并将辅助索引的空间标记为可用，同时删除MySQL数据库内部视图上对该表的索引定义即可。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/06/26/MySQL技术内幕/第五章/" data-id="cjko6d3pp000230va0mypjjb0" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL技术内幕/">MySQL技术内幕</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/06/26/MySQL技术内幕/第二章/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          第二章 Innodb存储引擎 读书笔记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/06/25/MySQL技术内幕/第一章/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">第一章 MySQL体系结构和存储引擎 读书笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java基础/">Java基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java多线程/">Java多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx学习笔记/">Nginx学习笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python基础/">Python基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习成长/">学习成长</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/心情/">心情</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL必知必会/">MySQL必知必会</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL技术内幕/">MySQL技术内幕</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/MySQL必知必会/" style="font-size: 20px;">MySQL必知必会</a> <a href="/tags/MySQL技术内幕/" style="font-size: 10px;">MySQL技术内幕</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/07/19/MySQL技术内幕/第四章/">第三章 表 读书笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/19/MySQL技术内幕/第三章/">第三章 文件 读书笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/26/MySQL技术内幕/第二章/">第二章 Innodb存储引擎 读书笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/26/MySQL技术内幕/第五章/">第五章 索引与算法 读书笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/25/MySQL技术内幕/第一章/">第一章 MySQL体系结构和存储引擎 读书笔记</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 殷鑫<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

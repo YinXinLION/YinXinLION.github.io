@@ -65,6 +65,96 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Zookeeper学习笔记2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/27/Zookeeper学习笔记2/" class="article-date">
+  <time datetime="2018-03-27T01:27:14.000Z" itemprop="datePublished">2018-03-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/27/Zookeeper学习笔记2/">Zookeeper学习-一致性协议</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="一致性协议"><a href="#一致性协议" class="headerlink" title="一致性协议"></a>一致性协议</h3><h4 id="二阶段提交"><a href="#二阶段提交" class="headerlink" title="二阶段提交"></a>二阶段提交</h4><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-3-27/66567191.jpg" alt="二阶段提交"><br>1.提交事务请求 2.执行事务提交<br>如果任何一个参与者返回No，或者等待超时时间后，协调者无法接收所有的反馈，那么执行事务中断。</p>
+<p>优点：原理简单、实现方便。<br>缺点：<br>1.同步阻塞：各个参与者在等待其他参与者响应的过程中，将无法进行其他任何操作。<br>2.单点问题：一旦协调者出现问题，那么整个二阶段提交流程将无法运转。参与者会一直处于锁定事务资源的状态中。<br>3.数据不一致性：由于网络的原因或者协调者自身宕机，导致只有部门参与者收到Commit请求，于是整个分布式出现数据不一致现象。<br>4.太过保守：任意一点失败都会导致事务的失败。</p>
+<p>二阶段提交协议解决了分布式事务的原子性问题</p>
+<h4 id="三阶段提交"><a href="#三阶段提交" class="headerlink" title="三阶段提交"></a>三阶段提交</h4><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-2/74225968.jpg" alt="三阶段提交"><br>1.选票收集CanCommit 2.提交授权PreCommit 3.确定提交DoCommit</p>
+<p>优点：降低参与者的阻塞范围，能够在出现单点故障后继续达成一致。<br>缺点：参与者接收到PreCommit消息后，如果网络出现分区，协调者所在的节点和参与者无法正常通信，参与者依然会进行事务提交，导致数据不一致。</p>
+<p>三阶段提交避免了二阶段提交中无限等待问题。</p>
+<h4 id="Paxos算法"><a href="#Paxos算法" class="headerlink" title="Paxos算法"></a>Paxos算法</h4><p><img src="http://oqp1ywek9.bkt.clouddn.com/18-4-3/11731777.jpg" alt="Paxos算法"><br>然后通知Leaner集合的一部分，然后通知剩余Leaner。保证可靠性，防止通知1个Leaner导致单点故障。</p>
+<p>P1：提出编号为M1的提案，完成阶段1.<br>P2:提出编号为M2的提案（M2&gt;M1），完成阶段1.此时不批准小于M2的提案。<br>P1：进入阶段二，发出的Accept请求会被忽略。于是P1重新生成编号M3的提案(M3&gt;M2),完成阶段1。<br>然后无限循环。为了避免这一现象，必须采用一个主Proposer。这样整套Paxos算法流程能够保持活性。</p>
+<p>Paxos算法解决了无限等待问题，解决了”脑裂”问题。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/03/27/Zookeeper学习笔记2/" data-id="cjg4i9a92000fwova4b70k3yg" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Zookeeper学习笔记1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/23/Zookeeper学习笔记1/" class="article-date">
+  <time datetime="2018-03-23T03:22:42.000Z" itemprop="datePublished">2018-03-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/23/Zookeeper学习笔记1/">Zookeeper学习笔记(1)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="分布式架构"><a href="#分布式架构" class="headerlink" title="分布式架构"></a>分布式架构</h2><h3 id="从集中式到分布式"><a href="#从集中式到分布式" class="headerlink" title="从集中式到分布式"></a>从集中式到分布式</h3><p>由于集中式系统规模大，运维人员难以维护，加上容易出现单点故障，PC机性能的不断提升，导致慢慢走向分布式系统时代。</p>
+<h4 id="集中式特点"><a href="#集中式特点" class="headerlink" title="集中式特点"></a>集中式特点</h4><p>集中式系统就是指由一台或多台主计算机组成中心节点，数据集中存储于这个中心节点，所有业务单元也都部署在中心节点上。<br>特点：部署结构简单。需要有性能卓越的主机。</p>
+<h4 id="分布式特点"><a href="#分布式特点" class="headerlink" title="分布式特点"></a>分布式特点</h4><p>定义：通过消息传递进行通信和协调工作的。<br>特征：1.分布性 2.对等性 3.并发性 4.缺乏全局时钟 5.故障总是会发生。</p>
+<h4 id="分布式环境的会遇到的问题"><a href="#分布式环境的会遇到的问题" class="headerlink" title="分布式环境的会遇到的问题"></a>分布式环境的会遇到的问题</h4><p>1.通信异常：引入网络因素，网络本身是不可靠的，可能导致分布式无法顺利完成一次网络通信。<br>2.网络分区：分布式系统中部分节点之间的网络延时不断增大，最终导致分布式系统中只有部分节点能够正常通信，另一些节点不能。我们将这个现象称为网络分区，或者叫”脑裂”。<br>3.三态：网络会出现各种各样的问题，每一次请求或响应，可能会存在成功、失败、超时。<br>4.节点故障：每个节点都会出现故障，服务器节点可能会出现宕机或”僵死”。</p>
+<h3 id="ACID到CAP-BASE"><a href="#ACID到CAP-BASE" class="headerlink" title="ACID到CAP/BASE"></a>ACID到CAP/BASE</h3><h4 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h4><p>事务：由一系列对系统中数据进行访问与更新的操作所组成的一个程序执行逻辑单元。<br>事务的4个特征：1.原子性 2.一致性 3.隔离性(读取未提交、读取已提交、可重复度、序列化) 4.持久性。</p>
+<h4 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h4><p>分布式事务：是指事务的参与者、支持事务的服务器、资源服务器以及事务管理器分别位于分布式系统的不同节点之上。通常一个分布式事务中会涉及对多个数据源或业务系统的操作。</p>
+<h5 id="CAP和BASE"><a href="#CAP和BASE" class="headerlink" title="CAP和BASE"></a>CAP和BASE</h5><p>CAP定理：一个分布式系统不可能同时满足一致性、可用性、分区容错性。最多只能满足其中两项。<br>一致性：多个副本之间是否能够保持一致的特性。<br>可用性：指系统提供的服务必须一致处于高可用状态，对于用户的每一个操作请求总是能够在有限的时间内返回结果。系统必须存在一个合理的响应时间，且返回一个正常的响应结果（要么成功，要么失败）。<br>分区容错性：故障发生时，仍能够保证对外提供满足一致性和可用性的服务，除非整个网络环境都发生了故障。</p>
+<p>BASE定理：即使无法做到强一致性，但每个应用都可以根据自身的业务特点，采用适当的方式来使系统达到最终一致性。</p>
+<p>最终一致性的五类主要变种：<br>1.因果一致性：A更新完数据后通知B，B能够访问A的最新值，如果B要进行更新，必须基于A更新后的值。同时，与A无因果关系的C没有此限制。<br>2.读己之所写：A更新数据后，自己总能访问到更新过得最新值，不会看到旧值。<br>3.会话一致性：执行更新操作后，客户端能够在统一个会话中始终读取到该数据项的最新值。<br>4.单调读一致性：如果一个进程从系统中读取出一个数据项的某个值后，那么系统对于该进程后续的任何数据访问都不应该返回更旧的值。<br>5.单调写一致性：一个系统需要能够保证来自同一个进程的写操作被顺序的执行。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/03/23/Zookeeper学习笔记1/" data-id="cjg4i9a9e000kwova4jqvceb4" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-排序算法学习" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/03/15/排序算法学习/" class="article-date">
@@ -480,95 +570,6 @@
 
 
   
-    <article id="post-2018年实施计划" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/01/01/2018年实施计划/" class="article-date">
-  <time datetime="2018-01-01T14:26:45.000Z" itemprop="datePublished">2018-01-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/心情/">心情</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/01/2018年实施计划/">2018年实施计划</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>今天，是2018年的第一天，所以要给自己指定下目标，想要改变自己，坚持努力下去。<br>希望家人平安健康幸福，天天开心。</p>
-<p>每天看2篇别人写的技术文章。<br>保持读书。<br>锻炼身体。（由于1月7号-过年这段时间要去公司实习，在学长家里住着，不是太熟悉那边班车时间，希望每天早起去公司跑步~~）<br>技术博客是要写的。</p>
-<p>书籍： 我的JD购物车看。<br>语言：Python、Scala。<br>感兴趣：大数据、分布式、爬虫。<br>音乐：节奏感好的，古风类的。<br>游戏：坐等国服吃鸡（希望别上瘾啊啊啊），彩虹六号。（已上瘾，控制自己，不要堕落）</p>
-<p>先到这里。加油ヾ(◍°∇°◍)ﾉﾞ</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/01/01/2018年实施计划/" data-id="cjg4i9a8d0000wova1pc2bo4u" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-JAVA反射" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/12/29/JAVA反射/" class="article-date">
-  <time datetime="2017-12-29T11:48:40.000Z" itemprop="datePublished">2017-12-29</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Java基础/">Java基础</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/29/JAVA反射/">JAVA反射</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>反射可以拿到一个类所有的方法和属性，包括父类和接口。<br>反射功能：<br>1.在运行时判断任意一个对象所属的类；<br>2.在运行时构造任意一个类的对象；<br>3.在运行时判断任意一个类所具有的成员变量和方法（通过反射甚至可以调用private方法）；<br>4.在运行时调用任意一个对象的方法<br>
-        
-          <p class="article-more-link">
-            <a href="/2017/12/29/JAVA反射/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/12/29/JAVA反射/" data-id="cjg4i9a8j0001wovadw73sqpf" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -626,6 +627,10 @@
       <ul>
         
           <li>
+            <a href="/2018/07/19/MySQL技术内幕/第四章/">第三章 表 读书笔记</a>
+          </li>
+        
+          <li>
             <a href="/2018/07/19/MySQL技术内幕/第三章/">第三章 文件 读书笔记</a>
           </li>
         
@@ -634,15 +639,11 @@
           </li>
         
           <li>
+            <a href="/2018/06/26/MySQL技术内幕/第五章/">第五章 索引与算法 读书笔记</a>
+          </li>
+        
+          <li>
             <a href="/2018/06/25/MySQL技术内幕/第一章/">第一章 MySQL体系结构和存储引擎 读书笔记</a>
-          </li>
-        
-          <li>
-            <a href="/2018/06/15/MySQL必知必会/第二十五二十六二十七三十章/">MySQL必知必会学习笔记(11)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/30/MySQL必知必会/第二十二二十三二十四章/">MySQL必知必会学习笔记(10)</a>
           </li>
         
       </ul>
